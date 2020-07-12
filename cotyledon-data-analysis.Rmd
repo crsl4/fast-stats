@@ -1,0 +1,352 @@
+---
+title: "WI FastPlants: Heritability of number of cotelydons"
+author: "Claudia Solis-Lemus"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(car)
+```
+
+### Reading the data
+
+Reading in the data (had to remove manually the '#' sign from the column and save as csv file):
+```{r}
+dat = read.table("data/Polycot-data-from-NY.csv", sep=",",header=TRUE)
+str(dat)
+```
+
+The data has 4 columns:
+```{r}
+head(dat)
+dat[200:210,]
+```
+
+We can summarize basic counts. For example, we have 622 offspring plants and 181 parent plants. On average, the plants have 2.691 cotelydons (`mean=2.691`). The median being 3 cotelydons means that 50% of the plants have 3 cotelydons or fewer
+```{r}
+summary(dat)
+summary(dat$parents)
+```
+
+# Data visualization
+
+```{r, echo=FALSE}
+p1 = ggplot(dat, aes(generation, fill=generation))+geom_bar()+
+  theme(
+        plot.title = element_text(hjust=0.5, size=rel(1.8)),
+        axis.title.x = element_text(size=rel(1.8)),
+        axis.title.y = element_text(size=rel(1.8), angle=90, vjust=0.5, hjust=0.5),
+        axis.text.x = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        axis.text.y = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        panel.background = element_blank(),
+        axis.line = element_line(colour = "grey")##,
+        )
+p1
+```
+```{r, echo=FALSE}
+p1.2 = ggplot(dat, aes(parents, fill=parents))+geom_bar()+
+  theme(
+        plot.title = element_text(hjust=0.5, size=rel(1.8)),
+        axis.title.x = element_text(size=rel(1.8)),
+        axis.title.y = element_text(size=rel(1.8), angle=90, vjust=0.5, hjust=0.5),
+        axis.text.x = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        axis.text.y = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        panel.background = element_blank(),
+        axis.line = element_line(colour = "grey")##,
+        )
+p1.2
+```
+```{r, echo=FALSE}
+p2 = ggplot(dat, aes(x = parents, y = cotyledons, fill = parents)) +
+  geom_point(pch = 21, alpha=0.3, position = position_jitterdodge(jitter.height=0.075, jitter.width=2.5))+
+  ylim(c(1,6))+
+  theme(
+        plot.title = element_text(hjust=0.5, size=rel(1.8)),
+        axis.title.x = element_text(size=rel(1.8)),
+        axis.title.y = element_text(size=rel(1.8), angle=90, vjust=0.5, hjust=0.5),
+        axis.text.x = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        axis.text.y = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        panel.background = element_blank(),
+        axis.line = element_line(colour = "grey")##,
+        )
+p2
+```
+
+```{r, echo=FALSE}
+p2.2 = ggplot(dat, aes(x=parents, y=cotyledons, fill=parents))+geom_boxplot(alpha=0.4)+
+  ylim(c(1,6))+
+  theme(
+        plot.title = element_text(hjust=0.5, size=rel(1.8)),
+        axis.title.x = element_text(size=rel(1.8)),
+        axis.title.y = element_text(size=rel(1.8), angle=90, vjust=0.5, hjust=0.5),
+        axis.text.x = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        axis.text.y = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        panel.background = element_blank(),
+        axis.line = element_line(colour = "grey")##,
+        )
+p2.2
+```
+
+```{r, echo=FALSE}
+p3 = ggplot(dat, aes(x = parents, y = cotyledons, fill = parents)) +
+  geom_boxplot(outlier.size = 0, alpha=0.1) +
+  geom_point(pch = 21, alpha=0.3, position = position_jitterdodge(jitter.height=0.05, jitter.width=2.5))+
+  ylim(c(1,6))+
+  theme(
+        plot.title = element_text(hjust=0.5, size=rel(1.8)),
+        axis.title.x = element_text(size=rel(1.8)),
+        axis.title.y = element_text(size=rel(1.8), angle=90, vjust=0.5, hjust=0.5),
+        axis.text.x = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        axis.text.y = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        panel.background = element_blank(),
+        axis.line = element_line(colour = "grey")##,
+        )
+p3
+```
+
+```{r, echo=FALSE}
+p4 = ggplot(dat, aes(x=parents, y=cotyledons, fill=parents))+geom_violin(alpha=0.5)+
+  ylim(c(1,6))+
+  theme(
+        plot.title = element_text(hjust=0.5, size=rel(1.8)),
+        axis.title.x = element_text(size=rel(1.8)),
+        axis.title.y = element_text(size=rel(1.8), angle=90, vjust=0.5, hjust=0.5),
+        axis.text.x = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        axis.text.y = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        panel.background = element_blank(),
+        axis.line = element_line(colour = "grey")##,
+        )
+
+p4
+```
+```{r, echo=FALSE}
+p4.2 = ggplot(dat, aes(x=parents, y=cotyledons, fill=parents))+geom_violin(alpha=0.5)+
+    geom_point(pch = 21, alpha=0.3, position = position_jitterdodge(jitter.height=0.05, jitter.width=2.5))+
+  ylim(c(1,6))+
+  theme(
+        plot.title = element_text(hjust=0.5, size=rel(1.8)),
+        axis.title.x = element_text(size=rel(1.8)),
+        axis.title.y = element_text(size=rel(1.8), angle=90, vjust=0.5, hjust=0.5),
+        axis.text.x = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        axis.text.y = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        panel.background = element_blank(),
+        axis.line = element_line(colour = "grey")##,
+        )
+
+p4.2
+```
+
+Now, we can combine groups in our data:
+
+- Parents
+- Offspring with both parents having 2 cotyledons
+- Offspring with one parent having more than 2 cotyledons
+- Offspring with both parents having more than 2 cotelydons
+```{r}
+dat2 = within(dat, group <- "(2+)x(2+)")
+dat2$group[dat2$parents == ""] = "parent"
+dat2$group[dat2$parents == "2x2"] = "2x2"
+dat2$group[dat2$parents == "2x3"] = "2x(2+)"
+dat2$group[dat2$parents == "2x4"] = "2x(2+)"
+dat2$group = factor(dat2$group,levels=c("parent", "2x2", "2x(2+)", "(2+)x(2+)"))
+```
+
+```{r, echo=FALSE}
+p5 = ggplot(dat2, aes(x=group, y=cotyledons, fill=group))+geom_violin(alpha=0.5, trim=FALSE)+
+  ylim(c(1,6))+
+  stat_summary(fun.y=mean, geom="point", shape=23, size=2)+
+  theme(
+        plot.title = element_text(hjust=0.5, size=rel(1.8)),
+        axis.title.x = element_text(size=rel(1.8)),
+        axis.title.y = element_text(size=rel(1.8), angle=90, vjust=0.5, hjust=0.5),
+        axis.text.x = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        axis.text.y = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        panel.background = element_blank(),
+        axis.line = element_line(colour = "grey")##,
+        )
+
+p5
+```
+
+```{r, echo=FALSE}
+p5.2 = ggplot(dat2, aes(x=group, y=cotyledons, fill=group))+geom_violin(alpha=0.5, trim=FALSE)+
+  ylim(c(1,6))+
+  stat_summary(fun.y=mean, geom="point", shape=23, size=2)+
+  geom_point(pch = 21, alpha=0.3, position = position_jitterdodge(jitter.height=0.05, jitter.width=2.5))+
+  theme(
+        plot.title = element_text(hjust=0.5, size=rel(1.8)),
+        axis.title.x = element_text(size=rel(1.8)),
+        axis.title.y = element_text(size=rel(1.8), angle=90, vjust=0.5, hjust=0.5),
+        axis.text.x = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        axis.text.y = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        panel.background = element_blank(),
+        axis.line = element_line(colour = "grey")##,
+        )
+
+p5.2
+```
+
+```{r, echo=FALSE}
+p5.3 = ggplot(dat2, aes(x=group, y=cotyledons, fill=group))+geom_violin(alpha=0.5, trim=FALSE)+
+  ylim(c(1,6))+
+  geom_point(pch = 21, alpha=0.3, position = position_jitterdodge(jitter.height=0.05, jitter.width=2.5))+
+    stat_summary(fun.y=median, geom="point", size=2)+
+  theme(
+        plot.title = element_text(hjust=0.5, size=rel(1.8)),
+        axis.title.x = element_text(size=rel(1.8)),
+        axis.title.y = element_text(size=rel(1.8), angle=90, vjust=0.5, hjust=0.5),
+        axis.text.x = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        axis.text.y = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        panel.background = element_blank(),
+        axis.line = element_line(colour = "grey")##,
+        )
+
+p5.3
+```
+
+```{r, echo=FALSE}
+p6 = ggplot(dat2, aes(group, fill=group))+geom_bar()+
+  theme(
+        plot.title = element_text(hjust=0.5, size=rel(1.8)),
+        axis.title.x = element_text(size=rel(1.8)),
+        axis.title.y = element_text(size=rel(1.8), angle=90, vjust=0.5, hjust=0.5),
+        axis.text.x = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        axis.text.y = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        panel.background = element_blank(),
+        axis.line = element_line(colour = "grey")##,
+        )
+p6
+```
+
+# Statistical tests
+
+### Standard t-test
+
+Standard t-test comparing:
+
+- Population 1: Offspring with both parents having 2 cotyledons
+- Population 2: Offspring with both parents having more than 2 cotyledons
+
+Assumptions:
+
+- Data distributed normal
+- Equal variance in the two groups (we can test this with the Levene's test later)
+
+Plotting the densities:
+
+```{r, echo=FALSE}
+dat3 = subset(dat2,group %in% c("2x2","(2+)x(2+)"))
+dat3$group = factor(dat3$group)
+  
+q1 = ggplot(dat3, aes(cotyledons, fill=group))+geom_density(alpha=0.25)+
+  theme(
+        plot.title = element_text(hjust=0.5, size=rel(1.8)),
+        axis.title.x = element_text(size=rel(1.8)),
+        axis.title.y = element_text(size=rel(1.8), angle=90, vjust=0.5, hjust=0.5),
+        axis.text.x = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        axis.text.y = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        panel.background = element_blank(),
+        axis.line = element_line(colour = "grey")##,
+        )
+q1
+```
+
+Not really normal!
+
+```{r}
+summary(dat2$group)
+x = dat2$cotyledons[dat2$group == "2x2"]
+y = dat2$cotyledons[dat2$group == "(2+)x(2+)"]
+```
+
+Variances look similar:
+```{r}
+var(x)
+var(y)
+```
+
+But let's do a Levene test:
+```{r}
+leveneTest(cotyledons ~ group, dat3, center=mean)
+```
+
+The p-value is greater than 0.05, so we do not reject the null hypothesis of equal variances.
+
+The Levene test also assumes Normality. So, we can run the alternative Fligner-Killeen test with the same conclusion (equal variances):
+```{r}
+fligner.test(cotyledons ~ group, dat3)
+```
+
+Back to the t-test assumptions:
+
+- Normality: not met
+- Equality of variances: met
+
+If we ignore the violation of normality and we run a standard t-test, we get:
+```{r}
+t.test(x,y)
+```
+
+The p-value is less than 0.05, so we reject the null hypothesis of equality of means. This implies that we have evidence that the number of cotyledons is significantly larger in the offspring from "(2+)x(2+)" than from "2x2".
+
+
+Our justification to do a standard t-test is that if the sample size is moderately large, the two-sample t-test is robust to non-normality due to the central limit theorem.
+
+### Wilcoxon-Mann-Whitney test
+
+Alternative to the t-test when normality is violated. This test does not test equality of means, but equality of distributions, so the conclusion could be deceiving (that is, two different distributions with the same mean will have a rejected null hypothesis using WMW test).
+
+```{r}
+wilcox.test(cotyledons ~ group, dat3)
+```
+
+The p-value less than 0.05 allows us to also reject the null hypothesis of equality of distributions which provides evidence that the number of cotyledons on the "(2+)x(2+)" group is significantly higher than in the "2x2" group.
+
+
+### One-way ANOVA
+
+If we want to compare more than two groups, we can do so with a one-way ANOVA test.
+We will compare the number of cotyledons on the four groups:
+
+- Population 1: Parent plants
+- Population 2: Offspring 2x2
+- Population 3: Offspring 2x(2+)
+- Population 4: Offspring (2+)x(2+)
+
+Assumptions:
+
+- The observations are obtained independently and randomly from the population defined by the factor levels
+- The data of each factor level are normally distributed.
+- These normal populations have a common variance
+
+```{r}
+res.aov <- aov(cotyledons ~ group, data = dat2)
+summary(res.aov)
+```
+
+We reject that all groups have the same mean number of cotyledons.
+
+We can check the assumptions:
+```{r}
+# Homogeneity of variance
+plot(res.aov,1)
+
+# Normality
+plot(res.aov,2)
+```
+
+### Kruskal-Wallis rank sum test
+
+When normality is not met, we can use a Kruskal-Wallis rank sum test, with the same conclusion:
+```{r}
+kruskal.test(cotyledons ~ group, data = dat2)
+```
+
+### Tukey HSD pairwise tests
+
+We can move on to do Tukey multiple pairwise-comparisons (HSD test):
+```{r}
+TukeyHSD(res.aov)
+ ```
