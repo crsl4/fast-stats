@@ -1,61 +1,124 @@
 library(shiny)
 
-## Only run examples in interactive R sessions
-if (interactive()) {
+# Define UI for data upload app ----
+ui <- fluidPage(
   
-  ui <- fluidPage(
-    sidebarLayout(
-      sidebarPanel(
-        fileInput("file1", "Choose CSV File",
-                  accept = c(
-                    "text/csv",
-                    "text/comma-separated-values,text/plain",
-                    ".csv")
-        ),
-        tags$hr(),
-        checkboxInput("header", "Header", TRUE)
-      ),
-      # Main panel for displaying outputs ----
-      mainPanel(
-        
-        # Output: Verbatim text for data summary ----
-        verbatimTextOutput("summary"),
-        
-        # Output: HTML table with requested number of observations ----
-        tableOutput("view")
-        
-      )
-    )
-  )
+  # App title ----
+  titlePanel("Upload Files"),
   
-  server <- function(input, output) {
-    output$summary <- renderPrint({
-      # input$file1 will be NULL initially. After the user selects
-      # and uploads a file, it will be a data frame with 'name',
-      # 'size', 'type', and 'datapath' columns. The 'datapath'
-      # column will contain the local filenames where the data can
-      # be found.
-      inFile <- input$file1
-      
-      if (is.null(inFile))
-        return("No file found")
-      
-      dataset <- read.csv(inFile$datapath, header = input$header)
-      summary(dataset)
-    })
+  # Sidebar layout with input and output definitions ----
+  sidebarLayout(
     
-    # Show the first "n" observations ----
-    output$view <- renderTable({
-      inFile <- input$file1
+    # Sidebar panel for inputs ----
+    sidebarPanel(
       
-      if (is.null(inFile))
-        return(NULL)
+      # Input: Select a file ----
+      fileInput("file1", "Choose CSV File",
+                multiple = FALSE,
+                accept = c("text/csv",
+                           "text/comma-separated-values,text/plain",
+                           ".csv")),
       
-      dataset <- read.csv(inFile$datapath, header = input$header)
-      head(dataset, n = 10)
-    })
-  }
+      # Horizontal line ----
+      tags$hr(),
+      
+      # Input: Checkbox if file has header ----
+      checkboxInput("header", "Header", TRUE),
+      
+      # Input: Select separator ----
+      radioButtons("sep", "Separator",
+                   choices = c(Comma = ",",
+                               Semicolon = ";",
+                               Tab = "\t"),
+                   selected = ","),
+      
+      # Horizontal line ----
+      tags$hr(),
+      
+      # Input: Select number of rows to display ----
+      radioButtons("disp", "Display",
+                   choices = c(Head = "head",
+                               All = "all"),
+                   selected = "head")
+      
+    ),
+    
+    # Main panel for displaying outputs ----
+    mainPanel(
+      
+      # Output: Verbatim text for data summary ----
+      verbatimTextOutput("summary"),
+      
+      # Output: Data file ----
+      tableOutput("contents")
+      
+    )
+    
+  )
+)
+
+# Define server logic to read selected file ----
+server <- function(input, output) {
   
-  shinyApp(ui, server)
+  output$summary <- renderPrint({
+    
+    # input$file1 will be NULL initially. After the user selects
+    # and uploads a file, head of that data file by default,
+    # or all rows if selected, will be shown.
+    
+    req(input$file1)
+    
+    # when reading semicolon separated files,
+    # having a comma separator causes `read.csv` to error
+    tryCatch(
+      {
+        df <- read.csv(input$file1$datapath,
+                       header = input$header,
+                       sep = input$sep)
+      },
+      error = function(e) {
+        # return a safeError if a parsing error occurs
+        stop(safeError(e))
+      }
+    )
+    
+    summary(df)
+    
+  })
+  
+  output$contents <- renderTable({
+    
+    # input$file1 will be NULL initially. After the user selects
+    # and uploads a file, head of that data file by default,
+    # or all rows if selected, will be shown.
+    
+    req(input$file1)
+    
+    # when reading semicolon separated files,
+    # having a comma separator causes `read.csv` to error
+    tryCatch(
+      {
+        df <- read.csv(input$file1$datapath,
+                       header = input$header,
+                       sep = input$sep)
+      },
+      error = function(e) {
+        # return a safeError if a parsing error occurs
+        stop(safeError(e))
+      }
+    )
+    
+    if(input$disp == "head") {
+      return(head(df))
+    }
+    else {
+      return(df)
+    }
+    
+  })
+  
 }
+
+# Create Shiny app ----
+shinyApp(ui, server)
 
