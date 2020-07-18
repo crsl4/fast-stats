@@ -10,6 +10,8 @@ library(ggplot2)
 library(car)
 ```
 
+# Initial data: `Polycot-data-from-NY.csv`
+
 ### Reading the data
 
 Reading in the data (had to remove manually the '#' sign from the column and save as csv file):
@@ -30,7 +32,7 @@ summary(dat)
 summary(dat$parents)
 ```
 
-# Data visualization
+## Data visualization
 
 ```{r, echo=FALSE}
 p1 = ggplot(dat, aes(generation, fill=generation))+geom_bar()+
@@ -220,7 +222,7 @@ p6 = ggplot(dat2, aes(group, fill=group))+geom_bar()+
 p6
 ```
 
-# Statistical tests
+## Statistical tests
 
 ### Standard t-test
 
@@ -349,4 +351,184 @@ kruskal.test(cotyledons ~ group, data = dat2)
 We can move on to do Tukey multiple pairwise-comparisons (HSD test):
 ```{r}
 TukeyHSD(res.aov)
- ```
+```
+
+
+# New data: `Polycot-data-2020.csv`
+
+### Reading the data
+
+Reading in the data (had to remove manually the '#' sign from the column and save as csv file):
+```{r}
+dat = read.table("data/Polycot-data-2020.csv", sep=",",header=TRUE)
+str(dat)
+head(dat)
+summary(dat)
+dat = within(dat, Generation<-factor(Generation, levels=c("P","O")))
+```
+
+### Data visualization
+
+```{r, echo=FALSE}
+p1 = ggplot(dat, aes(Generation, fill=Generation))+geom_bar()+
+  theme(
+        plot.title = element_text(hjust=0.5, size=rel(1.8)),
+        axis.title.x = element_text(size=rel(1.8)),
+        axis.title.y = element_text(size=rel(1.8), angle=90, vjust=0.5, hjust=0.5),
+        axis.text.x = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        axis.text.y = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        panel.background = element_blank(),
+        axis.line = element_line(colour = "grey")##,
+        )
+p1
+```
+
+```{r, echo=FALSE}
+p3 = ggplot(dat, aes(y = Generation, x = Cotyledons, fill = Generation)) +
+  geom_jitter(pch = 21, alpha=0.3, width=0.2)+
+  theme(
+        plot.title = element_text(hjust=0.5, size=rel(1.8)),
+        axis.title.x = element_text(size=rel(1.8)),
+        axis.title.y = element_text(size=rel(1.8), angle=90, vjust=0.5, hjust=0.5),
+        axis.text.x = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        axis.text.y = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        panel.background = element_blank(),
+        axis.line = element_line(colour = "grey")##,
+        )
+p3
+```
+
+```{r, echo=FALSE}
+p3.2 = ggplot(dat, aes(x = Generation, y = Cotyledons, fill = Generation)) +
+  geom_jitter(pch = 21, alpha=0.3, height=0.2)+
+    geom_boxplot(outlier.size = 0, alpha=0.1) +
+  theme(
+        plot.title = element_text(hjust=0.5, size=rel(1.8)),
+        axis.title.x = element_text(size=rel(1.8)),
+        axis.title.y = element_text(size=rel(1.8), angle=90, vjust=0.5, hjust=0.5),
+        axis.text.x = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        axis.text.y = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        panel.background = element_blank(),
+        axis.line = element_line(colour = "grey")##,
+        )
+p3.2
+```
+
+```{r, echo=FALSE}
+p4 = ggplot(dat, aes(x=Generation, y=Cotyledons, fill=Generation))+geom_violin(alpha=0.5)+
+  ylim(c(1,6))+
+  theme(
+        plot.title = element_text(hjust=0.5, size=rel(1.8)),
+        axis.title.x = element_text(size=rel(1.8)),
+        axis.title.y = element_text(size=rel(1.8), angle=90, vjust=0.5, hjust=0.5),
+        axis.text.x = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        axis.text.y = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        panel.background = element_blank(),
+        axis.line = element_line(colour = "grey")##,
+        )
+
+p4
+```
+
+```{r, echo=FALSE}
+p4.2 = ggplot(dat, aes(x=Generation, y=Cotyledons, fill=Generation))+geom_violin(alpha=1)+
+    geom_jitter(pch = 21, alpha=0.1)+
+  ylim(c(1,6))+
+  theme(
+        plot.title = element_text(hjust=0.5, size=rel(1.8)),
+        axis.title.x = element_text(size=rel(1.8)),
+        axis.title.y = element_text(size=rel(1.8), angle=90, vjust=0.5, hjust=0.5),
+        axis.text.x = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        axis.text.y = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        panel.background = element_blank(),
+        axis.line = element_line(colour = "grey")##,
+        )
+
+p4.2
+```
+
+## Statistical tests
+
+### Standard t-test
+
+Standard t-test comparing:
+
+- Population 1: Parents
+- Population 2: Offspring
+
+Assumptions:
+
+- Data distributed normal
+- Equal variance in the two groups (we can test this with the Levene's test later)
+
+Plotting the densities:
+
+```{r, echo=FALSE}
+q1 = ggplot(dat, aes(Cotyledons, fill=Generation))+geom_density(alpha=0.25)+
+  theme(
+        plot.title = element_text(hjust=0.5, size=rel(1.8)),
+        axis.title.x = element_text(size=rel(1.8)),
+        axis.title.y = element_text(size=rel(1.8), angle=90, vjust=0.5, hjust=0.5),
+        axis.text.x = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        axis.text.y = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        panel.background = element_blank(),
+        axis.line = element_line(colour = "grey")##,
+        )
+q1
+```
+
+Not really normal!
+
+```{r}
+x = dat$Cotyledons[dat$Generation == "P"]
+y = dat$Cotyledons[dat$Generation == "O"]
+```
+
+Variances look similar:
+```{r}
+var(x)
+var(y)
+```
+
+But let's do a Levene test:
+```{r}
+leveneTest(Cotyledons ~ Generation, dat, center=mean)
+```
+
+The p-value is less than 0.05, so we reject the null hypothesis of equal variances.
+
+The Levene test also assumes Normality. So, we can run the alternative Fligner-Killeen test with the same conclusion (equal variances):
+```{r}
+fligner.test(Cotyledons ~ Generation, dat)
+```
+
+Back to the t-test assumptions:
+
+- Normality: not met
+- Equality of variances: not met
+
+If we ignore the violations and we run a standard t-test, we get:
+```{r}
+t.test(x,y, var.equal=TRUE)
+```
+
+The p-value is less than 0.05, so we reject the null hypothesis of equality of means. This implies that we have evidence that the number of cotyledons is significantly larger in the offspring than in the parents.
+
+Our justification to do a standard t-test is that if the sample size is moderately large, the two-sample t-test is robust to non-normality due to the central limit theorem.
+
+We can also run the Welch version of t test that does not assume equal variances (this is the default in R):
+
+```{r}
+t.test(x,y)
+```
+
+
+### Wilcoxon-Mann-Whitney test
+
+Alternative to the t-test when normality is violated. This test does not test equality of means, but equality of distributions, so the conclusion could be deceiving (that is, two different distributions with the same mean will have a rejected null hypothesis using WMW test).
+
+```{r}
+wilcox.test(Cotyledons ~ Generation, dat)
+```
+
+The p-value less than 0.05 allows us to also reject the null hypothesis of equality of distributions which provides evidence that the number of cotyledons on the offspring group is significantly higher than in the parent group.
