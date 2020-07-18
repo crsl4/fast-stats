@@ -1,0 +1,107 @@
+library(shiny)
+# to do:
+# - read the df just once, not in every render function
+# - robust to column names
+# - different tabs? many more options for the user
+
+# Define UI for data upload app ----
+ui <- fluidPage(
+  
+  # App title ----
+  #titlePanel("FastStats"),
+  
+  # Sidebar layout with input and output definitions ----
+  sidebarLayout(
+    
+    # Sidebar panel for inputs ----
+    sidebarPanel(
+      
+      img(src = "logo.png", height = 75, width = 230),
+      
+      h3("Data Upload:"),
+      
+      # Input: Select a file ----
+      fileInput("file1", "Choose CSV File or Drag the file here",
+                multiple = FALSE,
+                accept = c("text/csv",
+                           "text/comma-separated-values,text/plain",
+                           ".csv")),
+      
+      # Horizontal line ----
+      tags$hr(),
+      
+      # Input: Checkbox if file has header ----
+      tags$p("Click the checkbox if file has a header:"),
+      checkboxInput("header", "Header", TRUE),
+      
+      # Input: Select separator ----
+      radioButtons("sep", "Choose the separator",
+                   choices = c(Comma = ",",
+                               Semicolon = ";",
+                               Tab = "\t"),
+                   selected = ","),
+     # seems like selected is okay
+      
+      
+      # Horizontal line ----
+      tags$hr(),
+      
+      h3("Data Summary:"),
+      
+      # Input: Select number of rows to display ----
+      radioButtons("disp", "Display the data",
+                   choices = c(Head = "head",
+                               All = "all"),
+                   selected = "head"),
+      # FIXME: users click on the checkbox and the app changes immediately, needs to let it change after click the summary button; can be solved it by isolated()
+      actionButton("goSummary", "Summary"),
+      
+      # Horizontal line ----
+      tags$hr(),
+      
+      h3("Data Visualization:"),
+    
+     fluidRow(
+       column(6,radioButtons("xaxisGrp","X-Axis:", c("1"="1","2"="2"))),
+       column(6,radioButtons("yaxisGrp","Y-axis:", c("1"="1","2"="2")))
+     ),
+      
+      actionButton("goHist", "Histogram"),
+      
+      actionButton("goViolin", "Violin Plot"),
+ 
+      # Horizontal line ----
+      tags$hr(),
+      
+      h3("Data Analysis:"),
+      
+      actionButton("goT", "t test"),     
+      
+    ),
+    
+    # Main panel for displaying outputs ----
+    mainPanel(
+      
+      
+      # Output: Verbatim text for data summary ----
+      verbatimTextOutput("summary"),
+      
+      # Output: Data file ----
+      tableOutput("contents"),
+      
+      # Output: t test ----
+      verbatimTextOutput("ttest"),
+      
+      # Output: plot
+      plotOutput("histogram"),
+      
+      # Output: plot
+      plotOutput("violinPlot"),
+      
+      
+      
+      
+    )
+    
+  )
+)

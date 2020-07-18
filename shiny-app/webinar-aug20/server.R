@@ -1,107 +1,39 @@
-library(shiny)
-# to do:
-# - read the df just once, not in every render function
-# - robust to column names
-# - different tabs? many more options for the user
-
-# Define UI for data upload app ----
-ui <- fluidPage(
-  
-  # App title ----
-  #titlePanel("FastStats"),
-  
-  # Sidebar layout with input and output definitions ----
-  sidebarLayout(
-    
-    # Sidebar panel for inputs ----
-    sidebarPanel(
-      
-      img(src = "logo.png", height = 75, width = 230),
-      
-      h3("Data Upload:"),
-      
-      # Input: Select a file ----
-      fileInput("file1", "Choose CSV File",
-                multiple = FALSE,
-                accept = c("text/csv",
-                           "text/comma-separated-values,text/plain",
-                           ".csv")),
-      
-      # Horizontal line ----
-      tags$hr(),
-      
-      # Input: Checkbox if file has header ----
-      checkboxInput("header", "Header", TRUE),
-      
-      # Input: Select separator ----
-      radioButtons("sep", "Separator",
-                   choices = c(Comma = ",",
-                               Semicolon = ";",
-                               Tab = "\t"),
-                   selected = ","),
-      
-      # Horizontal line ----
-      tags$hr(),
-      
-      h3("Data Summary:"),
-      
-      # Input: Select number of rows to display ----
-      radioButtons("disp", "Display",
-                   choices = c(Head = "head",
-                               All = "all"),
-                   selected = "head"),
-      
-      actionButton("goSummary", "Summary"),
-      
-      # Horizontal line ----
-      tags$hr(),
-      
-      h3("Data Visualization:"),
-      
-      actionButton("goHist", "Histogram"),
-      
-      actionButton("goViolin", "Violin Plot"),
- 
-      # Horizontal line ----
-      tags$hr(),
-      
-      h3("Data Analysis:"),
-      
-      actionButton("goT", "t test"),     
-      
-    ),
-    
-    # Main panel for displaying outputs ----
-    mainPanel(
-      
-      
-      # Output: Verbatim text for data summary ----
-      verbatimTextOutput("summary"),
-      
-      # Output: Data file ----
-      tableOutput("contents"),
-      
-      # Output: t test ----
-      verbatimTextOutput("ttest"),
-      
-      # Output: plot
-      plotOutput("histogram"),
-      
-      # Output: plot
-      plotOutput("violinPlot"),
-      
-      
-      
-      
-    )
-    
-  )
-)
-
+library(data.table)
 library(ggplot2)
 # Define server logic to read selected file ----
-server <- function(input, output) {
+server <- function(input, output,session) {
   v <- reactiveValues(doViolinPlot = FALSE)
+  # #################################### 
+  dsnames<-c() #a vector to store col names
+    
+  data_set <- reactive({
+    req(input$file1)
+    inFile <- input$file1
+    data_set<-read.csv(inFile$datapath, header=input$header, 
+                       sep=input$sep)
+  })
+  
+
+  output$contents <- renderTable({
+    data_set()
+  })
+  observe({
+    dsnames <- names(data_set())
+    cb_options <- list()
+    cb_options[ dsnames] <- dsnames
+    updateRadioButtons(session, "xaxisGrp",
+                       label = "X-Axis",
+                       choices = cb_options,
+                       selected = "")
+    updateRadioButtons(session, "yaxisGrp",
+                             label = "Y-Axis",
+                             choices = cb_options,
+                             selected = "")
+  })
+  output$choose_dataset <- renderUI({
+    selectInput("dataset", "Data set", as.list(data_sets))
+  })
+  ####################################
   
   observeEvent(input$goViolin, {
     # 0 will be coerced to FALSE
@@ -110,11 +42,15 @@ server <- function(input, output) {
   })
   
   v2 <- reactiveValues(doHist = FALSE)
+  # serve as a middleman between input and output, we can see that render func use v2$doHist instead of input$goHist
+  # I guess the id val (i'm not sure about id's class) can only be assigned to bool val; surprisingly, it's int val; so that means R can also treat int as bool used in conditional expr (like C; FALSE equals to 0)
   
   observeEvent(input$goHist, {
     # 0 will be coerced to FALSE
     # 1+ will be coerced to TRUE
     v2$doHist <- input$goHist
+    print(class(v2$doHist))
+    
   })
   
   v3 <- reactiveValues(doSummary = FALSE)
@@ -127,10 +63,20 @@ server <- function(input, output) {
   
   v4 <- reactiveValues(doT = FALSE)
   
+  
   observeEvent(input$goT, {
     # 0 will be coerced to FALSE
     # 1+ will be coerced to TRUE
     v4$doT <- input$goT
+  })
+  
+  v5<-reactiveValues(xv=0)
+  observeEvent(input$xaxisGrp,{
+    v5$xv<-input$xaxisGrp
+  })
+  v6<-reactiveValues(yv=0)
+  observeEvent(input$yaxisGrp,{
+    v6$yv<-input$yaxisGrp
   })
   
   output$summary <- renderPrint({
@@ -152,6 +98,7 @@ server <- function(input, output) {
       error = function(e) {
         # return a safeError if a parsing error occurs
         stop(safeError(e))
+        # print(safeError(e)), use as debugger
       }
     )
     
@@ -207,7 +154,7 @@ server <- function(input, output) {
     # and uploads a file, head of that data file by default,
     # or all rows if selected, will be shown.
     
-    req(input$file1)
+    req(input$file1) #to require that user upload a file
     
     # when reading semicolon separated files,
     # having a comma separator causes `read.csv` to error
@@ -257,8 +204,21 @@ server <- function(input, output) {
     )
 
     if (v$doViolinPlot == FALSE) return()
+    # fill should contain x var
     
-    ggplot(df, aes(x=parents, y=cotyledons, fill=parents))+geom_violin(alpha=0.5)+
+    # v4 <- reactiveValues(doT = FALSE)
+    # 
+    # 
+    # observeEvent(input$goT, {
+    #   # 0 will be coerced to FALSE
+    #   # 1+ will be coerced to TRUE
+    #   v4$doT <- input$goT
+    # })
+   
+    x_val<-unlist(subset(df, select=c(v5$xv)))
+    y_val<-unlist(subset(df, select=c(v6$yv)))
+    
+    ggplot(df, aes(x=x_val, y=y_val, fill=x_val))+geom_violin(alpha=0.5)+xlab(v5$xv)+ylab(v6$yv)+labs(fill=v5$xv)+
       geom_point(pch = 21, alpha=0.3, position = position_jitterdodge(jitter.height=0.05, jitter.width=2.5))+
       ylim(c(1,6))+
       theme(
@@ -299,21 +259,34 @@ server <- function(input, output) {
     
     if (v2$doHist == FALSE) return()
     
-    ggplot(df, aes(parents, fill=parents))+geom_bar(alpha=0.5)+
-      theme(
-        plot.title = element_text(hjust=0.5, size=rel(1.8)),
-        axis.title.x = element_text(size=rel(1.8)),
-        axis.title.y = element_text(size=rel(1.8), angle=90, vjust=0.5, hjust=0.5),
-        axis.text.x = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
-        axis.text.y = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
-        panel.background = element_blank(),
-        axis.line = element_line(colour = "grey")##,
-      )    
+   # print(subset(df, select=c(v5$xv)))
+   
+    x_val<-unlist(subset(df, select=c(v5$xv)))
+    # notice that v5$xv here is character, not col obj; but ggplot needs to accept col obj
+    # use subset func to extract col object from dataframe; other func, such as df[...], seems not work at all
+    # ggplot2 does not accept list object; must use unlist
+    # print(x_val)
+    # y_val<-df[,v6$yv]
+    
+   
+      ggplot(df, aes(x_val, fill=x_val))+geom_bar(alpha=0.5)+ 
+        xlab(v5$xv)+labs(fill=v5$xv)+
+        theme(
+          plot.title = element_text(hjust=0.5, size=rel(1.8)),
+          axis.title.x = element_text(size=rel(1.8)),
+          axis.title.y = element_text(size=rel(1.8), angle=90, vjust=0.5, hjust=0.5),
+          axis.text.x = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+          axis.text.y = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+          panel.background = element_blank(),
+          axis.line = element_line(colour = "grey")##,
+        )    
+    
+   
   }
   )
   
 }
 
-# Create Shiny app ----
-shinyApp(ui, server)
+# # Create Shiny app ----
+# shinyApp(ui, server)
 
