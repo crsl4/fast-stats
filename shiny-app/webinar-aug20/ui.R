@@ -49,7 +49,7 @@ ui <- fluidPage(
       h3("Data Summary:"),
       
       # Input: Select number of rows to display ----
-      radioButtons("disp", "Display the data",
+      radioButtons("disp", "Data Customization",
                    choices = c(Head = "head",
                                All = "all"),
                    selected = "head"),
@@ -62,13 +62,19 @@ ui <- fluidPage(
       h3("Data Visualization:"),
     
      fluidRow(
-       column(6,radioButtons("xaxisGrp","X-Axis:", c("1"="1","2"="2"))),
-       column(6,radioButtons("yaxisGrp","Y-axis:", c("1"="1","2"="2")))
+       column(6,radioButtons("xaxisGrp","Grouping Variables:", c("1"="1","2"="2"))),
+       column(6,radioButtons("yaxisGrp","Quantity:", c("1"="1","2"="2")))
      ),
       
       actionButton("goHist", "Histogram"),
       
       actionButton("goViolin", "Violin Plot"),
+     
+      actionButton("goScatter", "Scatter Plot"),
+     
+      actionButton("goBox", "Box Plot"),
+     
+      actionButton("goDensities", "Densities"),
  
       # Horizontal line ----
       tags$hr(),
@@ -102,6 +108,12 @@ ui <- fluidPage(
       
       # Output: plot
       plotOutput("violinPlot"),
+      
+      plotOutput("scatterPlot"),
+      
+      plotOutput("boxPlot"),
+      
+      plotOutput("densities"),
       
       
       

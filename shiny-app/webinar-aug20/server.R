@@ -22,11 +22,11 @@ server <- function(input, output,session) {
     cb_options <- list()
     cb_options[ dsnames] <- dsnames
     updateRadioButtons(session, "xaxisGrp",
-                       label = "X-Axis",
+                       label = "Grouping Variables",
                        choices = cb_options,
                        selected = "")
     updateRadioButtons(session, "yaxisGrp",
-                             label = "Y-Axis",
+                             label = "Quantity",
                              choices = cb_options,
                              selected = "")
     updateRadioButtons(session, "groupVar",
@@ -52,7 +52,6 @@ server <- function(input, output,session) {
   v2 <- reactiveValues(doHist = FALSE)
   # serve as a middleman between input and output, we can see that render func use v2$doHist instead of input$goHist
   # I guess the id val (i'm not sure about id's class) can only be assigned to bool val; surprisingly, it's int val; so that means R can also treat int as bool used in conditional expr (like C; FALSE equals to 0)
-  
   observeEvent(input$goHist, {
     # 0 will be coerced to FALSE
     # 1+ will be coerced to TRUE
@@ -62,7 +61,6 @@ server <- function(input, output,session) {
   })
   
   v3 <- reactiveValues(doSummary = FALSE)
-  
   observeEvent(input$goSummary, {
     # 0 will be coerced to FALSE
     # 1+ will be coerced to TRUE
@@ -70,8 +68,6 @@ server <- function(input, output,session) {
   })
   
   v4 <- reactiveValues(doT = FALSE)
-  
-  
   observeEvent(input$goT, {
     # 0 will be coerced to FALSE
     # 1+ will be coerced to TRUE
@@ -82,17 +78,41 @@ server <- function(input, output,session) {
   observeEvent(input$xaxisGrp,{
     v5$xv<-input$xaxisGrp
   })
+  
   v6<-reactiveValues(yv=0)
   observeEvent(input$yaxisGrp,{
     v6$yv<-input$yaxisGrp
   })
+  
   v7<-reactiveValues(gv=0)
   observeEvent(input$groupVar,{
     v7$gv<-input$groupVar
   })
+  
   v8<-reactiveValues(q=0)
   observeEvent(input$quantity,{
     v8$q<-input$quantity
+  })
+  
+  v9 <- reactiveValues(doScatter = FALSE)
+  observeEvent(input$goScatter, {
+    # 0 will be coerced to FALSE
+    # 1+ will be coerced to TRUE
+    v9$doScatter <- input$goScatter
+  })
+  
+  v10 <- reactiveValues(doBox = FALSE)
+  observeEvent(input$goBox, {
+    # 0 will be coerced to FALSE
+    # 1+ will be coerced to TRUE
+    v10$doBox <- input$goBox
+  })
+  
+  v11 <- reactiveValues(doDensities = FALSE)
+  observeEvent(input$goDensities, {
+    # 0 will be coerced to FALSE
+    # 1+ will be coerced to TRUE
+    v11$doDensities <- input$goDensities
   })
   
   output$summary <- renderPrint({
@@ -259,9 +279,10 @@ server <- function(input, output,session) {
         panel.background = element_blank(),
         axis.line = element_line(colour = "grey")##,
       )    
-  }
-  )
+  })
   
+  # histogram should be the base template
+  # all other plots should follow its styles
   output$histogram <- renderPlot({
     
     # there must be a way not to repeat the same lines to get df
@@ -311,8 +332,154 @@ server <- function(input, output,session) {
         )    
     
    
-  }
-  )
+  })
+  
+  output$scatterPlot<-renderPlot({
+    # FIXME:we want to read the input file only once per session
+    req(input$file1)
+    
+    # when reading semicolon separated files,
+    # having a comma separator causes `read.csv` to error
+    tryCatch(
+      {
+        df <- read.csv(input$file1$datapath,
+                       header = input$header,
+                       sep = input$sep)
+      },
+      error = function(e) {
+        # return a safeError if a parsing error occurs
+        stop(safeError(e))
+      }
+    )
+    
+    if (v9$doScatter == FALSE) return()
+    
+    # print(subset(df, select=c(v5$xv)))
+    
+    x_val<-unlist(subset(df, select=c(v5$xv)))
+    # notice that v5$xv here is character, not col obj; but ggplot needs to accept col obj
+    # use subset func to extract col object from dataframe; other func, such as df[...], seems not work at all
+    # ggplot2 does not accept list object; must use unlist
+    # print(x_val)
+    # y_val<-df[,v6$yv]
+    y_val<-unlist(subset(df, select=c(v6$yv)))
+    
+    
+    ggplot(df, aes(y = y_val, x = x_val, fill = y_val)) +
+      xlab(v5$xv)+labs(fill=v5$xv)+ylab(v6$yv)+
+      geom_jitter(pch = 21, alpha=0.3, width=0.2)+
+      theme(
+        plot.title = element_text(hjust=0.5, size=rel(1.8)),
+        axis.title.x = element_text(size=rel(1.8)),
+        axis.title.y = element_text(size=rel(1.8), angle=90, vjust=0.5, hjust=0.5),
+        axis.text.x = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        axis.text.y = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        panel.background = element_blank(),
+        axis.line = element_line(colour = "grey")##,
+      ) 
+    
+    
+    
+  })
+  
+  output$boxPlot <- renderPlot({
+    
+    # there must be a way not to repeat the same lines to get df
+    
+    # input$file1 will be NULL initially. After the user selects
+    # and uploads a file, head of that data file by default,
+    # or all rows if selected, will be shown.
+    
+    req(input$file1)
+    
+    # when reading semicolon separated files,
+    # having a comma separator causes `read.csv` to error
+    tryCatch(
+      {
+        df <- read.csv(input$file1$datapath,
+                       header = input$header,
+                       sep = input$sep)
+      },
+      error = function(e) {
+        # return a safeError if a parsing error occurs
+        stop(safeError(e))
+      }
+    )
+    
+    if (v10$doBox == FALSE) return()
+    
+    x_val<-unlist(subset(df, select=c(v5$xv)))
+    # notice that v5$xv here is character, not col obj; but ggplot needs to accept col obj
+    # use subset func to extract col object from dataframe; other func, such as df[...], seems not work at all
+    # ggplot2 does not accept list object; must use unlist
+    # print(x_val)
+    y_val<-unlist(subset(df, select=c(v6$yv)))
+    
+    ggplot(df, aes(x = x_val, y = y_val, fill = x_val)) +
+      xlab(v5$xv)+labs(fill=v5$xv)+ylab(v6$yv)+
+      geom_jitter(pch = 21, alpha=0.3, height=0.2)+
+      geom_boxplot(outlier.size = 0, alpha=0.1) +
+      theme(
+        plot.title = element_text(hjust=0.5, size=rel(1.8)),
+        axis.title.x = element_text(size=rel(1.8)),
+        axis.title.y = element_text(size=rel(1.8), angle=90, vjust=0.5, hjust=0.5),
+        axis.text.x = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        axis.text.y = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        panel.background = element_blank(),
+        axis.line = element_line(colour = "grey")##,
+      )
+    
+    
+  })
+  
+  output$densities<- renderPlot({
+    
+    # there must be a way not to repeat the same lines to get df
+    
+    # input$file1 will be NULL initially. After the user selects
+    # and uploads a file, head of that data file by default,
+    # or all rows if selected, will be shown.
+    
+    req(input$file1)
+    
+    # when reading semicolon separated files,
+    # having a comma separator causes `read.csv` to error
+    tryCatch(
+      {
+        df <- read.csv(input$file1$datapath,
+                       header = input$header,
+                       sep = input$sep)
+      },
+      error = function(e) {
+        # return a safeError if a parsing error occurs
+        stop(safeError(e))
+      }
+    )
+    
+    if (v11$doDensities == FALSE) return()
+    
+    x_val<-unlist(subset(df, select=c(v5$xv)))
+    # notice that v5$xv here is character, not col obj; but ggplot needs to accept col obj
+    # use subset func to extract col object from dataframe; other func, such as df[...], seems not work at all
+    # ggplot2 does not accept list object; must use unlist
+    # print(x_val)
+    y_val<-unlist(subset(df, select=c(v6$yv)))
+    
+    ggplot(df, aes(y_val, fill=x_val))+geom_density(alpha=0.25)+
+      xlab(v6$yv)+labs(fill=v5$xv)+
+      theme(
+        plot.title = element_text(hjust=0.5, size=rel(1.8)),
+        axis.title.x = element_text(size=rel(1.8)),
+        axis.title.y = element_text(size=rel(1.8), angle=90, vjust=0.5, hjust=0.5),
+        axis.text.x = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        axis.text.y = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        panel.background = element_blank(),
+        axis.line = element_line(colour = "grey")##,
+      )
+    
+    
+  })
+  
   
 }
 
