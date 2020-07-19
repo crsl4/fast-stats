@@ -74,6 +74,11 @@ ui <- fluidPage(
       tags$hr(),
       
       h3("Data Analysis:"),
+     
+     fluidRow(
+       column(6,radioButtons("groupVar","Group Variable:", c("1"="1","2"="2"))),
+       column(6,radioButtons("quantity","Quantity:", c("1"="1","2"="2")))
+     ),
       
       actionButton("goT", "t test"),     
       

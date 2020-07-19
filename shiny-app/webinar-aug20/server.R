@@ -14,9 +14,9 @@ server <- function(input, output,session) {
   })
   
 
-  output$contents <- renderTable({
-    data_set()
-  })
+  # output$contents <- renderTable({
+  #   data_set()
+  # })
   observe({
     dsnames <- names(data_set())
     cb_options <- list()
@@ -27,6 +27,14 @@ server <- function(input, output,session) {
                        selected = "")
     updateRadioButtons(session, "yaxisGrp",
                              label = "Y-Axis",
+                             choices = cb_options,
+                             selected = "")
+    updateRadioButtons(session, "groupVar",
+                       label = "Group Variable",
+                       choices = cb_options,
+                       selected = "")
+    updateRadioButtons(session, "quantity",
+                             label = "Quantity",
                              choices = cb_options,
                              selected = "")
   })
@@ -77,6 +85,14 @@ server <- function(input, output,session) {
   v6<-reactiveValues(yv=0)
   observeEvent(input$yaxisGrp,{
     v6$yv<-input$yaxisGrp
+  })
+  v7<-reactiveValues(gv=0)
+  observeEvent(input$groupVar,{
+    v7$gv<-input$groupVar
+  })
+  v8<-reactiveValues(q=0)
+  observeEvent(input$quantity,{
+    v8$q<-input$quantity
   })
   
   output$summary <- renderPrint({
@@ -130,18 +146,31 @@ server <- function(input, output,session) {
       }
     )
     
+    if (v4$doT == FALSE) return()
+    
+    # extract var as col obj
+    # print(v7$gv)
+   
+    group_val<-unlist(subset(df, select=c(v7$gv)))
+    
+    quantity<-unlist(subset(df, select=c(v8$q)))
+
     dat2 = within(df, group <- "(2+)x(2+)")
-    dat2$group[dat2$parents == ""] = "parent"
-    dat2$group[dat2$parents == "2x2"] = "2x2"
-    dat2$group[dat2$parents == "2x3"] = "2x(2+)"
-    dat2$group[dat2$parents == "2x4"] = "2x(2+)"
+    # #############################################
+    dat2$group[subset(dat2, select=c(v7$gv)) == ""] = "parent"
+    dat2$group[subset(dat2, select=c(v7$gv)) == "2x2"] = "2x2"
+    dat2$group[subset(dat2, select=c(v7$gv)) == "2x3"] = "2x(2+)"
+    dat2$group[subset(dat2, select=c(v7$gv)) == "2x4"] = "2x(2+)"
+    # i guess the other group besides the above 4 types is (2+)x(2+)
     dat2$group = factor(dat2$group,levels=c("parent", "2x2", "2x(2+)", "(2+)x(2+)"))
-    dat3 = subset(dat2,group %in% c("2x2","(2+)x(2+)"))
-    dat3$group = factor(dat3$group)
-    
-    x = dat2$cotyledons[dat2$group == "2x2"]
-    y = dat2$cotyledons[dat2$group == "(2+)x(2+)"]
-    
+    print(subset(dat2, select=c(v8$q)))
+    # dat3 = subset(dat2,group %in% c("2x2","(2+)x(2+)"))
+    # dat3$group = factor(dat3$group)
+
+    x = subset(dat2, select=c(v8$q))[dat2$group == "2x2",]
+    y = subset(dat2, select=c(v8$q))[dat2$group == "(2+)x(2+)",]
+    # , in the end omits default val set to be True
+    # important
     if (v4$doT == FALSE) return()
     
     t.test(x,y)
@@ -206,14 +235,14 @@ server <- function(input, output,session) {
     if (v$doViolinPlot == FALSE) return()
     # fill should contain x var
     
-    # v4 <- reactiveValues(doT = FALSE)
-    # 
-    # 
-    # observeEvent(input$goT, {
-    #   # 0 will be coerced to FALSE
-    #   # 1+ will be coerced to TRUE
-    #   v4$doT <- input$goT
-    # })
+    v4 <- reactiveValues(doT = FALSE)
+
+
+    observeEvent(input$goT, {
+      # 0 will be coerced to FALSE
+      # 1+ will be coerced to TRUE
+      v4$doT <- input$goT
+    })
    
     x_val<-unlist(subset(df, select=c(v5$xv)))
     y_val<-unlist(subset(df, select=c(v6$yv)))
