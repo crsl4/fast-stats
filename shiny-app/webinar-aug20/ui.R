@@ -40,7 +40,7 @@ ui <- fluidPage(
                                Semicolon = ";",
                                Tab = "\t"),
                    selected = ","),
-     # seems like selected is okay
+      # seems like selected is okay
       
       
       # Horizontal line ----
@@ -59,32 +59,50 @@ ui <- fluidPage(
       # Horizontal line ----
       tags$hr(),
       
+      h3("Plot Option:"),
+      
+      checkboxInput("addPoints", "Add data points", T),
+      
+      checkboxInput("adjustSize", "Adjust plot size", F),
+      
+      conditionalPanel(
+        # only show this panel when user wanna adjust plot size; this panel uses JS, don't need to have a quotation mark over true
+        condition="input.adjustSize==true",
+        numericInput("widthVal","Plot Width:",550),
+        numericInput("heightVal","Plot Height:",400)
+        # I've tested the result and seems that (550,400) is a great parameter for this, if val gets too large, plot simply go out of border in the mainpanel
+        # numericInput is the specific input branket for integer inputs; don't use textinput in this case, cos id$val will be characters instead of string
+      ),
+      # options func may solve this 
+      
+      tags$hr(),
+      
       h3("Data Visualization:"),
-    
-     fluidRow(
-       column(6,radioButtons("xaxisGrp","Grouping Variables:", c("1"="1","2"="2"))),
-       column(6,radioButtons("yaxisGrp","Quantity:", c("1"="1","2"="2")))
-     ),
+      
+      fluidRow(
+        column(6,radioButtons("xaxisGrp","Grouping Variables:", c("1"="1","2"="2"))),
+        column(6,radioButtons("yaxisGrp","Quantity:", c("1"="1","2"="2")))
+      ),
       
       actionButton("goHist", "Histogram"),
       
       actionButton("goViolin", "Violin Plot"),
-     
+      
       actionButton("goScatter", "Scatter Plot"),
-     
+      
       actionButton("goBox", "Box Plot"),
-     
+      
       actionButton("goDensities", "Densities"),
- 
+      
       # Horizontal line ----
       tags$hr(),
       
       h3("Data Analysis:"),
-     
-     fluidRow(
-       column(6,radioButtons("groupVar","Group Variable:", c("1"="1","2"="2"))),
-       column(6,radioButtons("quantity","Quantity:", c("1"="1","2"="2")))
-     ),
+      
+      fluidRow(
+        column(6,radioButtons("groupVar","Group Variable:", c("1"="1","2"="2"))),
+        column(6,radioButtons("quantity","Quantity:", c("1"="1","2"="2")))
+      ),
       
       actionButton("goT", "t test"),     
       
