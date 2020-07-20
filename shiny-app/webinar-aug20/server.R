@@ -10,8 +10,9 @@ server <- function(input, output,session) {
   data_set <- reactive({
     req(input$file1)
     inFile <- input$file1
-    data_set<-read.csv(inFile$datapath, header=input$header, 
-                       sep=input$sep)
+    read.csv(inFile$datapath, header=input$header, 
+                         sep=input$sep)
+   
   })
   
   
@@ -316,8 +317,14 @@ server <- function(input, output,session) {
     if (v2$doHist == FALSE) return()
     
     # print(subset(df, select=c(v5$xv)))
-    
+  
+    # tryCatch({
+    #   x_val<-unlist(subset(df, select=c(v5$xv)))
+    # }error=function(e){
+    #   stop(safeError(e))
+    # })
     x_val<-unlist(subset(df, select=c(v5$xv)))
+    
     # notice that v5$xv here is character, not col obj; but ggplot needs to accept col obj
     # use subset func to extract col object from dataframe; other func, such as df[...], seems not work at all
     # ggplot2 does not accept list object; must use unlist
@@ -337,8 +344,7 @@ server <- function(input, output,session) {
         axis.line = element_line(colour = "grey")##,
       )    
     
-    
-  },,width=exprToFunction(input$widthVal),height=exprToFunction(input$heightVal))
+  },width=exprToFunction(input$widthVal),height=exprToFunction(input$heightVal))
   
   output$scatterPlot<-renderPlot({
     # FIXME:we want to read the input file only once per session
@@ -487,7 +493,7 @@ server <- function(input, output,session) {
       )
     
     
-  },,width=exprToFunction(input$widthVal),height=exprToFunction(input$heightVal))
+  },width=exprToFunction(input$widthVal),height=exprToFunction(input$heightVal))
   
   output$sel1<-renderUI({
     req(input$file1)
