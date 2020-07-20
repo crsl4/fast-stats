@@ -1,5 +1,6 @@
 library(data.table)
 library(ggplot2)
+library(car)
 # Define server logic to read selected file ----
 server <- function(input, output,session) {
   v <- reactiveValues(doViolinPlot = FALSE)
@@ -127,21 +128,48 @@ server <- function(input, output,session) {
     v13$doAdjustSize<- input$adjustSize
   })
   
-  # v14 <- reactiveValues(doWidthVal =700)
-  # observeEvent(input$widthVal, {
-  #   # 0 will be coerced to FALSE
-  #   # 1+ will be coerced to TRUE
-  #   v14$doWidthVal<- input$widthVal
-  # })
-  # 
-  # v15 <- reactiveValues(doHeightVal =550)
-  # observeEvent(input$heightVal, {
-  #   # 0 will be coerced to FALSE
-  #   # 1+ will be coerced to TRUE
-  #   v15$doHeightVal<- input$heightVal
-  # })
+  v14 <- reactiveValues(sel1 =0)
+  observeEvent(input$group1, {
+    # 0 will be coerced to FALSE
+    # 1+ will be coerced to TRUE
+    v14$sel1<- input$group1
+  })
   
+  v15 <- reactiveValues(sel2 =0)
+  observeEvent(input$group2, {
+    # 0 will be coerced to FALSE
+    # 1+ will be coerced to TRUE
+    v15$sel2<- input$group2
+  })
   
+  v16 <- reactiveValues(doEqualVar=F)
+  observeEvent(input$isEqualVar, {
+    # 0 will be coerced to FALSE
+    # 1+ will be coerced to TRUE
+    v16$doEqualVar<- input$isEqualVar
+  })
+  
+  v17 <- reactiveValues(doLevene = FALSE)
+  observeEvent(input$goLevene, {
+    # 0 will be coerced to FALSE
+    # 1+ will be coerced to TRUE
+    v17$doLevene <- input$goLevene
+  })
+  
+  v18 <- reactiveValues(doFligner = FALSE)
+  observeEvent(input$goFligner, {
+    # 0 will be coerced to FALSE
+    # 1+ will be coerced to TRUE
+    v18$doFligner <- input$goFligner
+  })
+  
+  v19 <- reactiveValues(doWilcoxon = FALSE)
+  observeEvent(input$goWilcoxon, {
+    # 0 will be coerced to FALSE
+    # 1+ will be coerced to TRUE
+    v19$doWilcoxon <- input$goWilcoxon
+  })
+   
   output$summary <- renderPrint({
     
     # input$file1 will be NULL initially. After the user selects
@@ -168,59 +196,6 @@ server <- function(input, output,session) {
     if (v3$doSummary == FALSE) return()
     
     summary(df)
-    
-  })
-  
-  output$ttest <- renderPrint({
-    
-    # input$file1 will be NULL initially. After the user selects
-    # and uploads a file, head of that data file by default,
-    # or all rows if selected, will be shown.
-    
-    req(input$file1)
-    
-    # when reading semicolon separated files,
-    # having a comma separator causes `read.csv` to error
-    tryCatch(
-      {
-        df <- read.csv(input$file1$datapath,
-                       header = input$header,
-                       sep = input$sep)
-      },
-      error = function(e) {
-        # return a safeError if a parsing error occurs
-        stop(safeError(e))
-      }
-    )
-    
-    if (v4$doT == FALSE) return()
-    
-    # extract var as col obj
-    # print(v7$gv)
-    
-    group_val<-unlist(subset(df, select=c(v7$gv)))
-    
-    quantity<-unlist(subset(df, select=c(v8$q)))
-    
-    dat2 = within(df, group <- "(2+)x(2+)")
-    # #############################################
-    dat2$group[subset(dat2, select=c(v7$gv)) == ""] = "parent"
-    dat2$group[subset(dat2, select=c(v7$gv)) == "2x2"] = "2x2"
-    dat2$group[subset(dat2, select=c(v7$gv)) == "2x3"] = "2x(2+)"
-    dat2$group[subset(dat2, select=c(v7$gv)) == "2x4"] = "2x(2+)"
-    # i guess the other group besides the above 4 types is (2+)x(2+)
-    dat2$group = factor(dat2$group,levels=c("parent", "2x2", "2x(2+)", "(2+)x(2+)"))
-    print(subset(dat2, select=c(v8$q)))
-    # dat3 = subset(dat2,group %in% c("2x2","(2+)x(2+)"))
-    # dat3$group = factor(dat3$group)
-    
-    x = subset(dat2, select=c(v8$q))[dat2$group == "2x2",]
-    y = subset(dat2, select=c(v8$q))[dat2$group == "(2+)x(2+)",]
-    # , in the end omits default val set to be True
-    # important
-    if (v4$doT == FALSE) return()
-    
-    t.test(x,y)
     
   })
   
@@ -513,6 +488,224 @@ server <- function(input, output,session) {
     
     
   },,width=exprToFunction(input$widthVal),height=exprToFunction(input$heightVal))
+  
+  output$sel1<-renderUI({
+    req(input$file1)
+    
+    # when reading semicolon separated files,
+    # having a comma separator causes `read.csv` to error
+    tryCatch(
+      {
+        df <- read.csv(input$file1$datapath,
+                       header = input$header,
+                       sep = input$sep)
+      },
+      error = function(e) {
+        # return a safeError if a parsing error occurs
+        stop(safeError(e))
+      }
+    )
+    
+    # if (v7$gv == "") return()
+    if(v7$gv=="UnSpecified_Value") return()
+    
+    group_list<-unlist(subset(df, select=c(v7$gv)))
+    
+    selectInput("group1","Group one:",choices=as.character(unique(unlist(group_list,use.names = F))))
+    # dont know why cant I put two select input in one uioutput method
+  })
+  
+  output$sel2<-renderUI({
+    req(input$file1)
+    
+    # when reading semicolon separated files,
+    # having a comma separator causes `read.csv` to error
+    tryCatch(
+      {
+        df <- read.csv(input$file1$datapath,
+                       header = input$header,
+                       sep = input$sep)
+      },
+      error = function(e) {
+        # return a safeError if a parsing error occurs
+        stop(safeError(e))
+      }
+    )
+    
+    # if (v7$gv == "") return()
+    if(v7$gv=="UnSpecified_Value") return()
+    
+    group_list<-unlist(subset(df, select=c(v7$gv)))
+    
+    # dont know why cant I put two select input in one uioutput method
+    
+    selectInput("group2","Group two:",choices=as.character(unique(unlist(group_list,use.names = F))))
+    
+  })
+  
+  output$ttest <- renderPrint({
+    
+    # input$file1 will be NULL initially. After the user selects
+    # and uploads a file, head of that data file by default,
+    # or all rows if selected, will be shown.
+    
+    req(input$file1)
+    
+    # when reading semicolon separated files,
+    # having a comma separator causes `read.csv` to error
+    tryCatch(
+      {
+        df <- read.csv(input$file1$datapath,
+                       header = input$header,
+                       sep = input$sep)
+      },
+      error = function(e) {
+        # return a safeError if a parsing error occurs
+        stop(safeError(e))
+      }
+    )
+    
+    if (v4$doT == FALSE) return()
+    
+    # extract var as col obj
+    # print(v7$gv)
+    
+    group_val<-unlist(subset(df, select=c(v7$gv)))
+    
+    # , in the end omits default val set to be True
+    # # important
+    x = subset(df, select=c(v8$q))[group_val == v14$sel1,]
+    y = subset(df, select=c(v8$q))[group_val == v15$sel2,]
+    if (v4$doT == FALSE) return()
+    
+    if(v16$doEqualVar==T){
+      t.test(x,y,var.equal = T)
+    }
+    else{
+      t.test(x,y)
+    }
+    
+    
+    
+  })
+  
+  output$levene <- renderPrint({
+    
+    # input$file1 will be NULL initially. After the user selects
+    # and uploads a file, head of that data file by default,
+    # or all rows if selected, will be shown.
+    
+    req(input$file1)
+    
+    # when reading semicolon separated files,
+    # having a comma separator causes `read.csv` to error
+    tryCatch(
+      {
+        df <- read.csv(input$file1$datapath,
+                       header = input$header,
+                       sep = input$sep)
+      },
+      error = function(e) {
+        # return a safeError if a parsing error occurs
+        stop(safeError(e))
+      }
+    )
+    
+    if (v17$doLevene == FALSE) return()
+    
+    # extract var as col obj
+    # print(v7$gv)
+    
+    group_val<-unlist(subset(df, select=c(v7$gv)))
+    quantity<-unlist(subset(df, select=c(v8$q)))
+    
+    # , in the end omits default val set to be True
+    # # important
+    # x = subset(df, select=c(v8$q))[group_val == v14$sel1,]
+    # y = subset(df, select=c(v8$q))[group_val == v15$sel2,]
+    if (v17$doLevene == FALSE) return()
+    
+    leveneTest(quantity~group_val,df, center=mean)
+  })
+  
+  output$fligner <- renderPrint({
+    
+    # input$file1 will be NULL initially. After the user selects
+    # and uploads a file, head of that data file by default,
+    # or all rows if selected, will be shown.
+    
+    req(input$file1)
+    
+    # when reading semicolon separated files,
+    # having a comma separator causes `read.csv` to error
+    tryCatch(
+      {
+        df <- read.csv(input$file1$datapath,
+                       header = input$header,
+                       sep = input$sep)
+      },
+      error = function(e) {
+        # return a safeError if a parsing error occurs
+        stop(safeError(e))
+      }
+    )
+    
+    if (v18$doFligner == FALSE) return()
+    
+    # extract var as col obj
+    # print(v7$gv)
+    
+    group_val<-unlist(subset(df, select=c(v7$gv)))
+    quantity<-unlist(subset(df, select=c(v8$q)))
+    
+    # , in the end omits default val set to be True
+    # # important
+    # x = subset(df, select=c(v8$q))[group_val == v14$sel1,]
+    # y = subset(df, select=c(v8$q))[group_val == v15$sel2,]
+    if (v18$doFligner == FALSE) return()
+    
+    fligner.test(quantity~group_val,df)
+  })
+  
+  output$wilcoxon <- renderPrint({
+    
+    # input$file1 will be NULL initially. After the user selects
+    # and uploads a file, head of that data file by default,
+    # or all rows if selected, will be shown.
+    
+    req(input$file1)
+    
+    # when reading semicolon separated files,
+    # having a comma separator causes `read.csv` to error
+    tryCatch(
+      {
+        df <- read.csv(input$file1$datapath,
+                       header = input$header,
+                       sep = input$sep)
+      },
+      error = function(e) {
+        # return a safeError if a parsing error occurs
+        stop(safeError(e))
+      }
+    )
+    
+    if (v19$doWilcoxon == FALSE) return()
+    
+    # extract var as col obj
+    # print(v7$gv)
+    
+    group_val<-unlist(subset(df, select=c(v7$gv)))
+    quantity<-unlist(subset(df, select=c(v8$q)))
+    
+    # , in the end omits default val set to be True
+    # # important
+    # x = subset(df, select=c(v8$q))[group_val == v14$sel1,]
+    # y = subset(df, select=c(v8$q))[group_val == v15$sel2,]
+    if (v19$doWilcoxon == FALSE) return()
+    
+    wilcox.test(quantity~group_val,df)
+  })
+ 
   
   # if users wanna change the parameter (say change dots), we can first set a var as p<-ggplot(...). Then use if statement to test user's response, add it piece by piece, and finally return p
 }

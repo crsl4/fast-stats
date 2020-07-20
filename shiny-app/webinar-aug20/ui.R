@@ -97,14 +97,30 @@ ui <- fluidPage(
       # Horizontal line ----
       tags$hr(),
       
+      h3("Data Analysis Option:"),
+      
+      checkboxInput("isEqualVar", "Equal Variance", F),
+      
+      tags$hr(),
+      
       h3("Data Analysis:"),
       
       fluidRow(
-        column(6,radioButtons("groupVar","Group Variable:", c("1"="1","2"="2"))),
-        column(6,radioButtons("quantity","Quantity:", c("1"="1","2"="2")))
+        column(6,radioButtons("groupVar","Group Variable:", c("1"="UnSpecified_Value","2"="UnSpecified_Value"))),
+        column(6,radioButtons("quantity","Quantity:", c("1"="UnSpecified_Value","2"="UnSpecified_Value")))
       ),
       
-      actionButton("goT", "t test"),     
+      uiOutput("sel1"),
+      
+      uiOutput("sel2"),
+      
+      actionButton("goT", "T test"), 
+      
+      actionButton("goLevene", "Levene test"),
+      
+      actionButton("goFligner", "Fligner test"),  
+      
+      actionButton("goWilcoxon", "Wilcoxon test"),     
       
     ),
     
@@ -120,6 +136,12 @@ ui <- fluidPage(
       
       # Output: t test ----
       verbatimTextOutput("ttest"),
+      
+      verbatimTextOutput("levene"),
+      
+      verbatimTextOutput("fligner"),
+      
+      verbatimTextOutput("wilcoxon"),
       
       # Output: plot
       plotOutput("histogram"),
