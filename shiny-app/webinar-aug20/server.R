@@ -1,6 +1,7 @@
 library(data.table)
 library(ggplot2)
 library(car)
+library(plotly)
 # Define server logic to read selected file ----
 server <- function(input, output,session) {
   v <- reactiveValues(doViolinPlot = FALSE)
@@ -231,7 +232,7 @@ server <- function(input, output,session) {
     
   })
   
-  output$violinPlot <- renderPlot({
+  output$violinPlot <- renderPlotly({
     
     # there must be a way not to repeat the same lines to get df
     
@@ -280,17 +281,18 @@ server <- function(input, output,session) {
         axis.text.x = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
         axis.text.y = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
         panel.background = element_blank(),
+        text=element_text(size=8),
         axis.line = element_line(colour = "grey")##,
       )  
     if(v12$doAddPoints==T){
-      plot<-plot+geom_point(pch = 21, alpha=0.3, position = position_jitterdodge(jitter.height=0.05, jitter.width=2.5))
+      plot<-plot+geom_point(pch = 21, alpha=0.3, position = position_jitterdodge(jitter.height=0.05, jitter.width=2.5),size=0.5)
     }
-    return (plot)
-  },,width=exprToFunction(input$widthVal),height=exprToFunction(input$heightVal))
+    ggplotly(plot)
+  })
   
   # histogram should be the base template
   # all other plots should follow its styles
-  output$histogram <- renderPlot({
+  output$histogram <- renderPlotly({
     
     # there must be a way not to repeat the same lines to get df
     
@@ -332,7 +334,7 @@ server <- function(input, output,session) {
     # y_val<-df[,v6$yv]
     
     
-    ggplot(df, aes(x_val, fill=x_val))+geom_bar(alpha=0.5)+ 
+    p<-ggplot(df, aes(x_val, fill=x_val))+geom_bar(alpha=0.5)+ 
       xlab(v5$xv)+labs(fill=v5$xv)+
       theme(
         plot.title = element_text(hjust=0.5, size=rel(1.8)),
@@ -341,12 +343,14 @@ server <- function(input, output,session) {
         axis.text.x = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
         axis.text.y = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
         panel.background = element_blank(),
-        axis.line = element_line(colour = "grey")##,
-      )    
+        axis.line = element_line(colour = "grey"),
+        text=element_text(size=8),
+      )
+    ggplotly(p)
     
-  },width=exprToFunction(input$widthVal),height=exprToFunction(input$heightVal))
+  })
   
-  output$scatterPlot<-renderPlot({
+  output$scatterPlot<-renderPlotly({
     # FIXME:we want to read the input file only once per session
     req(input$file1)
     
@@ -377,7 +381,7 @@ server <- function(input, output,session) {
     y_val<-unlist(subset(df, select=c(v6$yv)))
     
     
-    ggplot(df, aes(y = y_val, x = x_val, fill = y_val)) +
+    p<-ggplot(df, aes(y = y_val, x = x_val, fill = y_val)) +
       xlab(v5$xv)+labs(fill=v5$xv)+ylab(v6$yv)+
       geom_jitter(pch = 21, alpha=0.3, width=0.2)+
       theme(
@@ -387,14 +391,15 @@ server <- function(input, output,session) {
         axis.text.x = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
         axis.text.y = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
         panel.background = element_blank(),
+        text=element_text(size=8),
         axis.line = element_line(colour = "grey")##,
       ) 
+    ggplotly(p)
     
     
-    
-  },width=exprToFunction(input$widthVal),height=exprToFunction(input$heightVal))
+  })
   
-  output$boxPlot <- renderPlot({
+  output$boxPlot <- renderPlotly({
     
     # there must be a way not to repeat the same lines to get df
     
@@ -437,17 +442,19 @@ server <- function(input, output,session) {
         axis.text.x = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
         axis.text.y = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
         panel.background = element_blank(),
+        text=element_text(size=8),
         axis.line = element_line(colour = "grey")##,
       )
     
     if(v12$doAddPoints==T){
-      plot<-  plot+geom_jitter(pch = 21, alpha=0.3, height=0.2)
+      plot<-  plot+geom_jitter(pch = 21, alpha=0.3, height=0.2,size=0.5)
     }
     
-    return (plot)# object returned here must has a parenthesis
-  },,width=exprToFunction(input$widthVal),height=exprToFunction(input$heightVal))
+    # return (plot)# object returned here must has a parenthesis
+    ggplotly(plot)
+  })
   
-  output$densities<- renderPlot({
+  output$densities<- renderPlotly({
     
     # there must be a way not to repeat the same lines to get df
     
@@ -480,7 +487,7 @@ server <- function(input, output,session) {
     # print(x_val)
     y_val<-unlist(subset(df, select=c(v6$yv)))
     
-    ggplot(df, aes(y_val, fill=x_val))+geom_density(alpha=0.25)+
+    p<-ggplot(df, aes(y_val, fill=x_val))+geom_density(alpha=0.25)+
       xlab(v6$yv)+labs(fill=v5$xv)+
       theme(
         plot.title = element_text(hjust=0.5, size=rel(1.8)),
@@ -489,11 +496,12 @@ server <- function(input, output,session) {
         axis.text.x = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
         axis.text.y = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
         panel.background = element_blank(),
+        text=element_text(size=8),
         axis.line = element_line(colour = "grey")##,
       )
+    ggplotly(p)
     
-    
-  },width=exprToFunction(input$widthVal),height=exprToFunction(input$heightVal))
+  })
   
   output$sel1<-renderUI({
     req(input$file1)
@@ -711,11 +719,28 @@ server <- function(input, output,session) {
     
     wilcox.test(quantity~group_val,df)
   })
+  
+  # output$down <- downloadHandler(
+  #   filename =  function() {
+  #     paste("iris", input$downloadOptions, sep=".")
+  #   },
+  #   # content is a function with argument file. content writes the plot to the device
+  #   content = function(file) {
+  #     if(input$downloadOptions == "png")
+  #       png(file) # open the png device
+  #     else if (input$downloadOptions=="pdf")
+  #       pdf(file) # open the pdf device
+  #     else
+  #       jpeg(file)
+  #     plot(x=x(), y=y(), main = "iris dataset plot", xlab = xl(), ylab = yl()) # draw the plot
+  #     dev.off()  # turn the device off
+  #     
+  #   } 
+  # )
  
   
   # if users wanna change the parameter (say change dots), we can first set a var as p<-ggplot(...). Then use if statement to test user's response, add it piece by piece, and finally return p
 }
 
-# # Create Shiny app ----
-# shinyApp(ui, server)
+
 

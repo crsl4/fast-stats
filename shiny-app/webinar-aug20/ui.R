@@ -1,4 +1,5 @@
 library(shiny)
+library(plotly)
 # to do:
 # - read the df just once, not in every render function
 # - robust to column names
@@ -63,19 +64,22 @@ ui <- fluidPage(
       
       checkboxInput("addPoints", "Add data points", T),
       
-      checkboxInput("adjustSize", "Adjust plot size", F),
+      # ###################################################
+      #if we insist on using plotly, the adjust and controlpanel button is not needed in this appp
+      # checkboxInput("adjustSize", "Adjust plot size", F),
       
-      conditionalPanel(
-        # only show this panel when user wanna adjust plot size; this panel uses JS, don't need to have a quotation mark over true
-        condition="input.adjustSize==true",
-        numericInput("widthVal","Plot Width:",550),
-        numericInput("heightVal","Plot Height:",400)
-        # I've tested the result and seems that (550,400) is a great parameter for this, if val gets too large, plot simply go out of border in the mainpanel
-        # numericInput is the specific input branket for integer inputs; don't use textinput in this case, cos id$val will be characters instead of string
-      ),
+      # conditionalPanel(
+      #   # only show this panel when user wanna adjust plot size; this panel uses JS, don't need to have a quotation mark over true
+      #   condition="input.adjustSize==true",
+      #   numericInput("widthVal","Plot Width:",600),
+      #   numericInput("heightVal","Plot Height:",480)
+      #   # I've tested the result and seems that (550,400) is a great parameter for this, if val gets too large, plot simply go out of border in the mainpanel
+      #   # numericInput is the specific input branket for integer inputs; don't use textinput in this case, cos id$val will be characters instead of string
+      # ),
       # options func may solve this 
       
-      tags$hr(),
+      # tags$hr(),
+      ########################################################
       
       h3("Data Visualization:"),
       
@@ -93,6 +97,10 @@ ui <- fluidPage(
       actionButton("goBox", "Box Plot"),
       
       actionButton("goDensities", "Densities"),
+      
+      tags$hr(),
+      
+      # radioButtons("downloadOptions", "Select the Option", list("png","jpeg","pdf")),
       
       # Horizontal line ----
       tags$hr(),
@@ -121,7 +129,7 @@ ui <- fluidPage(
       actionButton("goFligner", "Fligner test"),  
       
       actionButton("goWilcoxon", "Wilcoxon test"),     
-      
+           
     ),
     
     # Main panel for displaying outputs ----
@@ -144,24 +152,26 @@ ui <- fluidPage(
       verbatimTextOutput("wilcoxon"),
       
       # Output: plot
-      plotOutput("histogram"),
+      plotlyOutput("histogram"),
       
       # Output: plot
-      plotOutput("violinPlot"),
+      plotlyOutput("violinPlot"),
       
-      plotOutput("scatterPlot"),
+      plotlyOutput("scatterPlot"),
       
-      plotOutput("boxPlot"),
+      plotlyOutput("boxPlot"),
       
-      plotOutput("densities"),
+      plotlyOutput("densities"),
       
       # used to suppress the errors; comment it out everytime we need to debug
+      
       tags$style(type="text/css",
                  ".shiny-output-error { visibility: hidden; }",
                  ".shiny-output-error:before { visibility: hidden; }"
       )
       
     )
-    
-  )
 )
+)
+
+ 
