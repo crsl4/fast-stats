@@ -381,7 +381,7 @@ server <- function(input, output,session) {
     y_val<-unlist(subset(df, select=c(v6$yv)))
     
     
-    p<-ggplot(df, aes(y = y_val, x = x_val, fill = y_val)) +
+    p<-ggplot(df, aes(y = y_val, x = x_val, fill = x_val)) +
       xlab(v5$xv)+labs(fill=v5$xv)+ylab(v6$yv)+
       geom_jitter(pch = 21, alpha=0.3, width=0.2)+
       theme(
