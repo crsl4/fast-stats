@@ -12,8 +12,8 @@ server <- function(input, output,session) {
     req(input$file1)
     inFile <- input$file1
     read.csv(inFile$datapath, header=input$header, 
-                         sep=input$sep)
-   
+             sep=input$sep)
+    
   })
   
   
@@ -171,7 +171,7 @@ server <- function(input, output,session) {
     # 1+ will be coerced to TRUE
     v19$doWilcoxon <- input$goWilcoxon
   })
-   
+  
   output$summary <- renderPrint({
     
     # input$file1 will be NULL initially. After the user selects
@@ -319,7 +319,7 @@ server <- function(input, output,session) {
     if (v2$doHist == FALSE) return()
     
     # print(subset(df, select=c(v5$xv)))
-  
+    
     # tryCatch({
     #   x_val<-unlist(subset(df, select=c(v5$xv)))
     # }error=function(e){
@@ -381,7 +381,7 @@ server <- function(input, output,session) {
     y_val<-unlist(subset(df, select=c(v6$yv)))
     
     
-    p<-ggplot(df, aes(y = y_val, x = x_val, fill = y_val)) +
+    p<-ggplot(df, aes(y = y_val, x = x_val, fill = x_val)) +
       xlab(v5$xv)+labs(fill=v5$xv)+ylab(v6$yv)+
       geom_jitter(pch = 21, alpha=0.3, width=0.2)+
       theme(
@@ -737,7 +737,7 @@ server <- function(input, output,session) {
   #     
   #   } 
   # )
- 
+  
   
   # if users wanna change the parameter (say change dots), we can first set a var as p<-ggplot(...). Then use if statement to test user's response, add it piece by piece, and finally return p
 }
