@@ -1,0 +1,746 @@
+library(data.table)
+library(ggplot2)
+library(car)
+library(plotly)
+# Define server logic to read selected file ----
+server <- function(input, output,session) {
+  v <- reactiveValues(doViolinPlot = FALSE)
+  # #################################### 
+  dsnames<-c() #a vector to store col names
+  
+  data_set <- reactive({
+    req(input$file1)
+    inFile <- input$file1
+    read.csv(inFile$datapath, header=input$header, 
+             sep=input$sep)
+    
+  })
+  
+  
+  # output$contents <- renderTable({
+  #   data_set()
+  # })
+  observe({
+    dsnames <- names(data_set())
+    cb_options <- list()
+    cb_options[ dsnames] <- dsnames
+    updateRadioButtons(session, "xaxisGrp",
+                       label = "Group Variable",
+                       choices = cb_options,
+                       selected = "")
+    updateRadioButtons(session, "yaxisGrp",
+                       label = "Quantity",
+                       choices = cb_options,
+                       selected = "")
+    updateRadioButtons(session, "groupVar",
+                       label = "Group Variable",
+                       choices = cb_options,
+                       selected = "")
+    updateRadioButtons(session, "quantity",
+                       label = "Quantity",
+                       choices = cb_options,
+                       selected = "")
+  })
+  output$choose_dataset <- renderUI({
+    selectInput("dataset", "Data set", as.list(data_sets))
+  })
+  ####################################
+  
+  observeEvent(input$goViolin, {
+    # 0 will be coerced to FALSE
+    # 1+ will be coerced to TRUE
+    v$doViolinPlot <- input$goViolin
+  })
+  
+  v2 <- reactiveValues(doHist = FALSE)
+  # serve as a middleman between input and output, we can see that render func use v2$doHist instead of input$goHist
+  # I guess the id val (i'm not sure about id's class) can only be assigned to bool val; surprisingly, it's int val; so that means R can also treat int as bool used in conditional expr (like C; FALSE equals to 0)
+  observeEvent(input$goHist, {
+    # 0 will be coerced to FALSE
+    # 1+ will be coerced to TRUE
+    v2$doHist <- input$goHist
+  })
+  
+  v3 <- reactiveValues(doSummary = FALSE)
+  observeEvent(input$goSummary, {
+    # 0 will be coerced to FALSE
+    # 1+ will be coerced to TRUE
+    v3$doSummary <- input$goSummary
+  })
+  
+  v4 <- reactiveValues(doT = FALSE)
+  observeEvent(input$goT, {
+    # 0 will be coerced to FALSE
+    # 1+ will be coerced to TRUE
+    v4$doT <- input$goT
+  })
+  
+  v5<-reactiveValues(xv=0)
+  observeEvent(input$xaxisGrp,{
+    v5$xv<-input$xaxisGrp
+  })
+  
+  v6<-reactiveValues(yv=0)
+  observeEvent(input$yaxisGrp,{
+    v6$yv<-input$yaxisGrp
+  })
+  
+  v7<-reactiveValues(gv=0)
+  observeEvent(input$groupVar,{
+    v7$gv<-input$groupVar
+  })
+  
+  v8<-reactiveValues(q=0)
+  observeEvent(input$quantity,{
+    v8$q<-input$quantity
+  })
+  
+  v9 <- reactiveValues(doScatter = FALSE)
+  observeEvent(input$goScatter, {
+    # 0 will be coerced to FALSE
+    # 1+ will be coerced to TRUE
+    v9$doScatter <- input$goScatter
+  })
+  
+  v10 <- reactiveValues(doBox = FALSE)
+  observeEvent(input$goBox, {
+    # 0 will be coerced to FALSE
+    # 1+ will be coerced to TRUE
+    v10$doBox <- input$goBox
+  })
+  
+  v11 <- reactiveValues(doDensities = FALSE)
+  observeEvent(input$goDensities, {
+    # 0 will be coerced to FALSE
+    # 1+ will be coerced to TRUE
+    v11$doDensities <- input$goDensities
+  })
+  
+  v12 <- reactiveValues(doAddPoints =T)
+  observeEvent(input$addPoints, {
+    # 0 will be coerced to FALSE
+    # 1+ will be coerced to TRUE
+    v12$doAddPoints<- input$addPoints
+  })
+  
+  v13 <- reactiveValues(doAdjustSize =F)
+  observeEvent(input$adjustSize, {
+    # 0 will be coerced to FALSE
+    # 1+ will be coerced to TRUE
+    v13$doAdjustSize<- input$adjustSize
+  })
+  
+  v14 <- reactiveValues(sel1 =0)
+  observeEvent(input$group1, {
+    # 0 will be coerced to FALSE
+    # 1+ will be coerced to TRUE
+    v14$sel1<- input$group1
+  })
+  
+  v15 <- reactiveValues(sel2 =0)
+  observeEvent(input$group2, {
+    # 0 will be coerced to FALSE
+    # 1+ will be coerced to TRUE
+    v15$sel2<- input$group2
+  })
+  
+  v16 <- reactiveValues(doEqualVar=F)
+  observeEvent(input$isEqualVar, {
+    # 0 will be coerced to FALSE
+    # 1+ will be coerced to TRUE
+    v16$doEqualVar<- input$isEqualVar
+  })
+  
+  v17 <- reactiveValues(doLevene = FALSE)
+  observeEvent(input$goLevene, {
+    # 0 will be coerced to FALSE
+    # 1+ will be coerced to TRUE
+    v17$doLevene <- input$goLevene
+  })
+  
+  v18 <- reactiveValues(doFligner = FALSE)
+  observeEvent(input$goFligner, {
+    # 0 will be coerced to FALSE
+    # 1+ will be coerced to TRUE
+    v18$doFligner <- input$goFligner
+  })
+  
+  v19 <- reactiveValues(doWilcoxon = FALSE)
+  observeEvent(input$goWilcoxon, {
+    # 0 will be coerced to FALSE
+    # 1+ will be coerced to TRUE
+    v19$doWilcoxon <- input$goWilcoxon
+  })
+  
+  output$summary <- renderPrint({
+    
+    # input$file1 will be NULL initially. After the user selects
+    # and uploads a file, head of that data file by default,
+    # or all rows if selected, will be shown.
+    
+    req(input$file1)
+    
+    # when reading semicolon separated files,
+    # having a comma separator causes `read.csv` to error
+    tryCatch(
+      {
+        df <- read.csv(input$file1$datapath,
+                       header = input$header,
+                       sep = input$sep)
+      },
+      error = function(e) {
+        # return a safeError if a parsing error occurs
+        stop(safeError(e))
+        # print(safeError(e)), use as debugger
+      }
+    )
+    
+    if (v3$doSummary == FALSE) return()
+    
+    summary(df)
+    
+  })
+  
+  output$contents <- renderTable({
+    
+    # input$file1 will be NULL initially. After the user selects
+    # and uploads a file, head of that data file by default,
+    # or all rows if selected, will be shown.
+    
+    req(input$file1) #to require that user upload a file
+    
+    # when reading semicolon separated files,
+    # having a comma separator causes `read.csv` to error
+    tryCatch(
+      {
+        df <- read.csv(input$file1$datapath,
+                       header = input$header,
+                       sep = input$sep)
+      },
+      error = function(e) {
+        # return a safeError if a parsing error occurs
+        stop(safeError(e))
+      }
+    )
+    
+    if(input$disp == "head") {
+      return(head(df))
+    }
+    else {
+      return(df)
+    }
+    
+  })
+  
+  output$violinPlot <- renderPlotly({
+    
+    # there must be a way not to repeat the same lines to get df
+    
+    # input$file1 will be NULL initially. After the user selects
+    # and uploads a file, head of that data file by default,
+    # or all rows if selected, will be shown.
+    
+    req(input$file1)
+    
+    # when reading semicolon separated files,
+    # having a comma separator causes `read.csv` to error
+    tryCatch(
+      {
+        df <- read.csv(input$file1$datapath,
+                       header = input$header,
+                       sep = input$sep)
+      },
+      error = function(e) {
+        # return a safeError if a parsing error occurs
+        stop(safeError(e))
+      }
+    )
+    
+    if (v$doViolinPlot == FALSE) return()
+    # fill should contain x var
+    
+    v4 <- reactiveValues(doT = FALSE)
+    
+    
+    observeEvent(input$goT, {
+      # 0 will be coerced to FALSE
+      # 1+ will be coerced to TRUE
+      v4$doT <- input$goT
+    })
+    
+    x_val<-unlist(subset(df, select=c(v5$xv)))
+    y_val<-unlist(subset(df, select=c(v6$yv)))
+    
+    # options(repr.plot.width=v14$doWidthVal, repr.plot.height=v15$doHeightVal)
+    plot<-ggplot(df, aes(x=x_val, y=y_val, fill=x_val))+geom_violin(alpha=0.5)+xlab(v5$xv)+ylab(v6$yv)+labs(fill=v5$xv)+
+      ylim(c(1,6))+
+      theme(
+        plot.title = element_text(hjust=0.5, size=rel(1.8)),
+        axis.title.x = element_text(size=rel(1.8)),
+        axis.title.y = element_text(size=rel(1.8), angle=90, vjust=0.5, hjust=0.5),
+        axis.text.x = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        axis.text.y = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        panel.background = element_blank(),
+        text=element_text(size=8),
+        axis.line = element_line(colour = "grey")##,
+      )  
+    if(v12$doAddPoints==T){
+      plot<-plot+geom_point(pch = 21, alpha=0.3, position = position_jitterdodge(jitter.height=0.05, jitter.width=2.5),size=0.5)
+    }
+    ggplotly(plot)
+  })
+  
+  # histogram should be the base template
+  # all other plots should follow its styles
+  output$histogram <- renderPlotly({
+    
+    # there must be a way not to repeat the same lines to get df
+    
+    # input$file1 will be NULL initially. After the user selects
+    # and uploads a file, head of that data file by default,
+    # or all rows if selected, will be shown.
+    
+    req(input$file1)
+    
+    # when reading semicolon separated files,
+    # having a comma separator causes `read.csv` to error
+    tryCatch(
+      {
+        df <- read.csv(input$file1$datapath,
+                       header = input$header,
+                       sep = input$sep)
+      },
+      error = function(e) {
+        # return a safeError if a parsing error occurs
+        stop(safeError(e))
+      }
+    )
+    
+    if (v2$doHist == FALSE) return()
+    
+    # print(subset(df, select=c(v5$xv)))
+    
+    # tryCatch({
+    #   x_val<-unlist(subset(df, select=c(v5$xv)))
+    # }error=function(e){
+    #   stop(safeError(e))
+    # })
+    x_val<-unlist(subset(df, select=c(v5$xv)))
+    
+    # notice that v5$xv here is character, not col obj; but ggplot needs to accept col obj
+    # use subset func to extract col object from dataframe; other func, such as df[...], seems not work at all
+    # ggplot2 does not accept list object; must use unlist
+    # print(x_val)
+    # y_val<-df[,v6$yv]
+    
+    
+    p<-ggplot(df, aes(x_val, fill=x_val))+geom_bar(alpha=0.5)+ 
+      xlab(v5$xv)+labs(fill=v5$xv)+
+      theme(
+        plot.title = element_text(hjust=0.5, size=rel(1.8)),
+        axis.title.x = element_text(size=rel(1.8)),
+        axis.title.y = element_text(size=rel(1.8), angle=90, vjust=0.5, hjust=0.5),
+        axis.text.x = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        axis.text.y = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        panel.background = element_blank(),
+        axis.line = element_line(colour = "grey"),
+        text=element_text(size=8),
+      )
+    ggplotly(p)
+    
+  })
+  
+  output$scatterPlot<-renderPlotly({
+    # FIXME:we want to read the input file only once per session
+    req(input$file1)
+    
+    # when reading semicolon separated files,
+    # having a comma separator causes `read.csv` to error
+    tryCatch(
+      {
+        df <- read.csv(input$file1$datapath,
+                       header = input$header,
+                       sep = input$sep)
+      },
+      error = function(e) {
+        # return a safeError if a parsing error occurs
+        stop(safeError(e))
+      }
+    )
+    
+    if (v9$doScatter == FALSE) return()
+    
+    # print(subset(df, select=c(v5$xv)))
+    
+    x_val<-unlist(subset(df, select=c(v5$xv)))
+    # notice that v5$xv here is character, not col obj; but ggplot needs to accept col obj
+    # use subset func to extract col object from dataframe; other func, such as df[...], seems not work at all
+    # ggplot2 does not accept list object; must use unlist
+    # print(x_val)
+    # y_val<-df[,v6$yv]
+    y_val<-unlist(subset(df, select=c(v6$yv)))
+    
+    
+    p<-ggplot(df, aes(y = y_val, x = x_val, fill = x_val)) +
+      xlab(v5$xv)+labs(fill=v5$xv)+ylab(v6$yv)+
+      geom_jitter(pch = 21, alpha=0.3, width=0.2)+
+      theme(
+        plot.title = element_text(hjust=0.5, size=rel(1.8)),
+        axis.title.x = element_text(size=rel(1.8)),
+        axis.title.y = element_text(size=rel(1.8), angle=90, vjust=0.5, hjust=0.5),
+        axis.text.x = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        axis.text.y = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        panel.background = element_blank(),
+        text=element_text(size=8),
+        axis.line = element_line(colour = "grey")##,
+      ) 
+    ggplotly(p)
+    
+    
+  })
+  
+  output$boxPlot <- renderPlotly({
+    
+    # there must be a way not to repeat the same lines to get df
+    
+    # input$file1 will be NULL initially. After the user selects
+    # and uploads a file, head of that data file by default,
+    # or all rows if selected, will be shown.
+    
+    req(input$file1)
+    
+    # when reading semicolon separated files,
+    # having a comma separator causes `read.csv` to error
+    tryCatch(
+      {
+        df <- read.csv(input$file1$datapath,
+                       header = input$header,
+                       sep = input$sep)
+      },
+      error = function(e) {
+        # return a safeError if a parsing error occurs
+        stop(safeError(e))
+      }
+    )
+    
+    if (v10$doBox == FALSE) return()
+    
+    x_val<-unlist(subset(df, select=c(v5$xv)))
+    # notice that v5$xv here is character, not col obj; but ggplot needs to accept col obj
+    # use subset func to extract col object from dataframe; other func, such as df[...], seems not work at all
+    # ggplot2 does not accept list object; must use unlist
+    # print(x_val)
+    y_val<-unlist(subset(df, select=c(v6$yv)))
+    
+    plot<-ggplot(df, aes(x = x_val, y = y_val, fill = x_val)) +
+      xlab(v5$xv)+labs(fill=v5$xv)+ylab(v6$yv)+
+      geom_boxplot(outlier.size = 0, alpha=0.1) +
+      theme(
+        plot.title = element_text(hjust=0.5, size=rel(1.8)),
+        axis.title.x = element_text(size=rel(1.8)),
+        axis.title.y = element_text(size=rel(1.8), angle=90, vjust=0.5, hjust=0.5),
+        axis.text.x = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        axis.text.y = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        panel.background = element_blank(),
+        text=element_text(size=8),
+        axis.line = element_line(colour = "grey")##,
+      )
+    
+    if(v12$doAddPoints==T){
+      plot<-  plot+geom_jitter(pch = 21, alpha=0.3, height=0.2,size=0.5)
+    }
+    
+    # return (plot)# object returned here must has a parenthesis
+    ggplotly(plot)
+  })
+  
+  output$densities<- renderPlotly({
+    
+    # there must be a way not to repeat the same lines to get df
+    
+    # input$file1 will be NULL initially. After the user selects
+    # and uploads a file, head of that data file by default,
+    # or all rows if selected, will be shown.
+    
+    req(input$file1)
+    
+    # when reading semicolon separated files,
+    # having a comma separator causes `read.csv` to error
+    tryCatch(
+      {
+        df <- read.csv(input$file1$datapath,
+                       header = input$header,
+                       sep = input$sep)
+      },
+      error = function(e) {
+        # return a safeError if a parsing error occurs
+        stop(safeError(e))
+      }
+    )
+    
+    if (v11$doDensities == FALSE) return()
+    
+    x_val<-unlist(subset(df, select=c(v5$xv)))
+    # notice that v5$xv here is character, not col obj; but ggplot needs to accept col obj
+    # use subset func to extract col object from dataframe; other func, such as df[...], seems not work at all
+    # ggplot2 does not accept list object; must use unlist
+    # print(x_val)
+    y_val<-unlist(subset(df, select=c(v6$yv)))
+    
+    p<-ggplot(df, aes(y_val, fill=x_val))+geom_density(alpha=0.25)+
+      xlab(v6$yv)+labs(fill=v5$xv)+
+      theme(
+        plot.title = element_text(hjust=0.5, size=rel(1.8)),
+        axis.title.x = element_text(size=rel(1.8)),
+        axis.title.y = element_text(size=rel(1.8), angle=90, vjust=0.5, hjust=0.5),
+        axis.text.x = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        axis.text.y = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        panel.background = element_blank(),
+        text=element_text(size=8),
+        axis.line = element_line(colour = "grey")##,
+      )
+    ggplotly(p)
+    
+  })
+  
+  output$sel1<-renderUI({
+    req(input$file1)
+    
+    # when reading semicolon separated files,
+    # having a comma separator causes `read.csv` to error
+    tryCatch(
+      {
+        df <- read.csv(input$file1$datapath,
+                       header = input$header,
+                       sep = input$sep)
+      },
+      error = function(e) {
+        # return a safeError if a parsing error occurs
+        stop(safeError(e))
+      }
+    )
+    
+    # if (v7$gv == "") return()
+    if(v7$gv=="UnSpecified_Value") return()
+    
+    group_list<-unlist(subset(df, select=c(v7$gv)))
+    
+    selectInput("group1","Group one:",choices=as.character(unique(unlist(group_list,use.names = F))))
+    # dont know why cant I put two select input in one uioutput method
+  })
+  
+  output$sel2<-renderUI({
+    req(input$file1)
+    
+    # when reading semicolon separated files,
+    # having a comma separator causes `read.csv` to error
+    tryCatch(
+      {
+        df <- read.csv(input$file1$datapath,
+                       header = input$header,
+                       sep = input$sep)
+      },
+      error = function(e) {
+        # return a safeError if a parsing error occurs
+        stop(safeError(e))
+      }
+    )
+    
+    # if (v7$gv == "") return()
+    if(v7$gv=="UnSpecified_Value") return()
+    
+    group_list<-unlist(subset(df, select=c(v7$gv)))
+    
+    # dont know why cant I put two select input in one uioutput method
+    
+    selectInput("group2","Group two:",choices=as.character(unique(unlist(group_list,use.names = F))))
+    
+  })
+  
+  output$ttest <- renderPrint({
+    
+    # input$file1 will be NULL initially. After the user selects
+    # and uploads a file, head of that data file by default,
+    # or all rows if selected, will be shown.
+    
+    req(input$file1)
+    
+    # when reading semicolon separated files,
+    # having a comma separator causes `read.csv` to error
+    tryCatch(
+      {
+        df <- read.csv(input$file1$datapath,
+                       header = input$header,
+                       sep = input$sep)
+      },
+      error = function(e) {
+        # return a safeError if a parsing error occurs
+        stop(safeError(e))
+      }
+    )
+    
+    if (v4$doT == FALSE) return()
+    
+    # extract var as col obj
+    # print(v7$gv)
+    
+    group_val<-unlist(subset(df, select=c(v7$gv)))
+    
+    # , in the end omits default val set to be True
+    # # important
+    x = subset(df, select=c(v8$q))[group_val == v14$sel1,]
+    y = subset(df, select=c(v8$q))[group_val == v15$sel2,]
+    if (v4$doT == FALSE) return()
+    
+    if(v16$doEqualVar==T){
+      t.test(x,y,var.equal = T)
+    }
+    else{
+      t.test(x,y)
+    }
+    
+    
+    
+  })
+  
+  output$levene <- renderPrint({
+    
+    # input$file1 will be NULL initially. After the user selects
+    # and uploads a file, head of that data file by default,
+    # or all rows if selected, will be shown.
+    
+    req(input$file1)
+    
+    # when reading semicolon separated files,
+    # having a comma separator causes `read.csv` to error
+    tryCatch(
+      {
+        df <- read.csv(input$file1$datapath,
+                       header = input$header,
+                       sep = input$sep)
+      },
+      error = function(e) {
+        # return a safeError if a parsing error occurs
+        stop(safeError(e))
+      }
+    )
+    
+    if (v17$doLevene == FALSE) return()
+    
+    # extract var as col obj
+    # print(v7$gv)
+    
+    group_val<-unlist(subset(df, select=c(v7$gv)))
+    quantity<-unlist(subset(df, select=c(v8$q)))
+    
+    # , in the end omits default val set to be True
+    # # important
+    # x = subset(df, select=c(v8$q))[group_val == v14$sel1,]
+    # y = subset(df, select=c(v8$q))[group_val == v15$sel2,]
+    if (v17$doLevene == FALSE) return()
+    
+    leveneTest(quantity~group_val,df, center=mean)
+  })
+  
+  output$fligner <- renderPrint({
+    
+    # input$file1 will be NULL initially. After the user selects
+    # and uploads a file, head of that data file by default,
+    # or all rows if selected, will be shown.
+    
+    req(input$file1)
+    
+    # when reading semicolon separated files,
+    # having a comma separator causes `read.csv` to error
+    tryCatch(
+      {
+        df <- read.csv(input$file1$datapath,
+                       header = input$header,
+                       sep = input$sep)
+      },
+      error = function(e) {
+        # return a safeError if a parsing error occurs
+        stop(safeError(e))
+      }
+    )
+    
+    if (v18$doFligner == FALSE) return()
+    
+    # extract var as col obj
+    # print(v7$gv)
+    
+    group_val<-unlist(subset(df, select=c(v7$gv)))
+    quantity<-unlist(subset(df, select=c(v8$q)))
+    
+    # , in the end omits default val set to be True
+    # # important
+    # x = subset(df, select=c(v8$q))[group_val == v14$sel1,]
+    # y = subset(df, select=c(v8$q))[group_val == v15$sel2,]
+    if (v18$doFligner == FALSE) return()
+    
+    fligner.test(quantity~group_val,df)
+  })
+  
+  output$wilcoxon <- renderPrint({
+    
+    # input$file1 will be NULL initially. After the user selects
+    # and uploads a file, head of that data file by default,
+    # or all rows if selected, will be shown.
+    
+    req(input$file1)
+    
+    # when reading semicolon separated files,
+    # having a comma separator causes `read.csv` to error
+    tryCatch(
+      {
+        df <- read.csv(input$file1$datapath,
+                       header = input$header,
+                       sep = input$sep)
+      },
+      error = function(e) {
+        # return a safeError if a parsing error occurs
+        stop(safeError(e))
+      }
+    )
+    
+    if (v19$doWilcoxon == FALSE) return()
+    
+    # extract var as col obj
+    # print(v7$gv)
+    
+    group_val<-unlist(subset(df, select=c(v7$gv)))
+    quantity<-unlist(subset(df, select=c(v8$q)))
+    
+    # , in the end omits default val set to be True
+    # # important
+    # x = subset(df, select=c(v8$q))[group_val == v14$sel1,]
+    # y = subset(df, select=c(v8$q))[group_val == v15$sel2,]
+    if (v19$doWilcoxon == FALSE) return()
+    
+    wilcox.test(quantity~group_val,df)
+  })
+  
+  # output$down <- downloadHandler(
+  #   filename =  function() {
+  #     paste("iris", input$downloadOptions, sep=".")
+  #   },
+  #   # content is a function with argument file. content writes the plot to the device
+  #   content = function(file) {
+  #     if(input$downloadOptions == "png")
+  #       png(file) # open the png device
+  #     else if (input$downloadOptions=="pdf")
+  #       pdf(file) # open the pdf device
+  #     else
+  #       jpeg(file)
+  #     plot(x=x(), y=y(), main = "iris dataset plot", xlab = xl(), ylab = yl()) # draw the plot
+  #     dev.off()  # turn the device off
+  #     
+  #   } 
+  # )
+  
+  
+  # if users wanna change the parameter (say change dots), we can first set a var as p<-ggplot(...). Then use if statement to test user's response, add it piece by piece, and finally return p
+}
+
+
+
