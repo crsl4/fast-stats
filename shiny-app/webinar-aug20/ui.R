@@ -4,7 +4,7 @@ library(plotly)
 shinyUI(pageWithSidebar(
   
   headerPanel(
-    img(src = "logo.png", height = 50, width = 154),
+    img(src = "logo.png", height = 75, width = 350),
     # fix the adjust ratio 75/230
     # "Fast-Stats Web Tool",
     #           tags$head(tags$style(type="text/css", "label.radio { display: inline-block; }", ".radio input[type=\"radio\"] { float: none; }"),
@@ -42,14 +42,12 @@ shinyUI(pageWithSidebar(
                                               Tab = "\t"),
                                   selected = ","),
                      
-                     h4("Data Summary:"),
-                     
                      # Input: Select number of rows to display ----
                      radioButtons("disp","Choose to show 'head' or 'all'",
                                   choices = c(Head = "head",
                                               All = "all"),
                                   selected = "head"),
-                     actionButton("goSummary", "Summary"),
+                     # actionButton("goSummary", "Summary"),
                      
                      HTML('<p>Data in <a href="http://en.wikipedia.org/wiki/Delimiter-separated_values">delimited text files </a> can be separated by comma, tab or semicolon. 
 				For example, Excel data can be exported in .csv (comma separated) or .tab (tab separated) format. </p>')
@@ -61,6 +59,8 @@ shinyUI(pageWithSidebar(
                      h4("Plot Option:"),
                      
                      checkboxInput("addPoints", "Add data points", T),
+                     
+                     helpText("This option allows the user to add a scatterplot of the data where each dot corresponds to one observation (row) in the dataset."),
                      
                      h4("Data Visualization:"),
                      
@@ -76,7 +76,7 @@ shinyUI(pageWithSidebar(
                                                tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
                                         ),
                                       ),
-                                      helpText("help text")
+                                      helpText("Plot a numerical variable 'Quantity' by groups 'Group variable'. It is similar to the box plot but it also shows the distribution and spread of the data.")
                      ),
                      conditionalPanel(condition="input.plotType==1",
                                       fluidRow(
@@ -85,7 +85,7 @@ shinyUI(pageWithSidebar(
                                                tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
                                         )
                                       ),
-                                      helpText("help text")),
+                                      helpText("Plot a numerical variable 'Quantity' by groups 'Group variable'. Solid black line in the box represents the median, and the upper and lower edges of the box represent the 3rd and 1st quartiles respectively.")),
                      
     ),
     conditionalPanel(condition="input.tabs1=='Data analysis'",
@@ -93,6 +93,8 @@ shinyUI(pageWithSidebar(
                      h4("Data Analysis Option:"),
                      
                      checkboxInput("isEqualVar", "Equal Variance", F),
+                     
+                     helpText(" The standard t test assumes equal variances on the two groups. If the user checks this option, the standard t test is run, but if the user unchecks this option, then the Welch t test is run instead (that does not assume equal variances)."),
                      
                      tags$hr(),
                      
@@ -110,10 +112,12 @@ shinyUI(pageWithSidebar(
                               tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
                        )
                      ),
-                     helpText("help text")
+                     helpText("Statistical test of the null hypothesis of equality of means of a numerical variable 'Quantity' on two groups 'Group variable'. If the selected group variable has more than two categories, the user will select the two groups to compare. "),
+                     helpText("How to interpret the result? If the p-value is less than 0.05, we reject the null hypothesis of equality of means. The confidence interval represents the interval for the difference of means.")
     ),
     conditionalPanel(condition="input.tabs1=='FAQ'",
                      # img(src = "logo.png", height = 75, width = 230),
+                     h4("FAQ")
     )
   ),
   
@@ -121,19 +125,20 @@ shinyUI(pageWithSidebar(
     tabsetPanel(
       # Welcome tab
       tabPanel("About",
-               HTML('	<br> <p> xxx </p>'),
-               h5("Software references"),
-               HTML('<p> xxx </p>'),
-               h5("Further references"),
-               HTML('<p> xxx </p>'),
+               HTML('	<br> <h4> <strong>Welcome to the WI Fast Stats app! </strong> </h4></br>'),
+               # h5("Software references"),
+               h5( "This is the open-source publicly available web app to analyze data from WI Fast Plants.")
+               
                
       ),
       # Data upload tab
-      tabPanel("Data upload", tableOutput("filetable"),
+      tabPanel("Data upload", #tableOutput("filetable"),
                # Output: Verbatim text for data summary ----
-               verbatimTextOutput("summary"),
+               # verbatimTextOutput("summary",placeholder=F),
+               
                # Output: Data file ----
                tableOutput("contents"),
+              
       ),
       # plot tab
       tabPanel("Data visualization", 
@@ -145,16 +150,14 @@ shinyUI(pageWithSidebar(
       ), 
       # analysis tab
       tabPanel("Data analysis", 
-               verbatimTextOutput("ttest"),
+               verbatimTextOutput("ttest",placeholder = F),
+               
       ), 
       
       # FAQ 
       tabPanel("FAQ",
-               h5("Q: I have trouble editing the graphic files."), 
-               p("A: For EPS files make sure to 'ungroup' all objects so they can be edited independently. 
-				In Adobe Illustrator you will also need to use the 'release compound path' command. For PDF 
-				files you should 'release clipping mask'. SVG import appears to have problems in Adobe Illustrator 
-				and Corel Draw and should be avoided. EPS, PDF and SVG import all work with Inkscape http://www.inkscape.org/."),
+               h5("Q:How to get help? "), 
+               p("A: Soon we will have a google user group to post questions and answers for users of the app."),
       ),
       
       

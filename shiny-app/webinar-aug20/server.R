@@ -103,7 +103,7 @@ server <- function(input, output,session) {
   })
   
   v10 <- reactiveValues(doBox = FALSE)
-  observeEvent(input$goBox, {
+  observeEvent(input$goBofx, {
     # 0 will be coerced to FALSE
     # 1+ will be coerced to TRUE
     v10$doBox <- input$goBox
