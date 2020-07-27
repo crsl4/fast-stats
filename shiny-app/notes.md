@@ -91,3 +91,42 @@ q1
     - normality assumed => levene test: leveneTest(Cotyledons ~ Generation, dat, center=mean)
     - normality not assumed => Fligner-Killeen test: fligner.test(Cotyledons ~ Generation, dat)
 - wilcoxon-mann-whitney test: select grouping variable (Generation) and quantitative variable (Cotelydons). wilcox.test(Cotyledons ~ Generation, dat)
+
+
+# Adding chi-square
+For a dataset (`dat`) that has two categorical variables: `cots` and `generation`.
+```r
+dt = table(dat$cots, dat$generation)
+chisq.test(dt)
+```
+
+# Descriptions
+
+## About tab
+
+Welcome to the WI Fast Stats app! (this is larger font and bold)
+This is the open-source publicly available web app to analyze data from WI Fast Plants.
+
+## Data visualization
+
+Violin Plot: Plot a numerical variable ("Quantity") by groups ("Group variable"). It is similar to the box plot but it also shows the distribution and spread of the data.
+
+Box Plot: Plot a numerical variable ("Quantity") by groups ("Group variable"). Solid black line in the box represents the median, and the upper and lower edges of the box represent the 3rd and 1st quartiles respectively.
+
+Plot Option: Add data points. This option allows the user to add a scatterplot of the data where each dot corresponds to one observation (row) in the dataset.
+
+## Data analysis
+
+T test: Statistical test of the null hypothesis of equality of means of a numerical variable ("Quantity") on two groups ("Group variable"). If the selected group variable has more than two categories, the user will select the two groups to compare.
+
+How to interpret the result? If the p-value is less than 0.05, we reject the null hypothesis of equality of means. The confidence interval represents the interval for the difference of means.
+
+Data Analysis Option: Equal variance. The standard t test assumes equal variances on the two groups. If the user checks this option, the standard t test is run, but if the user unchecks this option, then the Welch t test is run instead (that does not assume equal variances).
+
+
+## FAQ
+
+(add the next question)
+
+How to get help? 
+Soon we will have a google user group to post questions and answers for users of the app.
