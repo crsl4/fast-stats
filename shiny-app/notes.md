@@ -117,11 +117,18 @@ Plot Option: Add data points. This option allows the user to add a scatterplot o
 
 ## Data analysis
 
+### t test
 T test: Statistical test of the null hypothesis of equality of means of a numerical variable ("Quantity") on two groups ("Group variable"). If the selected group variable has more than two categories, the user will select the two groups to compare.
 
 How to interpret the result? If the p-value is less than 0.05, we reject the null hypothesis of equality of means. The confidence interval represents the interval for the difference of means.
 
 Data Analysis Option: Equal variance. The standard t test assumes equal variances on the two groups. If the user checks this option, the standard t test is run, but if the user unchecks this option, then the Welch t test is run instead (that does not assume equal variances).
+
+### chi-square test
+
+Chi-square test: Pearson's chi-square test is used to determine whether there is a statistically significant difference between the expected frequencies and the observed frequencies in one or more categories of a contingency table
+
+How to interpret the result? If the p-value is less than 0.05, we reject the null hypothesis that in the population there is no difference between the classes (reject independence). 
 
 
 ## FAQ
