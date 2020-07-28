@@ -3,6 +3,7 @@ library(ggplot2)
 library(car)
 library(plotly)
 library(pracma)
+# library(shinyjs)
 # Define server logic to read selected file ----
 server <- function(input, output,session) {
   # #################################### 
@@ -25,7 +26,7 @@ server <- function(input, output,session) {
     cb_options <- list()
     cb_options[ dsnames] <- dsnames
     updateRadioButtons(session, "xaxisGrp",
-                       label = "Group Variable",
+                       label = "Grouping Variable",
                        choices = cb_options,
                        selected = "")
     updateRadioButtons(session, "yaxisGrp",
@@ -33,7 +34,7 @@ server <- function(input, output,session) {
                        choices = cb_options,
                        selected = "")
     updateRadioButtons(session, "groupVar",
-                       label = "Group Variable",
+                       label = "Grouping Variable",
                        choices = cb_options,
                        selected = "")
     updateRadioButtons(session, "quantity",
@@ -41,11 +42,11 @@ server <- function(input, output,session) {
                        choices = cb_options,
                        selected = "")
     updateRadioButtons(session, "gv1",
-                       label = "Group Variable 1",
+                       label = "Grouping Variable 1",
                        choices = cb_options,
                        selected = "")
     updateRadioButtons(session, "gv2",
-                       label = "Group Variable 2",
+                       label = "Grouping Variable 2",
                        choices = cb_options,
                        selected = "")
     updateRadioButtons(session, "gvBox",
@@ -66,6 +67,7 @@ server <- function(input, output,session) {
     # 0 will be coerced to FALSE
     # 1+ will be coerced to TRUE
     v$doViolinPlot <- input$goViolin
+    
   })
   
   v2 <- reactiveValues(doHist = FALSE)
@@ -89,6 +91,7 @@ server <- function(input, output,session) {
     # 0 will be coerced to FALSE
     # 1+ will be coerced to TRUE
     v4$doT <- input$goT
+    
   })
   
   v5<-reactiveValues(xv=0)
@@ -212,7 +215,20 @@ server <- function(input, output,session) {
   
   not_equalGV<-function(input1, input2){
     if(strcmp(input1, input2)){
-      showNotification("Please select different grouping variables!",duration=3,type = "error")
+      showNotification("Please select different 'Grouping Variables'!",duration=3,type = "error")
+      # "Please select different grouping variables!"
+    }else if(input1=="" || input2=="")
+    {
+      F
+    }else
+    {
+      NULL
+    }
+  }
+  
+  not_equalGV2<-function(input1, input2){
+    if(strcmp(input1, input2)){
+      showNotification("Please select different grouping variables for 'Group one' and 'Group two'!",duration=3,type = "error")
       # "Please select different grouping variables!"
     }else if(input1=="" || input2=="")
     {
@@ -226,7 +242,7 @@ server <- function(input, output,session) {
   not_categorical<-function(df, input){
     # check to see the data type of a specific col in data frame
     if(class(df[[input]])=="numeric"||class(df[[input]])=="integer"||class(df[[input]])=="complex"){
-      showNotification( "Please select a categorical variable to be the grouping variable!",duration=3,type = "error")
+      showNotification( "Please select a categorical variable to be the 'Grouping Variable'!",duration=3,type = "error")
       # "Please select a categorical variable to be the grouping variable!"
     }else if(df==""||input==""){
       F
@@ -239,7 +255,7 @@ server <- function(input, output,session) {
   not_quantity<-function(df, input){
     # check to see the data type of a specific col in data frame
     if(class(df[[input]])!="numeric"&&class(df[[input]])!="integer"&&class(df[[input]])!="complex"){
-      showNotification( "Please select a numerical variable to be the quantity!",duration=3,type = "error")
+      showNotification( "Please select a numerical variable to be the 'Quantity'!",duration=3,type = "error")
      # "Please select a numerical variable to be the quantity!"
       
     }else if(df==""||input==""){
@@ -669,6 +685,9 @@ server <- function(input, output,session) {
     validate(
       not_categorical(df,v7$gv)
     )
+    validate(
+      not_quantity(df,v8$q)
+    )
     group_val<-unlist(subset(df, select=c(v7$gv)))
   
     # , in the end omits default val set to be True
@@ -677,17 +696,16 @@ server <- function(input, output,session) {
     y = subset(df, select=c(v8$q))[group_val == v15$sel2,]
     # check if two group variables are equal
     validate(
-      not_equalGV(v14$sel1,v15$sel2)
+      not_equalGV2(v14$sel1,v15$sel2)
     )
-    
+    # print(x)
+    # print(y)
     if(v16$doEqualVar==T){
       t.test(x,y,var.equal = T)
     }
     else{
       t.test(x,y)
     }
-    
-    
     
   })
   
@@ -830,7 +848,7 @@ server <- function(input, output,session) {
       }
     )
     
-    # if (v22$doChi == FALSE) return()
+     if (v22$doChi == FALSE) return()
     
     # extract var as col obj
     # print(v7$gv)
@@ -839,7 +857,7 @@ server <- function(input, output,session) {
     # # important
     # x = subset(df, select=c(v8$q))[group_val == v14$sel1,]
     # y = subset(df, select=c(v8$q))[group_val == v15$sel2,]
-    if (v22$doChi == FALSE) return()
+    # if (v22$doChi == FALSE) return()
     # if(is.null(df)) return()
     
     validate(
@@ -854,13 +872,14 @@ server <- function(input, output,session) {
     validate(
       not_equalGV(v20$gv1,v21$gv2)
     )
+    # print(v20$gv1)
    
     group_var1<-unlist(subset(df, select=c(v20$gv1)))
     group_var2<-unlist(subset(df, select=c(v21$gv2)))
     # print(class(subset(df, select=c(v20$gv1))))
     dt = table(group_var1, group_var2)
-    
     chisq.test(dt)
+    # the test result cannot be assigned to a variable, otherwise it might get some unexpected errors
   })
   
   # output$down <- downloadHandler(
