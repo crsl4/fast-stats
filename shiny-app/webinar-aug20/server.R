@@ -2,9 +2,9 @@ library(data.table)
 library(ggplot2)
 library(car)
 library(plotly)
+library(pracma)
 # Define server logic to read selected file ----
 server <- function(input, output,session) {
-  v <- reactiveValues(doViolinPlot = FALSE)
   # #################################### 
   dsnames<-c() #a vector to store col names
   
@@ -40,12 +40,28 @@ server <- function(input, output,session) {
                        label = "Quantity",
                        choices = cb_options,
                        selected = "")
+    updateRadioButtons(session, "gv1",
+                       label = "Group Variable 1",
+                       choices = cb_options,
+                       selected = "")
+    updateRadioButtons(session, "gv2",
+                       label = "Group Variable 2",
+                       choices = cb_options,
+                       selected = "")
+    updateRadioButtons(session, "gvBox",
+                       label = "Grouping Variable",
+                       choices = cb_options,
+                       selected = "")
+    updateRadioButtons(session, "qBox",
+                       label = "Quantity",
+                       choices = cb_options,
+                       selected = "")
   })
   output$choose_dataset <- renderUI({
     selectInput("dataset", "Data set", as.list(data_sets))
   })
   ####################################
-  
+  v<-reactiveValues(doViolinPlot=FALSE)
   observeEvent(input$goViolin, {
     # 0 will be coerced to FALSE
     # 1+ will be coerced to TRUE
@@ -171,6 +187,68 @@ server <- function(input, output,session) {
     # 1+ will be coerced to TRUE
     v19$doWilcoxon <- input$goWilcoxon
   })
+  v20<-reactiveValues(gv1=0)
+  observeEvent(input$gv1,{
+    v20$gv1<-input$gv1
+  })
+  v21<-reactiveValues(gv2=0)
+  observeEvent(input$gv2,{
+    v21$gv2<-input$gv2
+  })
+  v22 <- reactiveValues(doChi = FALSE)
+  observeEvent(input$goChi, {
+    # 0 will be coerced to FALSE
+    # 1+ will be coerced to TRUE
+    v22$doChi <- input$goChi
+  })
+  v23<-reactiveValues(gvBox=0)
+  observeEvent(input$gvBox,{
+    v23$gvBox<-input$gvBox
+  })
+  v24<-reactiveValues(qBox=0)
+  observeEvent(input$qBox,{
+    v24$qBox<-input$qBox
+  })
+  
+  not_equalGV<-function(input1, input2){
+    if(strcmp(input1, input2)){
+      showNotification("Please select different grouping variables!",duration=3,type = "error")
+      # "Please select different grouping variables!"
+    }else if(input1=="" || input2=="")
+    {
+      F
+    }else
+    {
+      NULL
+    }
+  }
+  
+  not_categorical<-function(df, input){
+    # check to see the data type of a specific col in data frame
+    if(class(df[[input]])=="numeric"||class(df[[input]])=="integer"||class(df[[input]])=="complex"){
+      showNotification( "Please select a categorical variable to be the grouping variable!",duration=3,type = "error")
+      # "Please select a categorical variable to be the grouping variable!"
+    }else if(df==""||input==""){
+      F
+    }
+    else{
+      NULL
+    }
+  }
+  
+  not_quantity<-function(df, input){
+    # check to see the data type of a specific col in data frame
+    if(class(df[[input]])!="numeric"&&class(df[[input]])!="integer"&&class(df[[input]])!="complex"){
+      showNotification( "Please select a numerical variable to be the quantity!",duration=3,type = "error")
+     # "Please select a numerical variable to be the quantity!"
+      
+    }else if(df==""||input==""){
+      F
+    }
+    else{
+      NULL
+    }
+  }
   
   output$summary <- renderPrint({
     
@@ -259,14 +337,12 @@ server <- function(input, output,session) {
     if (v$doViolinPlot == FALSE) return()
     # fill should contain x var
     
-    v4 <- reactiveValues(doT = FALSE)
-    
-    
-    observeEvent(input$goT, {
-      # 0 will be coerced to FALSE
-      # 1+ will be coerced to TRUE
-      v4$doT <- input$goT
-    })
+    validate(
+      not_categorical(df,v5$xv)
+    )
+    validate(
+      not_quantity(df,v6$yv)
+    )
     
     x_val<-unlist(subset(df, select=c(v5$xv)))
     y_val<-unlist(subset(df, select=c(v6$yv)))
@@ -424,16 +500,25 @@ server <- function(input, output,session) {
     )
     
     if (v10$doBox == FALSE) return()
+    # print(v23$gvBox)
+    validate(
+      not_categorical(df,v23$gvBox)
+    )
+    validate(
+      # print(class(df[[v24$qBox]])),
+      not_quantity(df,v24$qBox)
+    )
     
-    x_val<-unlist(subset(df, select=c(v5$xv)))
+    
+    x_val<-unlist(subset(df, select=c(v23$gvBox)))
     # notice that v5$xv here is character, not col obj; but ggplot needs to accept col obj
     # use subset func to extract col object from dataframe; other func, such as df[...], seems not work at all
     # ggplot2 does not accept list object; must use unlist
     # print(x_val)
-    y_val<-unlist(subset(df, select=c(v6$yv)))
+    y_val<-unlist(subset(df, select=c(v24$qBox)))
     
     plot<-ggplot(df, aes(x = x_val, y = y_val, fill = x_val)) +
-      xlab(v5$xv)+labs(fill=v5$xv)+ylab(v6$yv)+
+      xlab(v23$gvBox)+labs(fill=v23$gvBox)+ylab(v24$qBox)+
       geom_boxplot(outlier.size = 0, alpha=0.1) +
       theme(
         plot.title = element_text(hjust=0.5, size=rel(1.8)),
@@ -580,17 +665,20 @@ server <- function(input, output,session) {
     )
     
     if (v4$doT == FALSE) return()
-    
-    # extract var as col obj
-    # print(v7$gv)
-    
+    # check to see if group variable is categorical
+    validate(
+      not_categorical(df,v7$gv)
+    )
     group_val<-unlist(subset(df, select=c(v7$gv)))
-    
+  
     # , in the end omits default val set to be True
     # # important
     x = subset(df, select=c(v8$q))[group_val == v14$sel1,]
     y = subset(df, select=c(v8$q))[group_val == v15$sel2,]
-    if (v4$doT == FALSE) return()
+    # check if two group variables are equal
+    validate(
+      not_equalGV(v14$sel1,v15$sel2)
+    )
     
     if(v16$doEqualVar==T){
       t.test(x,y,var.equal = T)
@@ -718,6 +806,61 @@ server <- function(input, output,session) {
     if (v19$doWilcoxon == FALSE) return()
     
     wilcox.test(quantity~group_val,df)
+  })
+  
+  output$chitest<-renderPrint({
+    
+    # input$file1 will be NULL initially. After the user selects
+    # and uploads a file, head of that data file by default,
+    # or all rows if selected, will be shown.
+    
+    req(input$file1)
+    
+    # when reading semicolon separated files,
+    # having a comma separator causes `read.csv` to error
+    tryCatch(
+      {
+        df <- read.csv(input$file1$datapath,
+                       header = input$header,
+                       sep = input$sep)
+      },
+      error = function(e) {
+        # return a safeError if a parsing error occurs
+        stop(safeError(e))
+      }
+    )
+    
+    # if (v22$doChi == FALSE) return()
+    
+    # extract var as col obj
+    # print(v7$gv)
+    
+    # , in the end omits default val set to be True
+    # # important
+    # x = subset(df, select=c(v8$q))[group_val == v14$sel1,]
+    # y = subset(df, select=c(v8$q))[group_val == v15$sel2,]
+    if (v22$doChi == FALSE) return()
+    # if(is.null(df)) return()
+    
+    validate(
+      not_categorical(df,v20$gv1)
+     
+    )
+    validate(
+      not_categorical(df,v21$gv2)
+    )
+    
+    # check if two group variables are equal
+    validate(
+      not_equalGV(v20$gv1,v21$gv2)
+    )
+   
+    group_var1<-unlist(subset(df, select=c(v20$gv1)))
+    group_var2<-unlist(subset(df, select=c(v21$gv2)))
+    # print(class(subset(df, select=c(v20$gv1))))
+    dt = table(group_var1, group_var2)
+    
+    chisq.test(dt)
   })
   
   # output$down <- downloadHandler(
