@@ -68,7 +68,7 @@ shinyUI(pageWithSidebar(
                                       h4("Data Visualization:"),
                                       
                                       fluidRow(
-                                        column(6,radioButtons("xaxisGrp","Grouping Variable:", c("1"="1","2"="2"))),
+                                        column(6,radioButtons("xaxisGrp","Group Variable:", c("1"="1","2"="2"))),
                                         column(6,radioButtons("yaxisGrp","Quantity:", c("1"="1","2"="2")))
                                       ),
                                       
@@ -78,7 +78,7 @@ shinyUI(pageWithSidebar(
                                                tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
                                         ),
                                       ),
-                                      HTML('<p style="color:#808080"> <b>Violin Plot:</b> Plot a numerical variable ("Quantity") by groups ("Grouping variable"). It is similar to the box plot but it also shows the distribution and spread of the data. </p>'),
+                                      HTML('<p style="color:#808080"> <b>Violin Plot:</b> Plot a numerical variable ("Quantity") by groups ("Group variable"). It is similar to the box plot but it also shows the distribution and spread of the data. </p>'),
                      ),
                      # boxplot
                      conditionalPanel(condition="input.plotType==1",
@@ -86,7 +86,7 @@ shinyUI(pageWithSidebar(
                                       h4("Data Visualization:"),
                                       
                                       fluidRow(
-                                        column(6,radioButtons("gvBox","Grouping Variable:", c("1"="1","2"="2"))),
+                                        column(6,radioButtons("gvBox","Group Variable:", c("1"="1","2"="2"))),
                                         column(6,radioButtons("qBox","Quantity:", c("1"="1","2"="2")))
                                       ),
                                       fluidRow(
@@ -95,7 +95,7 @@ shinyUI(pageWithSidebar(
                                                tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
                                         )
                                       ),
-                                      HTML('<p style="color:#808080"> <b>Box Plot:</b> Plot a numerical variable ("Quantity") by groups ("Grouping variable"). Solid black line in the box represents the median, and the upper and lower edges of the box represent the 3rd and 1st quartiles respectively. </p>'),
+                                      HTML('<p style="color:#808080"> <b>Box Plot:</b> Plot a numerical variable ("Quantity") by groups ("Group variable"). Solid black line in the box represents the median, and the upper and lower edges of the box represent the 3rd and 1st quartiles respectively. </p>'),
                                       
                      ),
     ),
@@ -113,12 +113,12 @@ shinyUI(pageWithSidebar(
                                                        
                                                        HTML('<p style="color:#808080"> <b> Equal variance:</b> The standard t test assumes equal variances on the two groups. If the user checks this option, the standard t test is run, but if the user unchecks this option, then the Welch t test is run instead (that does not assume equal variances). </p>'),
                                                        fluidRow(
-                                                         column(6,radioButtons("groupVar","Grouping Variable:", c("1"="UnSpecified_Value","2"="UnSpecified_Value"))),
+                                                         column(6,radioButtons("groupVar","Group Variable:", c("1"="UnSpecified_Value","2"="UnSpecified_Value"))),
                                                          column(6,radioButtons("quantity","Quantity:", c("1"="UnSpecified_Value","2"="UnSpecified_Value")))
                                                        ),
                                                        uiOutput("sel1"),
                                                        uiOutput("sel2"),
-                                                       HTML('<p style="color:#808080"> <b>T test:</b> Statistical test of the null hypothesis of equality of means of a numerical variable ("Quantity") on two groups ("Grouping variable"). If the selected group variable has more than two categories, the user will select the two groups to compare. </p>'),
+                                                       HTML('<p style="color:#808080"> <b>T test:</b> Statistical test of the null hypothesis of equality of means of a numerical variable ("Quantity") on two groups ("Group variable"). If the selected group variable has more than two categories, the user will select the two groups to compare. </p>'),
                                                        fluidRow(
                                                          column(6, align="center", offset = 3,
                                                                 actionButton("goT", "T-Test"), 
@@ -130,8 +130,8 @@ shinyUI(pageWithSidebar(
                                       # chi-square
                                       conditionalPanel(condition="input.testType==0",
                                                        fluidRow(
-                                                         column(6,radioButtons("gv1","Grouping Variable 1:", c("1"="UnSpecified_Value","2"="UnSpecified_Value"))),
-                                                         column(6,radioButtons("gv2","Grouping Variable 2:", c("1"="UnSpecified_Value","2"="UnSpecified_Value")))
+                                                         column(6,radioButtons("gv1","Group Variable 1:", c("1"="UnSpecified_Value","2"="UnSpecified_Value"))),
+                                                         column(6,radioButtons("gv2","Group Variable 2:", c("1"="UnSpecified_Value","2"="UnSpecified_Value")))
                                                        ),
                                                        HTML('<p style="color:#808080"> <b>Chi-square test:</b> Pearson\'s chi-square test is used to determine whether there is a statistically significant difference between the expected frequencies and the observed frequencies in one or more categories of a contingency table</p>'),
                                                        fluidRow(

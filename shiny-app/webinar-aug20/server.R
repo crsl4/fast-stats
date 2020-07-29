@@ -26,7 +26,7 @@ server <- function(input, output,session) {
     cb_options <- list()
     cb_options[ dsnames] <- dsnames
     updateRadioButtons(session, "xaxisGrp",
-                       label = "Grouping Variable",
+                       label = "Group Variable",
                        choices = cb_options,
                        selected = "")
     updateRadioButtons(session, "yaxisGrp",
@@ -34,7 +34,7 @@ server <- function(input, output,session) {
                        choices = cb_options,
                        selected = "")
     updateRadioButtons(session, "groupVar",
-                       label = "Grouping Variable",
+                       label = "Group Variable",
                        choices = cb_options,
                        selected = "")
     updateRadioButtons(session, "quantity",
@@ -42,15 +42,15 @@ server <- function(input, output,session) {
                        choices = cb_options,
                        selected = "")
     updateRadioButtons(session, "gv1",
-                       label = "Grouping Variable 1",
+                       label = "Group Variable 1",
                        choices = cb_options,
                        selected = "")
     updateRadioButtons(session, "gv2",
-                       label = "Grouping Variable 2",
+                       label = "Group Variable 2",
                        choices = cb_options,
                        selected = "")
     updateRadioButtons(session, "gvBox",
-                       label = "Grouping Variable",
+                       label = "Group Variable",
                        choices = cb_options,
                        selected = "")
     updateRadioButtons(session, "qBox",
@@ -150,17 +150,17 @@ server <- function(input, output,session) {
   })
   
   v14 <- reactiveValues(sel1 =0)
-  observeEvent(input$group1, {
+  observeEvent(input$Group1, {
     # 0 will be coerced to FALSE
     # 1+ will be coerced to TRUE
-    v14$sel1<- input$group1
+    v14$sel1<- input$Group1
   })
   
   v15 <- reactiveValues(sel2 =0)
-  observeEvent(input$group2, {
+  observeEvent(input$Group2, {
     # 0 will be coerced to FALSE
     # 1+ will be coerced to TRUE
-    v15$sel2<- input$group2
+    v15$sel2<- input$Group2
   })
   
   v16 <- reactiveValues(doEqualVar=F)
@@ -215,8 +215,8 @@ server <- function(input, output,session) {
   
   not_equalGV<-function(input1, input2){
     if(strcmp(input1, input2)){
-      showNotification("Please select different 'Grouping Variables'!",duration=3,type = "error")
-      # "Please select different grouping variables!"
+      showNotification("Please select different 'Group Variables'!",duration=3,type = "error")
+      # "Please select different Group variables!"
     }else if(input1=="" || input2=="")
     {
       F
@@ -228,8 +228,8 @@ server <- function(input, output,session) {
   
   not_equalGV2<-function(input1, input2){
     if(strcmp(input1, input2)){
-      showNotification("Please select different grouping variables for 'Group one' and 'Group two'!",duration=3,type = "error")
-      # "Please select different grouping variables!"
+      showNotification("Please select different Group variables for 'Group one' and 'Group two'!",duration=3,type = "error")
+      # "Please select different Group variables!"
     }else if(input1=="" || input2=="")
     {
       F
@@ -242,8 +242,8 @@ server <- function(input, output,session) {
   not_categorical<-function(df, input){
     # check to see the data type of a specific col in data frame
     if(class(df[[input]])=="numeric"||class(df[[input]])=="integer"||class(df[[input]])=="complex"){
-      showNotification( "Please select a categorical variable to be the 'Grouping Variable'!",duration=3,type = "error")
-      # "Please select a categorical variable to be the grouping variable!"
+      showNotification( "Please select a categorical variable to be the 'Group Variable'!",duration=3,type = "error")
+      # "Please select a categorical variable to be the Group variable!"
     }else if(df==""||input==""){
       F
     }
@@ -624,9 +624,9 @@ server <- function(input, output,session) {
     # if (v7$gv == "") return()
     if(v7$gv=="UnSpecified_Value") return()
     
-    group_list<-unlist(subset(df, select=c(v7$gv)))
+    Group_list<-unlist(subset(df, select=c(v7$gv)))
     
-    selectInput("group1","Group one:",choices=as.character(unique(unlist(group_list,use.names = F))))
+    selectInput("Group1","Group one:",choices=as.character(unique(unlist(Group_list,use.names = F))))
     # dont know why cant I put two select input in one uioutput method
   })
   
@@ -650,11 +650,11 @@ server <- function(input, output,session) {
     # if (v7$gv == "") return()
     if(v7$gv=="UnSpecified_Value") return()
     
-    group_list<-unlist(subset(df, select=c(v7$gv)))
+    Group_list<-unlist(subset(df, select=c(v7$gv)))
     
     # dont know why cant I put two select input in one uioutput method
     
-    selectInput("group2","Group two:",choices=as.character(unique(unlist(group_list,use.names = F))))
+    selectInput("Group2","Group two:",choices=as.character(unique(unlist(Group_list,use.names = F))))
     
   })
   
@@ -681,20 +681,20 @@ server <- function(input, output,session) {
     )
     
     if (v4$doT == FALSE) return()
-    # check to see if group variable is categorical
+    # check to see if Group variable is categorical
     validate(
       not_categorical(df,v7$gv)
     )
     validate(
       not_quantity(df,v8$q)
     )
-    group_val<-unlist(subset(df, select=c(v7$gv)))
+    Group_val<-unlist(subset(df, select=c(v7$gv)))
   
     # , in the end omits default val set to be True
     # # important
-    x = subset(df, select=c(v8$q))[group_val == v14$sel1,]
-    y = subset(df, select=c(v8$q))[group_val == v15$sel2,]
-    # check if two group variables are equal
+    x = subset(df, select=c(v8$q))[Group_val == v14$sel1,]
+    y = subset(df, select=c(v8$q))[Group_val == v15$sel2,]
+    # check if two Group variables are equal
     validate(
       not_equalGV2(v14$sel1,v15$sel2)
     )
@@ -736,16 +736,16 @@ server <- function(input, output,session) {
     # extract var as col obj
     # print(v7$gv)
     
-    group_val<-unlist(subset(df, select=c(v7$gv)))
+    Group_val<-unlist(subset(df, select=c(v7$gv)))
     quantity<-unlist(subset(df, select=c(v8$q)))
     
     # , in the end omits default val set to be True
     # # important
-    # x = subset(df, select=c(v8$q))[group_val == v14$sel1,]
-    # y = subset(df, select=c(v8$q))[group_val == v15$sel2,]
+    # x = subset(df, select=c(v8$q))[Group_val == v14$sel1,]
+    # y = subset(df, select=c(v8$q))[Group_val == v15$sel2,]
     if (v17$doLevene == FALSE) return()
     
-    leveneTest(quantity~group_val,df, center=mean)
+    leveneTest(quantity~Group_val,df, center=mean)
   })
   
   output$fligner <- renderPrint({
@@ -775,16 +775,16 @@ server <- function(input, output,session) {
     # extract var as col obj
     # print(v7$gv)
     
-    group_val<-unlist(subset(df, select=c(v7$gv)))
+    Group_val<-unlist(subset(df, select=c(v7$gv)))
     quantity<-unlist(subset(df, select=c(v8$q)))
     
     # , in the end omits default val set to be True
     # # important
-    # x = subset(df, select=c(v8$q))[group_val == v14$sel1,]
-    # y = subset(df, select=c(v8$q))[group_val == v15$sel2,]
+    # x = subset(df, select=c(v8$q))[Group_val == v14$sel1,]
+    # y = subset(df, select=c(v8$q))[Group_val == v15$sel2,]
     if (v18$doFligner == FALSE) return()
     
-    fligner.test(quantity~group_val,df)
+    fligner.test(quantity~Group_val,df)
   })
   
   output$wilcoxon <- renderPrint({
@@ -814,16 +814,16 @@ server <- function(input, output,session) {
     # extract var as col obj
     # print(v7$gv)
     
-    group_val<-unlist(subset(df, select=c(v7$gv)))
+    Group_val<-unlist(subset(df, select=c(v7$gv)))
     quantity<-unlist(subset(df, select=c(v8$q)))
     
     # , in the end omits default val set to be True
     # # important
-    # x = subset(df, select=c(v8$q))[group_val == v14$sel1,]
-    # y = subset(df, select=c(v8$q))[group_val == v15$sel2,]
+    # x = subset(df, select=c(v8$q))[Group_val == v14$sel1,]
+    # y = subset(df, select=c(v8$q))[Group_val == v15$sel2,]
     if (v19$doWilcoxon == FALSE) return()
     
-    wilcox.test(quantity~group_val,df)
+    wilcox.test(quantity~Group_val,df)
   })
   
   output$chitest<-renderPrint({
@@ -855,8 +855,8 @@ server <- function(input, output,session) {
     
     # , in the end omits default val set to be True
     # # important
-    # x = subset(df, select=c(v8$q))[group_val == v14$sel1,]
-    # y = subset(df, select=c(v8$q))[group_val == v15$sel2,]
+    # x = subset(df, select=c(v8$q))[Group_val == v14$sel1,]
+    # y = subset(df, select=c(v8$q))[Group_val == v15$sel2,]
     # if (v22$doChi == FALSE) return()
     # if(is.null(df)) return()
     
@@ -868,16 +868,16 @@ server <- function(input, output,session) {
       not_categorical(df,v21$gv2)
     )
     
-    # check if two group variables are equal
+    # check if two Group variables are equal
     validate(
       not_equalGV(v20$gv1,v21$gv2)
     )
     # print(v20$gv1)
    
-    group_var1<-unlist(subset(df, select=c(v20$gv1)))
-    group_var2<-unlist(subset(df, select=c(v21$gv2)))
+    Group_var1<-unlist(subset(df, select=c(v20$gv1)))
+    Group_var2<-unlist(subset(df, select=c(v21$gv2)))
     # print(class(subset(df, select=c(v20$gv1))))
-    dt = table(group_var1, group_var2)
+    dt = table(Group_var1, Group_var2)
     chisq.test(dt)
     # the test result cannot be assigned to a variable, otherwise it might get some unexpected errors
   })
