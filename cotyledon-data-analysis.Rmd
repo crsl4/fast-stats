@@ -551,7 +551,7 @@ Creating categorical variable: dycots/polycots
 
 ```{r}
 dat2 = data.frame(generation=dat$Generation)
-dat2$cots = "dycot"
+dat2$cots = "dicot"
 dat2$cots[dat$Cotyledons > 2] = "polycot"
 dat2 = within(dat2, cots<-factor(cots))
 summary(dat2)
