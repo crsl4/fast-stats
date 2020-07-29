@@ -1,6 +1,6 @@
 library(shiny)
 library(plotly)
-  
+
 shinyUI(pageWithSidebar(
   
   headerPanel(
@@ -99,137 +99,137 @@ shinyUI(pageWithSidebar(
                                       
                      ),
     ),
-                     conditionalPanel(condition="input.tabs1=='Data analysis'",
-                                      # img(src = "logo.png", height = 75, width = 230),
+    conditionalPanel(condition="input.tabs1=='Data analysis'",
+                     # img(src = "logo.png", height = 75, width = 230),
+                     
+                     # h4("Data Analysis:"),
+                     
+                     selectInput("testType","Test Type",choices =c("Chi-Square Test"=0,"T-Test"=1)),
+                     # t-test
+                     conditionalPanel(condition="input.testType==1",
+                                      h4("Data Analysis Option:"),
                                       
-                                      # h4("Data Analysis:"),
+                                      checkboxInput("isEqualVar", "Equal Variance", F),
                                       
-                                      selectInput("testType","Test Type",choices =c("Chi-Square Test"=0,"T-Test"=1)),
-                                      # t-test
-                                      conditionalPanel(condition="input.testType==1",
-                                                       h4("Data Analysis Option:"),
-                                                       
-                                                       checkboxInput("isEqualVar", "Equal Variance", F),
-                                                       
-                                                       HTML('<p style="color:#808080"> <b> Equal variance:</b> The standard t test assumes equal variances on the two groups. If the user checks this option, the standard t test is run, but if the user unchecks this option, then the Welch t test is run instead (that does not assume equal variances). </p>'),
-                                                       fluidRow(
-                                                         column(6,radioButtons("groupVar","Group Variable:", c("1"="UnSpecified_Value","2"="UnSpecified_Value"))),
-                                                         column(6,radioButtons("quantity","Quantity:", c("1"="UnSpecified_Value","2"="UnSpecified_Value")))
-                                                       ),
-                                                       uiOutput("sel1"),
-                                                       uiOutput("sel2"),
-                                                       HTML('<p style="color:#808080"> <b>T test:</b> Statistical test of the null hypothesis of equality of means of a numerical variable ("Quantity") on two groups ("Group variable"). If the selected group variable has more than two categories, the user will select the two groups to compare. </p>'),
-                                                       fluidRow(
-                                                         column(6, align="center", offset = 3,
-                                                                actionButton("goT", "T-Test"), 
-                                                                tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
-                                                         )
-                                                       ),
-                                                       HTML('<p style="color:#808080"> <b>How to interpret the result?</b> If the p-value is less than 0.05, we reject the null hypothesis of equality of means. The confidence interval represents the interval for the difference of means. </p>'),
+                                      HTML('<p style="color:#808080"> <b> Equal variance:</b> The standard t test assumes equal variances on the two groups. If the user checks this option, the standard t test is run, but if the user unchecks this option, then the Welch t test is run instead (that does not assume equal variances). </p>'),
+                                      fluidRow(
+                                        column(6,radioButtons("groupVar","Group Variable:", c("1"="UnSpecified_Value","2"="UnSpecified_Value"))),
+                                        column(6,radioButtons("quantity","Quantity:", c("1"="UnSpecified_Value","2"="UnSpecified_Value")))
                                       ),
-                                      # chi-square
-                                      conditionalPanel(condition="input.testType==0",
-                                                       fluidRow(
-                                                         column(6,radioButtons("gv1","Group Variable 1:", c("1"="UnSpecified_Value","2"="UnSpecified_Value"))),
-                                                         column(6,radioButtons("gv2","Group Variable 2:", c("1"="UnSpecified_Value","2"="UnSpecified_Value")))
-                                                       ),
-                                                       HTML('<p style="color:#808080"> <b>Chi-square test:</b> Pearson\'s chi-square test is used to determine whether there is a statistically significant difference between the expected frequencies and the observed frequencies in one or more categories of a contingency table</p>'),
-                                                       fluidRow(
-                                                         column(6, align="center", offset = 3,
-                                                                actionButton("goChi", "Chi-Square Test"), 
-                                                                tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
-                                                         )
-                                                       ),
-                                                       HTML('<p style="color:#808080"> <b>How to interpret the result?</b> If the p-value is less than 0.05, we reject the null hypothesis that in the population there is no difference between the classes (reject independence). </p>'),
+                                      uiOutput("sel1"),
+                                      uiOutput("sel2"),
+                                      HTML('<p style="color:#808080"> <b>T test:</b> Statistical test of the null hypothesis of equality of means of a numerical variable ("Quantity") on two groups ("Group variable"). If the selected group variable has more than two categories, the user will select the two groups to compare. </p>'),
+                                      fluidRow(
+                                        column(6, align="center", offset = 3,
+                                               actionButton("goT", "T-Test"), 
+                                               tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
+                                        )
                                       ),
-                                     
+                                      HTML('<p style="color:#808080"> <b>How to interpret the result?</b> If the p-value is less than 0.05, we reject the null hypothesis of equality of means. The confidence interval represents the interval for the difference of means. </p>'),
                      ),
-                     conditionalPanel(condition="input.tabs1=='FAQ'",
-                                      # img(src = "logo.png", height = 75, width = 230),
-                                      h4("FAQ")
-                     )
+                     # chi-square
+                     conditionalPanel(condition="input.testType==0",
+                                      fluidRow(
+                                        column(6,radioButtons("gv1","Group Variable 1:", c("1"="UnSpecified_Value","2"="UnSpecified_Value"))),
+                                        column(6,radioButtons("gv2","Group Variable 2:", c("1"="UnSpecified_Value","2"="UnSpecified_Value")))
+                                      ),
+                                      HTML('<p style="color:#808080"> <b>Chi-square test:</b> Pearson\'s chi-square test is used to determine whether there is a statistically significant difference between the expected frequencies and the observed frequencies in one or more categories of a contingency table</p>'),
+                                      fluidRow(
+                                        column(6, align="center", offset = 3,
+                                               actionButton("goChi", "Chi-Square Test"), 
+                                               tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
+                                        )
+                                      ),
+                                      HTML('<p style="color:#808080"> <b>How to interpret the result?</b> If the p-value is less than 0.05, we reject the null hypothesis that in the population there is no difference between the classes (reject independence). </p>'),
+                     ),
+                     
     ),
-    
-    mainPanel(
-      tags$head(
-        tags$style(HTML("
+    conditionalPanel(condition="input.tabs1=='FAQ'",
+                     # img(src = "logo.png", height = 75, width = 230),
+                     h4("FAQ")
+    )
+  ),
+  
+  mainPanel(
+    tags$head(
+      tags$style(HTML("
       .shiny-output-error-validation {
         color: red;
         font-size:120%;
       },
     ")),
-        # font for shiny notification
-        tags$style(
-          HTML(".shiny-notification {
+      # font for shiny notification
+      tags$style(
+        HTML(".shiny-notification {
              position:fixed;
              top: calc(40%);
              left: calc(40%);
              font-size:120%;
              }
              "
-          )
         )
-      ),
-      tabsetPanel(
-        # useShinyjs(),
-        # Welcome tab
-        tabPanel("About",
-                 HTML('	<br> <h4> <strong>Welcome to the WI Fast Stats app! </strong> </h4></br>'),
-                 # h5("Software references"),
-                 h5( "This is the open-source publicly available web app to analyze data from WI Fast Plants.")
-                 
-                 
-        ),
-        # Data upload tab
-        tabPanel("Data upload", #tableOutput("filetable"),
-                 # Output: Verbatim text for data summary ----
-                 # verbatimTextOutput("summary",placeholder=F),
-                 
-                 # Output: Data file ----
-                 tableOutput("contents"),
-                 
-        ),
-        # plot tab
-        tabPanel("Data visualization", 
-                 conditionalPanel(condition = "input.plotType==0",
-                                  plotlyOutput("violinPlot") ),
-                 conditionalPanel(condition = "input.plotType==1",
-                                  plotlyOutput("boxPlot") ),
-                 
-        ), 
-        # analysis tab
-        tabPanel("Data analysis", 
-                 # successfully hide the annoying verbaltext output using conditionalpanel
-                 conditionalPanel(condition="input.testType==0&&input.goChi==true",
-                                  verbatimTextOutput("chitest",placeholder = F)),
-                 conditionalPanel(condition="input.testType==1&&input.goT==true",
-                                  verbatimTextOutput("ttest",placeholder = F)
-                 )
-        ), 
-        
-        # FAQ 
-        tabPanel("FAQ",
-                 h5("Q: How to get help? "), 
-                 p("A: Soon we will have a google user group to post questions and answers for users of the app."),
-        ),
-        
-        
-        
-        id="tabs1"
-        
-      ),
-      # used to suppress the errors; comment it out everytime we need to debug
-      tags$style(type="text/css",
-                 ".shiny-output-error { visibility: hidden; }",
-                 ".shiny-output-error:before { visibility: hidden; }"
       )
+    ),
+    tabsetPanel(
+      # useShinyjs(),
+      # Welcome tab
+      tabPanel("About",
+               HTML('	<br> <h4> <strong>Welcome to the WI Fast Stats app! </strong> </h4></br>'),
+               # h5("Software references"),
+               h5( "This is the open-source publicly available web app to analyze data from WI Fast Plants.")
+               
+               
+      ),
+      # Data upload tab
+      tabPanel("Data upload", #tableOutput("filetable"),
+               # Output: Verbatim text for data summary ----
+               # verbatimTextOutput("summary",placeholder=F),
+               
+               # Output: Data file ----
+               tableOutput("contents"),
+               
+      ),
+      # plot tab
+      tabPanel("Data visualization", 
+               conditionalPanel(condition = "input.plotType==0",
+                                plotlyOutput("violinPlot") ),
+               conditionalPanel(condition = "input.plotType==1",
+                                plotlyOutput("boxPlot") ),
+               
+      ), 
+      # analysis tab
+      tabPanel("Data analysis", 
+               # successfully hide the annoying verbaltext output using conditionalpanel
+               # surprised to find that input$actionbuttonID is actually integer, keep adding one as users click the buttons
+               conditionalPanel(condition="input.testType==0&&input.goChi!=0",
+                                verbatimTextOutput("chitest",placeholder = F)),
+               conditionalPanel(condition="input.testType==1&&input.goT!=0",
+                                verbatimTextOutput("ttest",placeholder = F)
+               )
+      ), 
       
-    )))
-  
-  
-  
-  
-  
-  
-  
-  
+      # FAQ 
+      tabPanel("FAQ",
+               h5("Q: How to get help? "), 
+               p("A: Soon we will have a google user group to post questions and answers for users of the app."),
+      ),
+      
+      
+      
+      id="tabs1"
+      
+    ),
+    # used to suppress the errors; comment it out everytime we need to debug
+    tags$style(type="text/css",
+               ".shiny-output-error { visibility: hidden; }",
+               ".shiny-output-error:before { visibility: hidden; }"
+    )
+    
+  )))
+
+
+
+
+
+
+
