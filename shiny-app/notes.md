@@ -137,3 +137,35 @@ How to interpret the result? If the p-value is less than 0.05, we reject the nul
 
 How to get help? 
 Soon we will have a google user group to post questions and answers for users of the app.
+
+# Add chi square plot and more details to chi square test
+
+## In Data visualization
+- Mosaic plot: Plot to visualize contigency tables of frequencies among categorical variables
+
+We need a menu of two group variables (like the chi square) to choose.
+
+Code:
+```
+library(graphics)
+dt = table(dat2$cots, dat2$generation) 
+#group variable 1: dat2$cots, group variable 2: dat2$generation
+mosaicplot(dt, shade = TRUE, las=2)
+```
+
+Let's try to make the mosaic plot the first plot that appears in the menu.
+
+## In Data Analysis
+- Chi square test
+Let's print the table before the chi square results:
+
+```r
+dt = table(dat2$cots, dat2$generation)
+ct = chisq.test(dt)
+
+print("Observed values:")
+ct$observed
+print("Expected values:")
+ct$expected
+```
+After this, we can print the output of ct.
