@@ -567,7 +567,7 @@ mosaicplot(dt, shade = TRUE, las=2, main="Cotelydons")
 
 library(ggmosaic)
 ggplot(data = dat2) +
-  geom_mosaic(aes(x = product(cots), fill=generation))
+  geom_mosaic(aes(x=product(cots), fill=generation))
 ```
 
 ### Data analysis
