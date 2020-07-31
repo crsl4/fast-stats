@@ -246,10 +246,10 @@ shinyUI(pageWithSidebar(
       
     ),
     # used to suppress the errors; comment it out everytime we need to debug
-    # tags$style(type="text/css",
-    #            ".shiny-output-error { visibility: hidden; }",
-    #            ".shiny-output-error:before { visibility: hidden; }"
-    # )
+    tags$style(type="text/css",
+               ".shiny-output-error { visibility: hidden; }",
+               ".shiny-output-error:before { visibility: hidden; }"
+    )
     
   )))
 
