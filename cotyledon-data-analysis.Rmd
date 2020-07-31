@@ -564,6 +564,10 @@ dt = table(dat2$cots, dat2$generation)
 ```{r}
 library(graphics)
 mosaicplot(dt, shade = TRUE, las=2, main="Cotelydons")
+
+library(ggmosaic)
+ggplot(data = dat2) +
+  geom_mosaic(aes(x = product(cots), fill=generation))
 ```
 
 ### Data analysis
