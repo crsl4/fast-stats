@@ -395,7 +395,7 @@ server <- function(input, output,session) {
     y_val<-unlist(subset(df, select=c(v6$yv)))
     
     # options(repr.plot.width=v14$doWidthVal, repr.plot.height=v15$doHeightVal)
-    plot<-ggplot(df, aes(x=x_val, y=y_val, fill=x_val))+geom_violin(alpha=0.5)+xlab(v5$xv)+ylab(v6$yv)+labs(fill=v5$xv)+
+    plot<-ggplot(df, aes(x=x_val, y=y_val, fill=x_val))+geom_violin(alpha=0.5)+xlab(v5$xv)+ylab(v6$yv)+labs(fill=v5$xv)+ggtitle("Violin Plot")+
       ylim(c(1,6))+
       theme(
         plot.title = element_text(hjust=0.5, size=rel(1.8)),
@@ -451,16 +451,14 @@ server <- function(input, output,session) {
     )
     g_val1<-unlist(subset(df, select=c(v25$gvMosaic1)))
     g_val2<-unlist(subset(df, select=c(v26$gvMosaic2)))
-    dt = table(g_val1,  g_val2)   
-    mosaicplot(dt, shade = TRUE, las=2,xlab=v25$gvMosaic1,ylab=v26$gvMosaic2)
-    # plot<-ggplot(dt)
-    # ggplotly(plot)
-    # print(g_val2)
-    # # plot<-ggplot(df) +
-    # #   geom_mosaic(aes(weight=g_val2,x = product(g_val1), 
-    # #                   fill = factor(g_val1),na.rm=T)) 
-    # df<-data(df)
-    # plot<-as.ggplot(~mosaic(df))
+    dt = table(g_val1,  g_val2)
+    mosaicplot(dt, shade = TRUE, las=2,xlab=v25$gvMosaic1,ylab=v26$gvMosaic2,main="Mosaic Plot")
+    
+# ################################################
+     # ggplot(df) +
+     #  geom_mosaic(aes(x=product(gval1), fill=gval2),data=df)+xlab(v25$gvMosaic1)+ylab(v26$gvMosaic2)+ggtitle("Mosaic Plot")
+    # plot<-ggplot(df) +
+    #   geom_mosaic(aes(x=product(cots), fill=generation))+xlab(v25$gvMosaic1)+ylab(v26$gvMosaic2)
     # ggplotly(plot)
   })
   
@@ -614,9 +612,9 @@ server <- function(input, output,session) {
     # ggplot2 does not accept list object; must use unlist
     # print(x_val)
     y_val<-unlist(subset(df, select=c(v24$qBox)))
-    
+    # print(x_val)
     plot<-ggplot(df, aes(x = x_val, y = y_val, fill = x_val)) +
-      xlab(v23$gvBox)+labs(fill=v23$gvBox)+ylab(v24$qBox)+
+      xlab(v23$gvBox)+labs(fill=v23$gvBox)+ylab(v24$qBox)+ggtitle("Box Plot")+
       geom_boxplot(outlier.size = 0, alpha=0.1) +
       theme(
         plot.title = element_text(hjust=0.5, size=rel(1.8)),
@@ -962,10 +960,11 @@ server <- function(input, output,session) {
     # print(class(subset(df, select=c(v20$gv1))))
     dt <- table(group_variable1, group_variable2)
     ct<-chisq.test(dt)
-    cat("Observed values:")
+    cat("Observed values:\n")
     print(ct$observed)
-    cat("\nExpected values:")
+    cat("\n\n\nExpected values:\n")
     print(ct$expected)
+    cat("\n\n")
     chisq.test(dt)
     # the test result cannot be assigned to a variable, otherwise it might get some unexpected errors
   })
