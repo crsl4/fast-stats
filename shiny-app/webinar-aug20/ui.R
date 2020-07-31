@@ -57,13 +57,33 @@ shinyUI(pageWithSidebar(
                      # img(src = "logo.png", height = 75, width = 230),
                      h4("Plot Option:"),
                      
-                     selectInput("plotType","Plot Type",choices =c("ViolinPlot"=0,"BoxPlot"=1)),
-                     checkboxInput("addPoints", "Add data points", T),
+                     selectInput("plotType","Plot Type",choices =c("MosaicPlot"=0,"ViolinPlot"=1,"BoxPlot"=2)),
                      
-                     HTML('<p style="color:#808080"> <b>Plot Option: </b> Add data points. This option allows the user to add a scatterplot of the data where each dot corresponds to one observation (row) in the dataset. </p>'),
+                     # mosaic plot
+                     conditionalPanel(condition="input.plotType==0",
+                                      
+                                      h4("Data Visualization:"),
+                                      
+                                      fluidRow(
+                                        column(6,radioButtons("gvMosaic1","Group Variable 1:", c("1"="1","2"="2"))),
+                                        column(6,radioButtons("gvMosaic2","Group Variable 2:", c("1"="1","2"="2")))
+                                      ),
+                                      
+                                      fluidRow(
+                                        column(6, align="center", offset = 3,
+                                               actionButton("goMosaic", "Mosaic Plot"),
+                                               tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
+                                        ),
+                                      ),
+                                      HTML('<p style="color:#808080"> <b>Mosaic plot:</b> Plot to visualize contigency tables of frequencies among categorical variables </p>'),
+                     ),
                      
                      # violinplot
-                     conditionalPanel(condition="input.plotType==0",
+                     conditionalPanel(condition="input.plotType==1",
+                                      
+                                      checkboxInput("addPoints", "Add data points", T),
+                                      
+                                      HTML('<p style="color:#808080"> <b>Add data points: </b> This option allows the user to add a scatterplot of the data where each dot corresponds to one observation (row) in the dataset. </p>'),
                                       
                                       h4("Data Visualization:"),
                                       
@@ -81,7 +101,11 @@ shinyUI(pageWithSidebar(
                                       HTML('<p style="color:#808080"> <b>Violin Plot:</b> Plot a numerical variable ("Quantity") by groups ("Group variable"). It is similar to the box plot but it also shows the distribution and spread of the data. </p>'),
                      ),
                      # boxplot
-                     conditionalPanel(condition="input.plotType==1",
+                     conditionalPanel(condition="input.plotType==2",
+                                      # FIXME: not sure if this will work
+                                      checkboxInput("addPoints2", "Add data points", T),
+                                      
+                                      HTML('<p style="color:#808080"> <b>Add data points: </b>  This option allows the user to add a scatterplot of the data where each dot corresponds to one observation (row) in the dataset. </p>'),
                                       
                                       h4("Data Visualization:"),
                                       
@@ -192,8 +216,10 @@ shinyUI(pageWithSidebar(
       # plot tab
       tabPanel("Data visualization", 
                conditionalPanel(condition = "input.plotType==0",
-                                plotlyOutput("violinPlot") ),
+                                plotOutput("mosaicPlot") ),
                conditionalPanel(condition = "input.plotType==1",
+                                plotlyOutput("violinPlot") ),
+               conditionalPanel(condition = "input.plotType==2",
                                 plotlyOutput("boxPlot") ),
                
       ), 
@@ -220,10 +246,10 @@ shinyUI(pageWithSidebar(
       
     ),
     # used to suppress the errors; comment it out everytime we need to debug
-    tags$style(type="text/css",
-               ".shiny-output-error { visibility: hidden; }",
-               ".shiny-output-error:before { visibility: hidden; }"
-    )
+    # tags$style(type="text/css",
+    #            ".shiny-output-error { visibility: hidden; }",
+    #            ".shiny-output-error:before { visibility: hidden; }"
+    # )
     
   )))
 
