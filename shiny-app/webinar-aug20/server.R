@@ -3,6 +3,9 @@ library(ggplot2)
 library(car)
 library(plotly)
 library(pracma)
+library(graphics)
+library(ggmosaic)
+library(ggplotify)
 # library(shinyjs)
 # Define server logic to read selected file ----
 server <- function(input, output,session) {
@@ -55,6 +58,14 @@ server <- function(input, output,session) {
                        selected = "")
     updateRadioButtons(session, "qBox",
                        label = "Quantity",
+                       choices = cb_options,
+                       selected = "")
+    updateRadioButtons(session, "gvMosaic1",
+                       label = "Group Variable 1",
+                       choices = cb_options,
+                       selected = "")
+    updateRadioButtons(session, "gvMosaic2",
+                       label = "Group Variable 2",
                        choices = cb_options,
                        selected = "")
   })
@@ -211,6 +222,26 @@ server <- function(input, output,session) {
   v24<-reactiveValues(qBox=0)
   observeEvent(input$qBox,{
     v24$qBox<-input$qBox
+  })
+  v25<-reactiveValues(gvMosaic1=0)
+  observeEvent(input$gvMosaic1,{
+    v25$gvMosaic1<-input$gvMosaic1
+  })
+  v26<-reactiveValues(gvMosaic2=0)
+  observeEvent(input$gvMosaic2,{
+    v26$gvMosaic2<-input$gvMosaic2
+  })
+  v27 <- reactiveValues(doMosaic = FALSE)
+  observeEvent(input$goMosaic, {
+    # 0 will be coerced to FALSE
+    # 1+ will be coerced to TRUE
+    v27$doMosaic <- input$goMosaic
+  })
+  v28 <- reactiveValues(doAddPoints2 =T)
+  observeEvent(input$addPoints2, {
+    # 0 will be coerced to FALSE
+    # 1+ will be coerced to TRUE
+    v28$doAddPoints2<- input$addPoints2
   })
   
   not_equalGV<-function(input1, input2){
@@ -382,6 +413,57 @@ server <- function(input, output,session) {
     ggplotly(plot)
   })
   
+  output$mosaicPlot <- renderPlot({
+    
+    # there must be a way not to repeat the same lines to get df
+    
+    # input$file1 will be NULL initially. After the user selects
+    # and uploads a file, head of that data file by default,
+    # or all rows if selected, will be shown.
+    
+    req(input$file1)
+    
+    # when reading semicolon separated files,
+    # having a comma separator causes `read.csv` to error
+    tryCatch(
+      {
+        df <- read.csv(input$file1$datapath,
+                       header = input$header,
+                       sep = input$sep)
+      },
+      error = function(e) {
+        # return a safeError if a parsing error occurs
+        stop(safeError(e))
+      }
+    )
+    
+    if (v27$doMosaic == FALSE) return()
+    # fill should contain x var
+    
+    validate(
+      not_categorical(df,v25$gvMosaic1)
+    )
+    validate(
+      not_categorical(df,v26$gvMosaic2)
+    )
+    validate(
+      not_equalGV(v25$gvMosaic1,v26$gvMosaic2)
+    )
+    g_val1<-unlist(subset(df, select=c(v25$gvMosaic1)))
+    g_val2<-unlist(subset(df, select=c(v26$gvMosaic2)))
+    dt = table(g_val1,  g_val2)   
+    mosaicplot(dt, shade = TRUE, las=2,xlab=v25$gvMosaic1,ylab=v26$gvMosaic2)
+    # plot<-ggplot(dt)
+    # ggplotly(plot)
+    # print(g_val2)
+    # # plot<-ggplot(df) +
+    # #   geom_mosaic(aes(weight=g_val2,x = product(g_val1), 
+    # #                   fill = factor(g_val1),na.rm=T)) 
+    # df<-data(df)
+    # plot<-as.ggplot(~mosaic(df))
+    # ggplotly(plot)
+  })
+  
   # histogram should be the base template
   # all other plots should follow its styles
   output$histogram <- renderPlotly({
@@ -429,7 +511,7 @@ server <- function(input, output,session) {
     p<-ggplot(df, aes(x_val, fill=x_val))+geom_bar(alpha=0.5)+ 
       xlab(v5$xv)+labs(fill=v5$xv)+
       theme(
-        plot.title = element_text(hjust=0.5, size=rel(1.8)),
+        plot.titlelib = element_text(hjust=0.5, size=rel(1.8)),
         axis.title.x = element_text(size=rel(1.8)),
         axis.title.y = element_text(size=rel(1.8), angle=90, vjust=0.5, hjust=0.5),
         axis.text.x = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
@@ -547,7 +629,7 @@ server <- function(input, output,session) {
         axis.line = element_line(colour = "grey")##,
       )
     
-    if(v12$doAddPoints==T){
+    if(v28$doAddPoints2==T){
       plot<-  plot+geom_jitter(pch = 21, alpha=0.3, height=0.2,size=0.5)
     }
     
@@ -874,11 +956,16 @@ server <- function(input, output,session) {
     )
     # print(v20$gv1)
     
-    group_var1<-unlist(subset(df, select=c(v20$gv1)))
-    group_var2<-unlist(subset(df, select=c(v21$gv2)))
+    group_variable1<-unlist(subset(df, select=c(v20$gv1)))
+    group_variable2<-unlist(subset(df, select=c(v21$gv2)))
     # print(v22$doChi)
     # print(class(subset(df, select=c(v20$gv1))))
-    dt = table(group_var1, group_var2)
+    dt <- table(group_variable1, group_variable2)
+    ct<-chisq.test(dt)
+    cat("Observed values:")
+    print(ct$observed)
+    cat("\nExpected values:")
+    print(ct$expected)
     chisq.test(dt)
     # the test result cannot be assigned to a variable, otherwise it might get some unexpected errors
   })
