@@ -216,7 +216,7 @@ shinyUI(pageWithSidebar(
       # plot tab
       tabPanel("Data visualization", 
                conditionalPanel(condition = "input.plotType==0",
-                                plotOutput("mosaicPlot") ),
+                                plotlyOutput("mosaicPlot") ),
                conditionalPanel(condition = "input.plotType==1",
                                 plotlyOutput("violinPlot") ),
                conditionalPanel(condition = "input.plotType==2",
