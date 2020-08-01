@@ -6,6 +6,7 @@ library(pracma)
 library(graphics)
 library(ggmosaic)
 library(ggplotify)
+library(thatssorandom)
 # library(shinyjs)
 # Define server logic to read selected file ----
 server <- function(input, output,session) {
@@ -243,6 +244,22 @@ server <- function(input, output,session) {
     # 1+ will be coerced to TRUE
     v28$doAddPoints2<- input$addPoints2
   })
+  ggMMplot <- function(var1, var2){
+    require(ggplot2)
+    levVar1 <- length(levels(var1))
+    levVar2 <- length(levels(var2))
+    
+    jointTable <- prop.table(table(var1, var2))
+    plotData <- as.data.frame(jointTable)
+    plotData$marginVar1 <- prop.table(table(var1))
+    plotData$var2Height <- plotData$Freq / plotData$marginVar1
+    plotData$var1Center <- c(0, cumsum(plotData$marginVar1)[1:levVar1 -1]) +
+      plotData$marginVar1 / 2
+    
+    ggplot(plotData, aes(var1Center, var2Height)) +
+      geom_bar(stat = "identity", aes(width = marginVar1, fill = var2), col = "Black") +
+      geom_text(aes(label = as.character(var1), x = var1Center, y = 1.05)) 
+  }
   
   not_equalGV<-function(input1, input2){
     if(strcmp(input1, input2)){
@@ -413,7 +430,7 @@ server <- function(input, output,session) {
     ggplotly(plot)
   })
   
-  output$mosaicPlot <- renderPlot({
+  output$mosaicPlot <- renderPlotly({
     
     # there must be a way not to repeat the same lines to get df
     
@@ -451,8 +468,15 @@ server <- function(input, output,session) {
     )
     g_val1<-unlist(subset(df, select=c(v25$gvMosaic1)))
     g_val2<-unlist(subset(df, select=c(v26$gvMosaic2)))
-    dt = table(g_val1,  g_val2)
-    mosaicplot(dt, shade = TRUE, las=2,xlab=v25$gvMosaic1,ylab=v26$gvMosaic2,main="Mosaic Plot")
+    # dt = table(g_val1,  g_val2)
+    # mosaicplot(dt, shade = TRUE, las=2,xlab=v25$gvMosaic1,ylab=v26$gvMosaic2,main="Mosaic Plot")
+    plot<-ggmm(df,g_val1, g_val2)
+    plot<-plot+xlab(v25$gvMosaic1)+ylab(v26$gvMosaic2)+ggtitle("Mosaic Plot")+labs(fill=v26$gvMosaic2)+ 
+      theme(
+        plot.title = element_text(hjust = 0.5),
+        text=element_text(size=9),
+      )
+    ggplotly(plot)
     
 # ################################################
      # ggplot(df) +
@@ -460,6 +484,7 @@ server <- function(input, output,session) {
     # plot<-ggplot(df) +
     #   geom_mosaic(aes(x=product(cots), fill=generation))+xlab(v25$gvMosaic1)+ylab(v26$gvMosaic2)
     # ggplotly(plot)
+    # something need to note is that ggplotly is not compatiable with geom_mosaic
   })
   
   # histogram should be the base template
