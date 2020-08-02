@@ -2,9 +2,9 @@ library(shiny)
 library(plotly)
 
 shinyUI(pageWithSidebar(
-  
   headerPanel(
     img(src = "logo.png", height = 80, width = 350),
+    windowTitle="wi-fast-stats"
     # fix the adjust ratio 75/230
     # "Fast-Stats Web Tool",
     #           tags$head(tags$style(type="text/css", "label.radio { display: inline-block; }", ".radio input[type=\"radio\"] { float: none; }"),
@@ -200,7 +200,8 @@ shinyUI(pageWithSidebar(
       tabPanel("About",
                HTML('	<br> <h4> <strong>Welcome to the WI Fast Stats app! </strong> </h4></br>'),
                # h5("Software references"),
-               h5( "This is the open-source publicly available web app to analyze data from WI Fast Plants.")
+              
+               HTML( 'This is the <a href="https://github.com/crsl4/fast-stats" target="_blank">open-source</a> publicly available web app to analyze data from <a href="https://fastplants.org/" target="_blank">WI Fast Plants</a>.')
                
                
       ),
@@ -251,7 +252,8 @@ shinyUI(pageWithSidebar(
                ".shiny-output-error:before { visibility: hidden; }"
     )
     
-  )))
+  ))
+  )
 
 
 

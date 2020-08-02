@@ -4,9 +4,9 @@ library(car)
 library(plotly)
 library(pracma)
 library(graphics)
-library(ggmosaic)
 library(ggplotify)
 library(thatssorandom)
+library(rsconnect)
 # library(shinyjs)
 # Define server logic to read selected file ----
 server <- function(input, output,session) {
