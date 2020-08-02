@@ -1,0 +1,10 @@
+name: simple
+title:
+username:
+account: wi-fast-stats
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 2634973
+bundleId: 3465870
+url: https://wi-fast-stats.shinyapps.io/simple/
+when: 1596384170.31467
