@@ -169,3 +169,33 @@ print("Expected values:")
 ct$expected
 ```
 After this, we can print the output of ct.
+
+
+# Adding scatterplot/densities
+
+These plots are for the data with one categorical variable (generation) and numerical (number of cotelydons):
+
+```r
+ggplot(dat, aes(x = Generation, y = Cotyledons, fill = Generation)) +
+  geom_jitter(pch = 21, alpha=0.3, height=0.2)+
+  theme(
+        plot.title = element_text(hjust=0.5, size=rel(1.8)),
+        axis.title.x = element_text(size=rel(1.8)),
+        axis.title.y = element_text(size=rel(1.8), angle=90, vjust=0.5, hjust=0.5),
+        axis.text.x = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        axis.text.y = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        panel.background = element_blank(),
+        axis.line = element_line(colour = "grey")##,
+        )
+
+ggplot(dat, aes(Cotyledons, fill=Generation))+geom_density(alpha=0.25)+
+  theme(
+        plot.title = element_text(hjust=0.5, size=rel(1.8)),
+        axis.title.x = element_text(size=rel(1.8)),
+        axis.title.y = element_text(size=rel(1.8), angle=90, vjust=0.5, hjust=0.5),
+        axis.text.x = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        axis.text.y = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        panel.background = element_blank(),
+        axis.line = element_line(colour = "grey")##,
+        )
+```
