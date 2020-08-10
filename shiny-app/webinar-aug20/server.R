@@ -7,6 +7,7 @@ library(graphics)
 library(ggplotify)
 library(thatssorandom)
 library(rsconnect)
+library(shinydashboard)
 # library(shinyjs)
 # Define server logic to read selected file ----
 server <- function(input, output,session) {
