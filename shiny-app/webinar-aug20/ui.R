@@ -3,7 +3,12 @@ library(plotly)
 
 shinyUI(pageWithSidebar(
   headerPanel(
-    img(src = "logo.png", height = 80, width = 350),
+    fluidRow(
+             # column(),
+             img(src = "uw-logo-flush-web.png", height = 60, width = 200),
+             img(src = "logo.png", height = 60, width = 200),
+             img(src = "WIDSimpleAcronym.png", height = 60, width = 100)),
+    
     windowTitle="wi-fast-stats"
     # fix the adjust ratio 75/230
     # "Fast-Stats Web Tool",
@@ -57,7 +62,7 @@ shinyUI(pageWithSidebar(
                      # img(src = "logo.png", height = 75, width = 230),
                      h4("Plot Option:"),
                      
-                     selectInput("plotType","Plot Type",choices =c("MosaicPlot"=0,"ViolinPlot"=1,"BoxPlot"=2)),
+                     selectInput("plotType","Plot Type",choices =c("MosaicPlot"=0,"ViolinPlot"=1,"BoxPlot"=2,"ScatterPlot"=3,"Densities"=4)),
                      
                      # mosaic plot
                      conditionalPanel(condition="input.plotType==0",
@@ -120,6 +125,42 @@ shinyUI(pageWithSidebar(
                                         )
                                       ),
                                       HTML('<p style="color:#808080"> <b>Box Plot:</b> Plot a numerical variable ("Quantity") by groups ("Group variable"). Solid black line in the box represents the median, and the upper and lower edges of the box represent the 3rd and 1st quartiles respectively. </p>'),
+                                      
+                     ),
+                     # scatterplot
+                     conditionalPanel(condition="input.plotType==3",
+                                      
+                                      h4("Data Visualization:"),
+                                      
+                                      fluidRow(
+                                        column(6,radioButtons("gvScatter","Group Variable:", c("1"="1","2"="2"))),
+                                        column(6,radioButtons("qScatter","Quantity:", c("1"="1","2"="2")))
+                                      ),
+                                      fluidRow(
+                                        column(6, align="center", offset = 3,
+                                               actionButton("goScatter", "Scatter Plot"),
+                                               tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
+                                        )
+                                      ),
+                                      HTML('<p style="color:#808080"> <b>Scatter Plot:</b> Something about ScatterPlot </p>'),
+                                      
+                     ),
+                     # densities
+                     conditionalPanel(condition="input.plotType==4",
+                                      
+                                      h4("Data Visualization:"),
+                                      
+                                      fluidRow(
+                                        column(6,radioButtons("gvDensities","Group Variable:", c("1"="1","2"="2"))),
+                                        column(6,radioButtons("qDensities","Quantity:", c("1"="1","2"="2")))
+                                      ),
+                                      fluidRow(
+                                        column(6, align="center", offset = 3,
+                                               actionButton("goDensities", "Densities Plot"),
+                                               tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
+                                        )
+                                      ),
+                                      HTML('<p style="color:#808080"> <b>Densities Plot:</b> Something about DensitiesPlot </p>'),
                                       
                      ),
     ),
@@ -222,6 +263,10 @@ shinyUI(pageWithSidebar(
                                 plotlyOutput("violinPlot") ),
                conditionalPanel(condition = "input.plotType==2",
                                 plotlyOutput("boxPlot") ),
+               conditionalPanel(condition = "input.plotType==3",
+                                plotlyOutput("scatterPlot") ),
+               conditionalPanel(condition = "input.plotType==4",
+                                plotlyOutput("densities") ),
                
       ), 
       # analysis tab

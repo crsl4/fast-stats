@@ -69,6 +69,22 @@ server <- function(input, output,session) {
                        label = "Group Variable 2",
                        choices = cb_options,
                        selected = "")
+    updateRadioButtons(session, "gvScatter",
+                       label = "Group Variable",
+                       choices = cb_options,
+                       selected = "")
+    updateRadioButtons(session, "qScatter",
+                       label = "Quantity",
+                       choices = cb_options,
+                       selected = "")
+    updateRadioButtons(session, "gvDensities",
+                       label = "Group Variable",
+                       choices = cb_options,
+                       selected = "")
+    updateRadioButtons(session, "qDensities",
+                       label = "Quantity",
+                       choices = cb_options,
+                       selected = "")
   })
   output$choose_dataset <- renderUI({
     selectInput("dataset", "Data set", as.list(data_sets))
@@ -244,22 +260,22 @@ server <- function(input, output,session) {
     # 1+ will be coerced to TRUE
     v28$doAddPoints2<- input$addPoints2
   })
-  ggMMplot <- function(var1, var2){
-    require(ggplot2)
-    levVar1 <- length(levels(var1))
-    levVar2 <- length(levels(var2))
-    
-    jointTable <- prop.table(table(var1, var2))
-    plotData <- as.data.frame(jointTable)
-    plotData$marginVar1 <- prop.table(table(var1))
-    plotData$var2Height <- plotData$Freq / plotData$marginVar1
-    plotData$var1Center <- c(0, cumsum(plotData$marginVar1)[1:levVar1 -1]) +
-      plotData$marginVar1 / 2
-    
-    ggplot(plotData, aes(var1Center, var2Height)) +
-      geom_bar(stat = "identity", aes(width = marginVar1, fill = var2), col = "Black") +
-      geom_text(aes(label = as.character(var1), x = var1Center, y = 1.05)) 
-  }
+  v29<-reactiveValues(gvScatter=0)
+  observeEvent(input$gvScatter,{
+    v29$gvScatter<-input$gvScatter
+  })
+  v30<-reactiveValues(qScatter=0)
+  observeEvent(input$qScatter,{
+    v30$qScatter<-input$qScatter
+  })
+  v31<-reactiveValues(gvDensities=0)
+  observeEvent(input$gvDensities,{
+    v31$gvDensities<-input$gvDensities
+  })
+  v32<-reactiveValues(qDensities=0)
+  observeEvent(input$qDensities,{
+    v32$qDensities<-input$qDensities
+  })
   
   not_equalGV<-function(input1, input2){
     if(strcmp(input1, input2)){
@@ -567,19 +583,24 @@ server <- function(input, output,session) {
     
     if (v9$doScatter == FALSE) return()
     
-    # print(subset(df, select=c(v5$xv)))
+    validate(
+      not_categorical(df,v29$gvScatter)
+    )
+    validate(
+      # print(class(df[[v24$qBox]])),
+      not_quantity(df,v30$qScatter)
+    )
     
-    x_val<-unlist(subset(df, select=c(v5$xv)))
+    
+    x_val<-unlist(subset(df, select=c(v29$gvScatter)))
     # notice that v5$xv here is character, not col obj; but ggplot needs to accept col obj
     # use subset func to extract col object from dataframe; other func, such as df[...], seems not work at all
     # ggplot2 does not accept list object; must use unlist
-    # print(x_val)
-    # y_val<-df[,v6$yv]
-    y_val<-unlist(subset(df, select=c(v6$yv)))
+    y_val<-unlist(subset(df, select=c(v30$qScatter)))
     
     
     p<-ggplot(df, aes(y = y_val, x = x_val, fill = x_val)) +
-      xlab(v5$xv)+labs(fill=v5$xv)+ylab(v6$yv)+
+      xlab(v29$gvScatter)+labs(fill=v29$gvScatter)+ylab(v30$qScatter)+
       geom_jitter(pch = 21, alpha=0.3, width=0.2)+
       theme(
         plot.title = element_text(hjust=0.5, size=rel(1.8)),
@@ -686,15 +707,24 @@ server <- function(input, output,session) {
     
     if (v11$doDensities == FALSE) return()
     
-    x_val<-unlist(subset(df, select=c(v5$xv)))
+    validate(
+      not_categorical(df,v31$gvDensities)
+    )
+    validate(
+      # print(class(df[[v24$qBox]])),
+      not_quantity(df,v32$qDensities)
+    )
+    
+    
+    x_val<-unlist(subset(df, select=c(v31$gvDensities)))
     # notice that v5$xv here is character, not col obj; but ggplot needs to accept col obj
     # use subset func to extract col object from dataframe; other func, such as df[...], seems not work at all
     # ggplot2 does not accept list object; must use unlist
     # print(x_val)
-    y_val<-unlist(subset(df, select=c(v6$yv)))
+    y_val<-unlist(subset(df, select=c(v32$qDensities)))
     
     p<-ggplot(df, aes(y_val, fill=x_val))+geom_density(alpha=0.25)+
-      xlab(v6$yv)+labs(fill=v5$xv)+
+      xlab(v32$qDensities)+labs(fill=v31$gvDensities)+
       theme(
         plot.title = element_text(hjust=0.5, size=rel(1.8)),
         axis.title.x = element_text(size=rel(1.8)),
