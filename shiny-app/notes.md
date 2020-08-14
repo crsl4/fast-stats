@@ -115,6 +115,12 @@ Box Plot: Plot a numerical variable ("Quantity") by groups ("Group variable"). S
 
 Plot Option: Add data points. This option allows the user to add a scatterplot of the data where each dot corresponds to one observation (row) in the dataset.
 
+
+Scatterplot: Plot that shows the relationship between two numerical variables
+
+Density: Plot that represents the distribution of a numeric variable (like a smoothed histogram)
+
+
 ## Data analysis
 
 ### t test
