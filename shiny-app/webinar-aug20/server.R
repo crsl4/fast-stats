@@ -7,7 +7,6 @@ library(graphics)
 library(ggplotify)
 library(thatssorandom)
 library(rsconnect)
-library(shinydashboard)
 # library(shinyjs)
 # Define server logic to read selected file ----
 server <- function(input, output,session) {
@@ -495,9 +494,9 @@ server <- function(input, output,session) {
       )
     ggplotly(plot)
     
-# ################################################
-     # ggplot(df) +
-     #  geom_mosaic(aes(x=product(gval1), fill=gval2),data=df)+xlab(v25$gvMosaic1)+ylab(v26$gvMosaic2)+ggtitle("Mosaic Plot")
+    # ################################################
+    # ggplot(df) +
+    #  geom_mosaic(aes(x=product(gval1), fill=gval2),data=df)+xlab(v25$gvMosaic1)+ylab(v26$gvMosaic2)+ggtitle("Mosaic Plot")
     # plot<-ggplot(df) +
     #   geom_mosaic(aes(x=product(cots), fill=generation))+xlab(v25$gvMosaic1)+ylab(v26$gvMosaic2)
     # ggplotly(plot)
@@ -834,7 +833,7 @@ server <- function(input, output,session) {
     validate(
       not_equalGV2(v14$sel1,v15$sel2)
     )
-     # print()
+    # print()
     # print(y)
     if(v16$doEqualVar==T){
       t.test(x,y,var.equal = T)
@@ -1046,5 +1045,4 @@ server <- function(input, output,session) {
   
   # if users wanna change the parameter (say change dots), we can first set a var as p<-ggplot(...). Then use if statement to test user's response, add it piece by piece, and finally return p
 }
-
 
