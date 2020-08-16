@@ -1,9 +1,16 @@
-
+##################################################
+## Project:wi-fast-stats webinar app
+## Script purpose: ui.R
+## Date: 8/15/2020
+## Authors: Claudia SL, Yizhou Liu
+##################################################
 library(shiny)
 library(plotly)
 
+# main ui
 shinyUI(pageWithSidebar(
   headerPanel(
+    # logos added
     fluidRow(
       img(src="v_line.png",height=60),
       img(src = "logo.png", height = 60, width = 200),
@@ -15,24 +22,16 @@ shinyUI(pageWithSidebar(
       img(src="v_line.png",height=60, style="float:right;")),
     
     windowTitle="wi-fast-stats"
-    # fix the adjust ratio 75/230
-    # "Fast-Stats Web Tool",
-    #           tags$head(tags$style(type="text/css", "label.radio { display: inline-block; }", ".radio input[type=\"radio\"] { float: none; }"),
-    #                     tags$style(type="text/css", "select { max-width: 200px; }"),
-    #                     tags$style(type="text/css", "textarea { max-width: 185px; }"),
-    #                     tags$style(type="text/css", ".jslider { max-width: 200px; }"),
-    #                     tags$style(type='text/css', ".well { max-width: 330px; }"),
-    #                     tags$style(type='text/css', ".span4 { max-width: 330px; }")) 
   ),
   
+  # condition tabs added
   sidebarPanel(
-    # useShinyjs(),
+    # intro added
     conditionalPanel(condition="input.tabs1=='About'",
-                     # img(src = "logo.png", height = 75, width = 230),
                      h4("Introduction")
     ),
+    # data upload added
     conditionalPanel(condition="input.tabs1=='Data upload'",
-                     # img(src = "logo.png", height = 75, width = 230),
                      h4("Data Upload:"),
                      
                      # Input: Select a file ----
@@ -58,13 +57,12 @@ shinyUI(pageWithSidebar(
                                   choices = c(Head = "head",
                                               All = "all"),
                                   selected = "head"),
-                     # actionButton("goSummary", "Summary"),
                      
                      HTML('<p>Data in <a href="http://en.wikipedia.org/wiki/Delimiter-separated_values">delimited text files </a> can be separated by comma, tab or semicolon. 
 				For example, Excel data can be exported in .csv (comma separated) or .tab (tab separated) format. </p>')
     ),
+    # data vis added
     conditionalPanel(condition="input.tabs1=='Data visualization'",
-                     # img(src = "logo.png", height = 75, width = 230),
                      h4("Plot Option:"),
                      
                      selectInput("plotType","Plot Type",choices =c("MosaicPlot"=0,"ViolinPlot"=1,"BoxPlot"=2,"ScatterPlot"=3,"Densities"=4)),
@@ -169,11 +167,8 @@ shinyUI(pageWithSidebar(
                                       
                      ),
     ),
+    # data analysis added
     conditionalPanel(condition="input.tabs1=='Data analysis'",
-                     # img(src = "logo.png", height = 75, width = 230),
-                     
-                     # h4("Data Analysis:"),
-                     
                      selectInput("testType","Test Type",choices =c("Chi-Square Test"=0,"T-Test"=1)),
                      # t-test
                      conditionalPanel(condition="input.testType==1",
@@ -214,6 +209,7 @@ shinyUI(pageWithSidebar(
                      ),
                      
     ),
+    # FAQ added 
     conditionalPanel(condition="input.tabs1=='FAQ'",
                      # img(src = "logo.png", height = 75, width = 230),
                      h4("FAQ")
@@ -221,6 +217,7 @@ shinyUI(pageWithSidebar(
   ),
   
   mainPanel(
+    # font for shiny error validation
     tags$head(
       tags$style(HTML("
       .shiny-output-error-validation {
@@ -241,20 +238,14 @@ shinyUI(pageWithSidebar(
       )
     ),
     tabsetPanel(
-      # useShinyjs(),
       # Welcome tab
       tabPanel("About",
                HTML('	<br> <h4> <strong>Welcome to the WI Fast Stats app! </strong> </h4></br>'),
-               # h5("Software references"),
-               
                HTML( 'This is the <a href="https://github.com/crsl4/fast-stats" target="_blank">open-source</a> publicly available web app to analyze data from <a href="https://fastplants.org/" target="_blank">WI Fast Plants</a>.')
-               
-               
       ),
       # Data upload tab
-      tabPanel("Data upload", #tableOutput("filetable"),
+      tabPanel("Data upload", 
                # Output: Verbatim text for data summary ----
-               # verbatimTextOutput("summary",placeholder=F),
                
                # Output: Data file ----
                tableOutput("contents"),
@@ -296,7 +287,7 @@ shinyUI(pageWithSidebar(
       id="tabs1"
       
     ),
-    # used to suppress the errors; comment it out everytime we need to debug
+    # used to suppress the errors; comment it out every time needs to debug
     tags$style(type="text/css",
                ".shiny-output-error { visibility: hidden; }",
                ".shiny-output-error:before { visibility: hidden; }"
