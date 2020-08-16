@@ -1,3 +1,9 @@
+##################################################
+## Project:wi-fast-stats webinar app
+## Script purpose: server.R
+## Date: 8/15/2020
+## Authors: Claudia SL, Yizhou Liu
+##################################################
 library(data.table)
 library(ggplot2)
 library(car)
@@ -7,12 +13,13 @@ library(graphics)
 library(ggplotify)
 library(thatssorandom)
 library(rsconnect)
-# library(shinyjs)
+
 # Define server logic to read selected file ----
 server <- function(input, output,session) {
-  # #################################### 
-  dsnames<-c() #a vector to store col names
+  #a vector to store col names
+  dsnames<-c() 
   
+  #set the reactive value 
   data_set <- reactive({
     req(input$file1)
     inFile <- input$file1
@@ -21,10 +28,7 @@ server <- function(input, output,session) {
     
   })
   
-  
-  # output$contents <- renderTable({
-  #   data_set()
-  # })
+  # updates the options once data set is uploaded
   observe({
     dsnames <- names(data_set())
     cb_options <- list()
@@ -86,16 +90,15 @@ server <- function(input, output,session) {
                        choices = cb_options,
                        selected = "")
   })
+  # the following structures (i.e. v<-reactiveValues();output<-renderUI()) get all the reactive values from inputs
   output$choose_dataset <- renderUI({
     selectInput("dataset", "Data set", as.list(data_sets))
   })
-  ####################################
   v<-reactiveValues(doViolinPlot=FALSE)
   observeEvent(input$goViolin, {
     # 0 will be coerced to FALSE
     # 1+ will be coerced to TRUE
     v$doViolinPlot <- input$goViolin
-    
   })
   
   v2 <- reactiveValues(doHist = FALSE)
@@ -277,6 +280,7 @@ server <- function(input, output,session) {
     v32$qDensities<-input$qDensities
   })
   
+  # validate statements:check for the same group var 
   not_equalGV<-function(input1, input2){
     if(strcmp(input1, input2)){
       showNotification("Please select different 'Group Variables'!",duration=3,type = "error")
@@ -290,6 +294,7 @@ server <- function(input, output,session) {
     }
   }
   
+  # validate statements:check for the same group var 
   not_equalGV2<-function(input1, input2){
     if(strcmp(input1, input2)){
       showNotification("Please select different group variables for 'Group one' and 'Group two'!",duration=3,type = "error")
@@ -303,6 +308,7 @@ server <- function(input, output,session) {
     }
   }
   
+  # validate statements: check to see if user selects appropriate categorical var
   not_categorical<-function(df, input){
     # check to see the data type of a specific col in data frame
     if(class(df[[input]])=="numeric"||class(df[[input]])=="integer"||class(df[[input]])=="complex"){
@@ -316,12 +322,12 @@ server <- function(input, output,session) {
     }
   }
   
+  # validate statements: check to see if user selects appropriate group var
   not_quantity<-function(df, input){
-    # check to see the data type of a specific col in data frame
+    # check to see the data type of a specific col in data frame.
     if(class(df[[input]])!="numeric"&&class(df[[input]])!="integer"&&class(df[[input]])!="complex"){
       showNotification( "Please select a numerical variable to be the 'Quantity'!",duration=3,type = "error")
       # "Please select a numerical variable to be the quantity!"
-      
     }else if(df==""||input==""){
       F
     }
@@ -330,6 +336,7 @@ server <- function(input, output,session) {
     }
   }
   
+  #output summary of data set 
   output$summary <- renderPrint({
     
     # input$file1 will be NULL initially. After the user selects
@@ -359,6 +366,7 @@ server <- function(input, output,session) {
     
   })
   
+  # output summary of table
   output$contents <- renderTable({
     
     # input$file1 will be NULL initially. After the user selects
@@ -390,8 +398,9 @@ server <- function(input, output,session) {
     
   })
   
+  # output violin plot
   output$violinPlot <- renderPlotly({
-    
+    # FIXME:
     # there must be a way not to repeat the same lines to get df
     
     # input$file1 will be NULL initially. After the user selects
@@ -415,8 +424,8 @@ server <- function(input, output,session) {
     )
     
     if (v$doViolinPlot == FALSE) return()
-    # fill should contain x var
-    
+
+    # validate statements
     validate(
       not_categorical(df,v5$xv)
     )
@@ -424,10 +433,11 @@ server <- function(input, output,session) {
       not_quantity(df,v6$yv)
     )
     
+    # get the x_val,y_val from users'inputs
     x_val<-unlist(subset(df, select=c(v5$xv)))
     y_val<-unlist(subset(df, select=c(v6$yv)))
     
-    # options(repr.plot.width=v14$doWidthVal, repr.plot.height=v15$doHeightVal)
+    # plot created
     plot<-ggplot(df, aes(x=x_val, y=y_val, fill=x_val))+geom_violin(alpha=0.5)+xlab(v5$xv)+ylab(v6$yv)+labs(fill=v5$xv)+ggtitle("Violin Plot")+
       ylim(c(1,6))+
       theme(
@@ -440,12 +450,14 @@ server <- function(input, output,session) {
         text=element_text(size=8),
         axis.line = element_line(colour = "grey")##,
       )  
+    # data points added
     if(v12$doAddPoints==T){
       plot<-plot+geom_point(pch = 21, alpha=0.3, position = position_jitterdodge(jitter.height=0.05, jitter.width=2.5),size=0.5)
     }
     ggplotly(plot)
   })
   
+  # output mosaic plot
   output$mosaicPlot <- renderPlotly({
     
     # there must be a way not to repeat the same lines to get df
@@ -494,17 +506,16 @@ server <- function(input, output,session) {
       )
     ggplotly(plot)
     
-# ################################################
-     # ggplot(df) +
-     #  geom_mosaic(aes(x=product(gval1), fill=gval2),data=df)+xlab(v25$gvMosaic1)+ylab(v26$gvMosaic2)+ggtitle("Mosaic Plot")
+    # ################################################
+    # ggplot(df) +
+    #  geom_mosaic(aes(x=product(gval1), fill=gval2),data=df)+xlab(v25$gvMosaic1)+ylab(v26$gvMosaic2)+ggtitle("Mosaic Plot")
     # plot<-ggplot(df) +
     #   geom_mosaic(aes(x=product(cots), fill=generation))+xlab(v25$gvMosaic1)+ylab(v26$gvMosaic2)
     # ggplotly(plot)
     # something need to note is that ggplotly is not compatiable with geom_mosaic
   })
   
-  # histogram should be the base template
-  # all other plots should follow its styles
+  # output histogram plot
   output$histogram <- renderPlotly({
     
     # there must be a way not to repeat the same lines to get df
@@ -563,6 +574,7 @@ server <- function(input, output,session) {
     
   })
   
+  # output scatter plot
   output$scatterPlot<-renderPlotly({
     # FIXME:we want to read the input file only once per session
     req(input$file1)
@@ -617,6 +629,7 @@ server <- function(input, output,session) {
     
   })
   
+  # output box plot
   output$boxPlot <- renderPlotly({
     
     # there must be a way not to repeat the same lines to get df
@@ -681,6 +694,7 @@ server <- function(input, output,session) {
     ggplotly(plot)
   })
   
+  # output densities
   output$densities<- renderPlotly({
     
     # there must be a way not to repeat the same lines to get df
@@ -739,6 +753,7 @@ server <- function(input, output,session) {
     
   })
   
+  # output selection buttons 1
   output$sel1<-renderUI({
     req(input$file1)
     
@@ -765,6 +780,7 @@ server <- function(input, output,session) {
     # dont know why cant I put two select input in one uioutput method
   })
   
+  # output selection buttons 2
   output$sel2<-renderUI({
     req(input$file1)
     
@@ -793,6 +809,7 @@ server <- function(input, output,session) {
     
   })
   
+  # output T-Test
   output$ttest <- renderPrint({
     
     # input$file1 will be NULL initially. After the user selects
@@ -833,7 +850,7 @@ server <- function(input, output,session) {
     validate(
       not_equalGV2(v14$sel1,v15$sel2)
     )
-     # print()
+    # print()
     # print(y)
     if(v16$doEqualVar==T){
       t.test(x,y,var.equal = T)
@@ -844,6 +861,7 @@ server <- function(input, output,session) {
     
   })
   
+  # output Levene Test 
   output$levene <- renderPrint({
     
     # input$file1 will be NULL initially. After the user selects
@@ -883,6 +901,7 @@ server <- function(input, output,session) {
     leveneTest(quantity~group_val,df, center=mean)
   })
   
+  # output Fligner Test
   output$fligner <- renderPrint({
     
     # input$file1 will be NULL initially. After the user selects
@@ -922,6 +941,7 @@ server <- function(input, output,session) {
     fligner.test(quantity~group_val,df)
   })
   
+  # output Wilcoxon Test
   output$wilcoxon <- renderPrint({
     
     # input$file1 will be NULL initially. After the user selects
@@ -961,6 +981,7 @@ server <- function(input, output,session) {
     wilcox.test(quantity~group_val,df)
   })
   
+  # output Chi-squ Test
   output$chitest<-renderPrint({
     
     # input$file1 will be NULL initially. After the user selects
@@ -1024,6 +1045,8 @@ server <- function(input, output,session) {
     # the test result cannot be assigned to a variable, otherwise it might get some unexpected errors
   })
   
+  #####################################################################
+  # optional: manual download handler
   # output$down <- downloadHandler(
   #   filename =  function() {
   #     paste("iris", input$downloadOptions, sep=".")
@@ -1041,9 +1064,5 @@ server <- function(input, output,session) {
   #     
   #   } 
   # )
-  
-  
-  # if users wanna change the parameter (say change dots), we can first set a var as p<-ggplot(...). Then use if statement to test user's response, add it piece by piece, and finally return p
 }
-
 
