@@ -136,8 +136,8 @@ shinyUI(pageWithSidebar(
                                       h4("Data Visualization:"),
                                       
                                       fluidRow(
-                                        column(6,radioButtons("gvScatter","Group Variable:", c("1"="1","2"="2"))),
-                                        column(6,radioButtons("qScatter","Quantity:", c("1"="1","2"="2")))
+                                        column(6,radioButtons("gvScatter","Variable 1:", c("1"="1","2"="2"))),
+                                        column(6,radioButtons("qScatter","Variable 2:", c("1"="1","2"="2")))
                                       ),
                                       fluidRow(
                                         column(6, align="center", offset = 3,

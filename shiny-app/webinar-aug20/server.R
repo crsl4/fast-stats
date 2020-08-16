@@ -74,11 +74,11 @@ server <- function(input, output,session) {
                        choices = cb_options,
                        selected = "")
     updateRadioButtons(session, "gvScatter",
-                       label = "Group Variable",
+                       label = "Variable 1",
                        choices = cb_options,
                        selected = "")
     updateRadioButtons(session, "qScatter",
-                       label = "Quantity",
+                       label = "Variable 2",
                        choices = cb_options,
                        selected = "")
     updateRadioButtons(session, "gvDensities",
