@@ -276,6 +276,18 @@ server <- function(input, output,session) {
   observeEvent(input$qDensities,{
     v32$qDensities<-input$qDensities
   })
+  v33<-reactiveValues(transScatter=0)
+  observeEvent(input$transScatter,{
+    v33$transScatter<-input$transScatter
+  })
+  v34<-reactiveValues(pointShapeScatter=0)
+  observeEvent(input$pointShapeScatter,{
+    v34$pointShapeScatter<-input$pointShapeScatter
+  })
+  v35<-reactiveValues(pointSizeScatter=0)
+  observeEvent(input$pointSizeScatter,{
+    v35$pointSizeScatter<-input$pointSizeScatter
+  })
   
   not_equalGV<-function(input1, input2){
     if(strcmp(input1, input2)){
@@ -601,7 +613,7 @@ server <- function(input, output,session) {
     
     p<-ggplot(df, aes(y = y_val, x = x_val, fill = x_val)) +
       xlab(v29$gvScatter)+labs(fill=v29$gvScatter)+ylab(v30$qScatter)+
-      geom_jitter(pch = 21, alpha=0.3, width=0.2)+
+      geom_jitter(pch = v34$pointShapeScatter, alpha=v33$transScatter/100, width=0.2,size=v35$pointSizeScatter/100)+
       theme(
         plot.title = element_text(hjust=0.5, size=rel(1.8)),
         axis.title.x = element_text(size=rel(1.8)),
