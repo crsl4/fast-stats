@@ -7,9 +7,13 @@ shinyUI(dashboardPage(
   dashboardHeader(
     
     title="Fast-Stats Web Tool",
+    tags$li(img(src='v_line.png',width=20,height =50),class="dropdown"),
     tags$li(img(src='logo.png',width=175,height =50),class="dropdown"),
+    tags$li(img(src='v_line.png',width=20,height =50),class="dropdown"),
     tags$li(img(src='WIDSimpleAcronym.png',width=80,height =50),class="dropdown"),
-    tags$li(img(src='uw-logo-flush-web.png',width=150,height =50),class="dropdown")
+    tags$li(img(src='v_line.png',width=20,height =50),class="dropdown"),
+    tags$li(img(src='uw-logo-flush-web.png',width=150,height =50),class="dropdown"),
+    tags$li(img(src='v_line.png',width=20,height =50),class="dropdown")
     
     # fix the adjust ratio 75/230
     # "Fast-Stats Web Tool",
@@ -54,9 +58,11 @@ shinyUI(dashboardPage(
     
     tabItems(
       tabItem("about",
-              HTML('	<br> <h4> <strong>Welcome to the WI Fast Stats app! </strong> </h4></br>'),
-              
-              HTML( 'This is the <a href="https://github.com/crsl4/fast-stats" target="_blank">open-source</a> publicly available web app to analyze data from <a href="https://fastplants.org/" target="_blank">WI Fast Plants</a>.')
+              box( width=12, status="primary",solidHeader = T,
+                   title = "Welcome to the WI Fast Stats app!",
+                   
+                   HTML( 'This is the <a href="https://github.com/crsl4/fast-stats" target="_blank">open-source</a> publicly available web app to analyze data from <a href="https://fastplants.org/" target="_blank">WI Fast Plants</a>.'))
+             
       ),
       
       tabItem("dataUpload",
@@ -105,15 +111,15 @@ shinyUI(dashboardPage(
           box(
             width = 8, status = "primary", solidHeader = TRUE,
             title = "Plot Display",
-            conditionalPanel(condition = "input.plotType==0",
+            conditionalPanel(condition = "input.plotType==0&&input.goMosaic!=0",
                              plotlyOutput("mosaicPlot") ),
-            conditionalPanel(condition = "input.plotType==1",
+            conditionalPanel(condition = "input.plotType==1&&input.goViolin!=0",
                              plotlyOutput("violinPlot") ),
-            conditionalPanel(condition = "input.plotType==2",
+            conditionalPanel(condition = "input.plotType==2&&input.goBox!=0",
                              plotlyOutput("boxPlot") ),
-            conditionalPanel(condition = "input.plotType==3",
+            conditionalPanel(condition = "input.plotType==3&&input.goScatter!=0",
                              plotlyOutput("scatterPlot") ),
-            conditionalPanel(condition = "input.plotType==4",
+            conditionalPanel(condition = "input.plotType==4&&input.goDensities!=0",
                              plotlyOutput("densities") ),
           ),
           box(
@@ -191,6 +197,18 @@ shinyUI(dashboardPage(
                              
                              h4("Data Visualization:"),
                              
+                             selectInput("colorScatter","Color",choices =c("Blue+Purple"="BuPu","Dark Color"="Dark2","Orange+Red"="OrRd","Yellow+Green+Blue"="YlGnbu","Grey"="Greys","Paired"="Paired","Red+Blue"="RdBu","Purple+Red"="PuRd","Blue"="Blues","Red"="Reds")),
+                             
+                             sliderInput("transScatter", "Transparency:",
+                                         min = 0, max = 100,
+                                         value = 50),
+                             
+                             sliderInput("pointSizeScatter", "Point Size:",
+                                         min = 0, max = 10,
+                                         value = 2),
+                             
+                             selectInput("pointShapeScatter","Point Shape",choices =c("Solid Circle"=19,"Bullet"=20,"Filled Circle"=21,"Filled Square"=22,"Filled Diamond"=23,"Filled Triangle Point-Up"=24, "Filled Triangle Point-down"=25)),
+                             
                              fluidRow(
                                column(6,radioButtons("gvScatter","Group Variable:", c("1"="1","2"="2"))),
                                column(6,radioButtons("qScatter","Quantity:", c("1"="1","2"="2")))
@@ -264,6 +282,7 @@ shinyUI(dashboardPage(
                                )
                              ),
                              HTML('<p style="color:#808080"> <b>How to interpret the result?</b> If the p-value is less than 0.05, we reject the null hypothesis of equality of means. The confidence interval represents the interval for the difference of means. </p>'),
+                             HTML('<p style="color:#808080"> <b>Assumptions of t test:</b> The t test assumes normality, equal variance and independence. Take a look at <a href="https://wolfganghuber.shinyapps.io/t-test-normality-and-independence/" target="_blank">this link</a> that illustrate how important normality and independence are in the t test results. </p>'),
             ),
             # chi-square
             conditionalPanel(condition="input.testType==0",
@@ -285,8 +304,11 @@ shinyUI(dashboardPage(
       ),#tabitem for data analysis ends
       # cannot add extra , if it's the final tab item!
       tabItem("faq",
+              box( width=12, status="primary",solidHeader = T,
+                   title="Frequently Asked Questions",
               h5("Q: How to get help? "), 
               p("A: Soon we will have a google user group to post questions and answers for users of the app.")
+              )
       )
     ),#tabitems end
     
