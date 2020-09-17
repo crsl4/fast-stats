@@ -197,13 +197,15 @@ shinyUI(dashboardPage(
                              
                              h4("Data Visualization:"),
                              
+                             selectInput("colorScatter","Color",choices =c("Blue+Purple"="BuPu","Dark Color"="Dark2","Orange+Red"="OrRd","Yellow+Green+Blue"="YlGnbu","Grey"="Greys","Paired"="Paired","Red+Blue"="RdBu","Purple+Red"="PuRd","Blue"="Blues","Red"="Reds")),
+                             
                              sliderInput("transScatter", "Transparency:",
                                          min = 0, max = 100,
-                                         value = 30),
+                                         value = 50),
                              
                              sliderInput("pointSizeScatter", "Point Size:",
-                                         min = 0, max = 100,
-                                         value = 50),
+                                         min = 0, max = 10,
+                                         value = 2),
                              
                              selectInput("pointShapeScatter","Point Shape",choices =c("Solid Circle"=19,"Bullet"=20,"Filled Circle"=21,"Filled Square"=22,"Filled Diamond"=23,"Filled Triangle Point-Up"=24, "Filled Triangle Point-down"=25)),
                              
@@ -280,6 +282,7 @@ shinyUI(dashboardPage(
                                )
                              ),
                              HTML('<p style="color:#808080"> <b>How to interpret the result?</b> If the p-value is less than 0.05, we reject the null hypothesis of equality of means. The confidence interval represents the interval for the difference of means. </p>'),
+                             HTML('<p style="color:#808080"> <b>Assumptions of t test:</b> The t test assumes normality, equal variance and independence. Take a look at <a href="https://wolfganghuber.shinyapps.io/t-test-normality-and-independence/" target="_blank">this link</a> that illustrate how important normality and independence are in the t test results. </p>'),
             ),
             # chi-square
             conditionalPanel(condition="input.testType==0",

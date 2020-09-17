@@ -7,6 +7,8 @@ library(graphics)
 library(ggplotify)
 library(thatssorandom)
 library(rsconnect)
+# library(viridis)
+library(RColorBrewer)
 # library(shinyjs)
 # Define server logic to read selected file ----
 server <- function(input, output,session) {
@@ -287,6 +289,10 @@ server <- function(input, output,session) {
   v35<-reactiveValues(pointSizeScatter=0)
   observeEvent(input$pointSizeScatter,{
     v35$pointSizeScatter<-input$pointSizeScatter
+  })
+  v36<-reactiveValues(colorScatter=0)
+  observeEvent(input$colorScatter,{
+    v36$colorScatter<-input$colorScatter
   })
   
   not_equalGV<-function(input1, input2){
@@ -613,7 +619,7 @@ server <- function(input, output,session) {
     
     p<-ggplot(df, aes(y = y_val, x = x_val, fill = x_val)) +
       xlab(v29$gvScatter)+labs(fill=v29$gvScatter)+ylab(v30$qScatter)+
-      geom_jitter(pch = v34$pointShapeScatter, alpha=v33$transScatter/100, width=0.2,size=v35$pointSizeScatter/100)+
+      geom_jitter(pch = v34$pointShapeScatter, alpha=v33$transScatter/100, width=0.2,size=v35$pointSizeScatter)+
       theme(
         plot.title = element_text(hjust=0.5, size=rel(1.8)),
         axis.title.x = element_text(size=rel(1.8)),
@@ -623,7 +629,10 @@ server <- function(input, output,session) {
         panel.background = element_blank(),
         text=element_text(size=8),
         axis.line = element_line(colour = "grey")##,
-      ) 
+      )
+    # brewer.pal(n = 8, name = "Spectral")
+    p<-p+ scale_fill_brewer(palette = v36$colorScatter)
+    # A character string indicating the colormap option to use. Four options are available: "magma" (or "A"), "inferno" (or "B"), "plasma" (or "C"), "viridis" (or "D", the default option) and "cividis" (or "E").
     ggplotly(p)
     
     
