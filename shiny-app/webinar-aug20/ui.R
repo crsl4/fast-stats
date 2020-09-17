@@ -197,11 +197,14 @@ shinyUI(dashboardPage(
                              
                              h4("Data Visualization:"),
                              
-                             selectInput("colorScatter","Color",choices =c("Blue+Purple"="BuPu","Dark Color"="Dark2","Orange+Red"="OrRd","Yellow+Green+Blue"="YlGnbu","Grey"="Greys","Paired"="Paired","Red+Blue"="RdBu","Purple+Red"="PuRd","Blue"="Blues","Red"="Reds")),
+                             selectInput("colorScatter","Color",choices = c("Blue+Purple"="BuPu","Dark Color"="Dark2","Orange+Red"="OrRd","Yellow+Green+Blue"="YlGnBu","Accent"="Accent","Paired"="Paired","Red+Blue"="RdYlBu","Purple+Red"="PuRd","Set2"="Set2","Purple+Green"="PRGn")
+                             ),
                              
+                             # c("viridis"="viridis","magma"="magma","inferno"="inferno","plasma"="plasma","cividis"="cividis")
+                            
                              sliderInput("transScatter", "Transparency:",
-                                         min = 0, max = 100,
-                                         value = 50),
+                                         min = 30, max = 100,
+                                         value = 65),
                              
                              sliderInput("pointSizeScatter", "Point Size:",
                                          min = 0, max = 10,

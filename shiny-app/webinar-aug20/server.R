@@ -7,7 +7,7 @@ library(graphics)
 library(ggplotify)
 library(thatssorandom)
 library(rsconnect)
-# library(viridis)
+library(viridis)
 library(RColorBrewer)
 # library(shinyjs)
 # Define server logic to read selected file ----
@@ -630,9 +630,17 @@ server <- function(input, output,session) {
         text=element_text(size=8),
         axis.line = element_line(colour = "grey")##,
       )
-    # brewer.pal(n = 8, name = "Spectral")
-    p<-p+ scale_fill_brewer(palette = v36$colorScatter)
-    # A character string indicating the colormap option to use. Four options are available: "magma" (or "A"), "inferno" (or "B"), "plasma" (or "C"), "viridis" (or "D", the default option) and "cividis" (or "E").
+    group_list=unlist(subset(df,select=c(v29$gvScatter)))
+    colorCount = length(unique(unlist(group_list,use.names=F)))   #8, an arbitrary number
+      # length(unique(subset(df, select=c(v29$gvScatter))))
+    getPalette <- colorRampPalette(brewer.pal(8, v36$colorScatter),bias=5)(colorCount)
+    p<-p+scale_fill_manual(values= getPalette)
+    # p<-p+ scale_fill_brewer(palette = v36$colorScatter)+scale_color_brewer(palette = v36$colorScatter)
+    # p<-p+ scale_fill_brewer(palette = v36$colorScatter,direction=-1)+scale_color_brewer(palette = v36$colorScatter,direction=-1)
+   
+    # p<-p+scale_color_viridis(discrete = T, option = v36$colorScatter)+
+    #   scale_fill_viridis(discrete = T) 
+   
     ggplotly(p)
     
     
