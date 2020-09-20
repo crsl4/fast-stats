@@ -633,7 +633,9 @@ server <- function(input, output,session) {
     group_list=unlist(subset(df,select=c(v29$gvScatter)))
     colorCount = length(unique(unlist(group_list,use.names=F)))   #8, an arbitrary number
       # length(unique(subset(df, select=c(v29$gvScatter))))
-    getPalette <- colorRampPalette(brewer.pal(8, v36$colorScatter),bias=5)(colorCount)
+    getPalette <- colorRampPalette(brewer.pal(8, v36$colorScatter),bias=2.5)(colorCount)
+    # FIXME LATER:
+    # bias value needs to be tested to get the best level change within color palette
     p<-p+scale_fill_manual(values= getPalette)
     # p<-p+ scale_fill_brewer(palette = v36$colorScatter)+scale_color_brewer(palette = v36$colorScatter)
     # p<-p+ scale_fill_brewer(palette = v36$colorScatter,direction=-1)+scale_color_brewer(palette = v36$colorScatter,direction=-1)
