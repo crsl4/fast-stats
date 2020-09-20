@@ -7,7 +7,6 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(ggplot2)
-library(car)
 ```
 
 # Initial data: `ecosystem-data.csv`
@@ -56,9 +55,9 @@ p2
 
 We want to give people the option to add a linear regression line:
 ```{r, echo=FALSE}
-p2 = ggplot(dat2, aes(x = Osmocote, y = Height, fill = Osmocote)) +
+p2.2 = ggplot(dat2, aes(x = Osmocote, y = Height, fill = Osmocote)) +
   geom_point(pch = 21, alpha=0.3, position = position_jitterdodge(jitter.height=0.075, jitter.width=0.1))+
-  #ylim(c(1,6))+
+  geom_smooth(method='lm', formula= y~x)+
   theme(
         plot.title = element_text(hjust=0.5, size=rel(1.8)),
         axis.title.x = element_text(size=rel(1.8)),
@@ -68,5 +67,26 @@ p2 = ggplot(dat2, aes(x = Osmocote, y = Height, fill = Osmocote)) +
         panel.background = element_blank(),
         axis.line = element_line(colour = "grey")##,
         )
-p2
+p2.2
+```
+
+We can also do violin plots if one of the variables in categorical. We do not have any independent categorical variable right now (we only have osmocotes), but we could pretend that we have a categorical variable by treating the values of osmocotes as categories:
+```{r}
+dat2$osmocote.cat = factor(dat2$Osmocote)
+str(dat2)
+```
+
+```{r}
+p4 = ggplot(dat2, aes(x=osmocote.cat, y=Height, fill=osmocote.cat))+geom_violin(alpha=0.5)+
+  theme(
+        plot.title = element_text(hjust=0.5, size=rel(1.8)),
+        axis.title.x = element_text(size=rel(1.8)),
+        axis.title.y = element_text(size=rel(1.8), angle=90, vjust=0.5, hjust=0.5),
+        axis.text.x = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        axis.text.y = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+        panel.background = element_blank(),
+        axis.line = element_line(colour = "grey")##,
+        )
+
+p4
 ```
