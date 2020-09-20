@@ -36,6 +36,16 @@ shinyUI(dashboardPage(
   ),
   
   dashboardBody(
+    # for internal links
+    tags$script(HTML("
+        var openTab = function(tabName){
+          $('a', $('.sidebar')).each(function() {
+            if(this.getAttribute('data-value') == tabName) {
+              this.click()
+            };
+          });
+        }
+      ")),
     tags$head(
       tags$style(HTML("
       .shiny-output-error-validation {
@@ -62,7 +72,7 @@ shinyUI(dashboardPage(
                    title = "Welcome to the WI Fast Stats app!",
                    
                    HTML( 'This is the <a href="https://github.com/crsl4/fast-stats" target="_blank">open-source</a> publicly available web app to analyze data from <a href="https://fastplants.org/" target="_blank">WI Fast Plants</a>.'))
-             
+              
       ),
       
       tabItem("dataUpload",
@@ -107,6 +117,7 @@ shinyUI(dashboardPage(
       ),
       tabItem(
         "dataVisualization",
+        
         fluidRow(
           box(
             width = 8, status = "primary", solidHeader = TRUE,
@@ -197,11 +208,17 @@ shinyUI(dashboardPage(
                              
                              h4("Data Visualization:"),
                              
-                             selectInput("colorScatter","Color",choices = c("Blue+Purple"="BuPu","Dark Color"="Dark2","Orange+Red"="OrRd","Yellow+Green+Blue"="YlGnBu","Accent"="Accent","Paired"="Paired","Red+Blue"="RdYlBu","Purple+Red"="PuRd","Set2"="Set2","Purple+Green"="PRGn")
+                             fluidRow(
+                               column(6,radioButtons("gvScatter","Group Variable:", c("1"="1","2"="2"))),
+                               column(6,radioButtons("qScatter","Quantity:", c("1"="1","2"="2")))
                              ),
                              
+                             selectInput("colorScatter","Color",choices = c("Blue+Purple"="BuPu","Dark Color"="Dark2","Orange+Red"="OrRd","Yellow+Green+Blue"="YlGnBu","Accent"="Accent","Paired"="Paired","Red+Blue"="RdYlBu","Purple+Red"="PuRd","Set2"="Set2","Purple+Green"="PRGn")
+                             ),
+                             HTML('<p style="color:#808080"> <b>Notice:</b> Click the FAQ tab to see the detailed color palettes</p>'),
+                             
                              # c("viridis"="viridis","magma"="magma","inferno"="inferno","plasma"="plasma","cividis"="cividis")
-                            
+                             
                              sliderInput("transScatter", "Transparency:",
                                          min = 30, max = 100,
                                          value = 65),
@@ -212,17 +229,14 @@ shinyUI(dashboardPage(
                              
                              selectInput("pointShapeScatter","Point Shape",choices =c("Solid Circle"=19,"Bullet"=20,"Filled Circle"=21,"Filled Square"=22,"Filled Diamond"=23,"Filled Triangle Point-Up"=24, "Filled Triangle Point-down"=25)),
                              
-                             fluidRow(
-                               column(6,radioButtons("gvScatter","Group Variable:", c("1"="1","2"="2"))),
-                               column(6,radioButtons("qScatter","Quantity:", c("1"="1","2"="2")))
-                             ),
+                             
                              fluidRow(
                                column(6, align="center", offset = 3,
                                       actionButton("goScatter", "Scatter Plot"),
                                       tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
                                )
                              ),
-                             HTML('<p style="color:#808080"> <b>Scatter Plot:</b> Something about ScatterPlot </p>'),
+                             HTML('<p style="color:#808080"> <b>Scatter Plot:</b> Plot that shows the relationship between two numerical variables </p>'),
                              
             ),
             # densities
@@ -240,7 +254,7 @@ shinyUI(dashboardPage(
                                       tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
                                )
                              ),
-                             HTML('<p style="color:#808080"> <b>Densities Plot:</b> Something about DensitiesPlot </p>'),
+                             HTML('<p style="color:#808080"> <b>Densities Plot:</b> Plot that represents the distribution of a numeric variable (like a smoothed histogram) </p>'),
             ),
           )
         )
@@ -309,8 +323,10 @@ shinyUI(dashboardPage(
       tabItem("faq",
               box( width=12, status="primary",solidHeader = T,
                    title="Frequently Asked Questions",
-              h5("Q: How to get help? "), 
-              p("A: Soon we will have a google user group to post questions and answers for users of the app.")
+                   h4("Q: How to get help? "), 
+                   p(HTML('<b>A: Soon we will have a google user group to post questions and answers for users of the app.</b>')),
+                   h4("Q: Color Palettes Charts: "), 
+                   img(src="color_palettes.png",width=525, height=671)
               )
       )
     ),#tabitems end
