@@ -294,6 +294,75 @@ server <- function(input, output,session) {
   observeEvent(input$colorScatter,{
     v36$colorScatter<-input$colorScatter
   })
+  ##
+  v37<-reactiveValues(transMosaic=0)
+  observeEvent(input$transMosaic,{
+    v37$transMosaic<-input$transMosaic
+  })
+  v38<-reactiveValues(pointShapeMosaic=0)
+  observeEvent(input$pointShapeMosaic,{
+    v38$pointShapeMosaic<-input$pointShapeMosaic
+  })
+  v39<-reactiveValues(pointSizeMosaic=0)
+  observeEvent(input$pointSizeScatter,{
+    v39$pointSizeMosaic<-input$pointSizeMosaic
+  })
+  v40<-reactiveValues(colorMosaic=0)
+  observeEvent(input$colorMosaic,{
+    v40$colorMosaic<-input$colorMosaic
+  })
+  ##
+  v41<-reactiveValues(transViolin=0)
+  observeEvent(input$transViolin,{
+    v41$transViolin<-input$transViolin
+  })
+  v42<-reactiveValues(pointShapeViolin=0)
+  observeEvent(input$pointShapeViolin,{
+    v42$pointShapeViolin<-input$pointShapeViolin
+  })
+  v43<-reactiveValues(pointSizeViolin=0)
+  observeEvent(input$pointSizeViolin,{
+    v43$pointSizeViolin<-input$pointSizeViolin
+  })
+  v44<-reactiveValues(colorViolin=0)
+  observeEvent(input$colorViolin,{
+    v44$colorViolin<-input$colorViolin
+  })
+  ##box
+  v45<-reactiveValues(transBox=0)
+  observeEvent(input$transBox,{
+    v45$transBox<-input$transBox
+  })
+  v46<-reactiveValues(pointShapeBox=0)
+  observeEvent(input$pointShapeBox,{
+    v46$pointShapeBox<-input$pointShapeBox
+  })
+  v47<-reactiveValues(pointSizeBox=0)
+  observeEvent(input$pointSizeBox,{
+    v47$pointSizeBox<-input$pointSizeBox
+  })
+  v48<-reactiveValues(colorBox=0)
+  observeEvent(input$colorBox,{
+    v48$colorBox<-input$colorBox
+  })
+  ##densities
+  v49<-reactiveValues(transDensities=0)
+  observeEvent(input$transDensities,{
+    v49$transDensities<-input$transDensities
+  })
+  v50<-reactiveValues(pointShapeDensities=0)
+  observeEvent(input$pointShapeDensities,{
+    v50$pointShapeDensities<-input$pointShapeDensities
+  })
+  v51<-reactiveValues(pointSizeDensities=0)
+  observeEvent(input$pointSizeDensities,{
+    v51$pointSizeDensities<-input$pointSizeDensities
+  })
+  v52<-reactiveValues(colorDensities=0)
+  observeEvent(input$colorDensities,{
+    v52$colorDensities<-input$colorDensities
+  })
+  
   
   not_equalGV<-function(input1, input2){
     if(strcmp(input1, input2)){
@@ -632,17 +701,17 @@ server <- function(input, output,session) {
       )
     group_list=unlist(subset(df,select=c(v29$gvScatter)))
     colorCount = length(unique(unlist(group_list,use.names=F)))   #8, an arbitrary number
-      # length(unique(subset(df, select=c(v29$gvScatter))))
+    # length(unique(subset(df, select=c(v29$gvScatter))))
     getPalette <- colorRampPalette(brewer.pal(8, v36$colorScatter),bias=2.5)(colorCount)
     # FIXME LATER:
     # bias value needs to be tested to get the best level change within color palette
     p<-p+scale_fill_manual(values= getPalette)
     # p<-p+ scale_fill_brewer(palette = v36$colorScatter)+scale_color_brewer(palette = v36$colorScatter)
     # p<-p+ scale_fill_brewer(palette = v36$colorScatter,direction=-1)+scale_color_brewer(palette = v36$colorScatter,direction=-1)
-   
+    
     # p<-p+scale_color_viridis(discrete = T, option = v36$colorScatter)+
     #   scale_fill_viridis(discrete = T) 
-   
+    
     ggplotly(p)
     
     
@@ -692,7 +761,7 @@ server <- function(input, output,session) {
     # print(x_val)
     plot<-ggplot(df, aes(x = x_val, y = y_val, fill = x_val)) +
       xlab(v23$gvBox)+labs(fill=v23$gvBox)+ylab(v24$qBox)+ggtitle("Box Plot")+
-      geom_boxplot(outlier.size = 0, alpha=0.1) +
+      geom_boxplot(outlier.size = 0, alpha=v45$transBox/100) +
       theme(
         plot.title = element_text(hjust=0.5, size=rel(1.8)),
         axis.title.x = element_text(size=rel(1.8)),
@@ -705,8 +774,16 @@ server <- function(input, output,session) {
       )
     
     if(v28$doAddPoints2==T){
-      plot<-  plot+geom_jitter(pch = 21, alpha=0.3, height=0.2,size=0.5)
+      plot<-  plot+geom_jitter(pch = v46$pointShapeBox, alpha=v45$transBox/100, size=v47$pointSizeBox)
+      
     }
+    group_list=unlist(subset(df,select=c(v23$gvBox)))
+    colorCount = length(unique(unlist(group_list,use.names=F)))   
+    getPalette <- colorRampPalette(brewer.pal(8, v48$colorBox),bias=2.5)(colorCount)
+    # FIXME LATER:
+    # bias value needs to be tested to get the best level change within color palette
+    plot<-plot+scale_fill_manual(values= getPalette)
+    
     
     # return (plot)# object returned here must has a parenthesis
     ggplotly(plot)
@@ -754,7 +831,7 @@ server <- function(input, output,session) {
     # print(x_val)
     y_val<-unlist(subset(df, select=c(v32$qDensities)))
     
-    p<-ggplot(df, aes(y_val, fill=x_val))+geom_density(alpha=0.25)+
+    p<-ggplot(df, aes(y_val, fill=x_val))+geom_density(alpha=v49$transDensities/100)+
       xlab(v32$qDensities)+labs(fill=v31$gvDensities)+
       theme(
         plot.title = element_text(hjust=0.5, size=rel(1.8)),
@@ -766,6 +843,13 @@ server <- function(input, output,session) {
         text=element_text(size=8),
         axis.line = element_line(colour = "grey")##,
       )
+    group_list=unlist(subset(df,select=c(v31$gvDensities)))
+    colorCount = length(unique(unlist(group_list,use.names=F)))
+    getPalette <- colorRampPalette(brewer.pal(8, v52$colorDensities),bias=2.5)(colorCount)
+    # FIXME LATER:
+    # bias value needs to be tested to get the best level change within color palette
+    p<-p+scale_fill_manual(values= getPalette)
+    
     ggplotly(p)
     
   })
@@ -1076,4 +1160,3 @@ server <- function(input, output,session) {
   
   # if users wanna change the parameter (say change dots), we can first set a var as p<-ggplot(...). Then use if statement to test user's response, add it piece by piece, and finally return p
 }
-
