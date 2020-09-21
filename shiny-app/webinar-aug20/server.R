@@ -515,7 +515,7 @@ server <- function(input, output,session) {
     y_val<-unlist(subset(df, select=c(v6$yv)))
     
     # options(repr.plot.width=v14$doWidthVal, repr.plot.height=v15$doHeightVal)
-    plot<-ggplot(df, aes(x=x_val, y=y_val, fill=x_val))+geom_violin(alpha=0.5)+xlab(v5$xv)+ylab(v6$yv)+labs(fill=v5$xv)+ggtitle("Violin Plot")+
+    plot<-ggplot(df, aes(x=x_val, y=y_val, fill=x_val))+geom_violin(alpha=v41$transViolin/100)+xlab(v5$xv)+ylab(v6$yv)+labs(fill=v5$xv)+ggtitle("Violin Plot")+
       ylim(c(1,6))+
       theme(
         plot.title = element_text(hjust=0.5, size=rel(1.8)),
@@ -528,8 +528,13 @@ server <- function(input, output,session) {
         axis.line = element_line(colour = "grey")##,
       )  
     if(v12$doAddPoints==T){
-      plot<-plot+geom_point(pch = 21, alpha=0.3, position = position_jitterdodge(jitter.height=0.05, jitter.width=2.5),size=0.5)
+      plot<-plot+geom_point(pch = v42$pointShapeViolin, alpha=v41$transViolin/100, position = position_jitterdodge(jitter.height=0.05, jitter.width=2.5),size=v43$pointSizeViolin)
+      
     }
+    group_list<-unlist(subset(df,select=c(v5$xv)))
+    colorCount=length(unique(unlist(group_list,use.names = F)))
+    getPalette<-colorRampPalette(brewer.pal(8,v44$colorViolin),bias=2.5)(colorCount)
+    plot<-plot+scale_fill_manual(values=getPalette)
     ggplotly(plot)
   })
   
@@ -579,6 +584,15 @@ server <- function(input, output,session) {
         plot.title = element_text(hjust = 0.5),
         text=element_text(size=9),
       )
+    group_list=unlist(subset(df,select=c(v25$gvMosaic1)))
+    colorCount = length(unique(unlist(group_list,use.names=F)))
+    group_list=unlist(subset(df,select=c(v26$gvMosaic2)))
+    colorCount = max(colorCount,length(unique(unlist(group_list,use.names=F))) )  
+    getPalette <- colorRampPalette(brewer.pal(8, v40$colorMosaic),bias=2.5)(colorCount)
+    # FIXME LATER:
+    # bias value needs to be tested to get the best level change within color palette
+    plot<-plot+scale_fill_manual(values= getPalette)
+    
     ggplotly(plot)
     
     # ################################################
