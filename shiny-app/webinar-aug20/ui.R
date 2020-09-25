@@ -86,6 +86,15 @@ shinyUI(dashboardPage(
                   width = 4, status = "info", solidHeader = TRUE,
                   title = "Data Upload",
                   # Input: Select a file ----
+                  
+                  radioButtons("fileType","Use Sample Data or Upload Data",
+                               choices = c("Sample File" = "sampleFile",
+                                           "Upload File" = "uploadFile"),
+                               selected = "sampleFile"),
+                  
+                  # if(input.fileType=="uploadFile"){
+                  #   
+                  # }
                   fileInput("file1", "Choose CSV File or Drag the file here",
                             multiple = FALSE,
                             accept = c("text/csv",
@@ -108,7 +117,6 @@ shinyUI(dashboardPage(
                                choices = c(Head = "head",
                                            All = "all"),
                                selected = "head"),
-                  # actionButton("goSummary", "Summary"),
                   
                   HTML('<p>Data in <a href="http://en.wikipedia.org/wiki/Delimiter-separated_values">delimited text files </a> can be separated by comma, tab or semicolon. 
 				For example, Excel data can be exported in .csv (comma separated) or .tab (tab separated) format. </p>'),
@@ -146,16 +154,12 @@ shinyUI(dashboardPage(
                              h4("Data Visualization:"),
                              
                              fluidRow(
-                               column(6,radioButtons("gvMosaic1","Group Variable 1:", c("1"="1","2"="2"))),
-                               column(6,radioButtons("gvMosaic2","Group Variable 2:", c("1"="1","2"="2")))
+                               column(6,radioButtons("gvMosaic1","Group Variable 1:", c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"))),
+                               column(6,radioButtons("gvMosaic2","Group Variable 2:", c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents")))
                              ),
                              selectInput("colorMosaic","Color",choices = c("Blue+Purple"="BuPu","Dark Color"="Dark2","Orange+Red"="OrRd","Yellow+Green+Blue"="YlGnBu","Accent"="Accent","Paired"="Paired","Red+Blue"="RdYlBu","Purple+Red"="PuRd","Set2"="Set2","Purple+Green"="PRGn")
                              ),
                              HTML('<p style="color:#808080"> <b>Notice:</b> Click the <b>FAQ</b> tab in the left sidebar to see the detailed color palettes</p>'),
-                             
-                             sliderInput("transMosaic", "Transparency:",
-                                         min = 30, max = 100,
-                                         value = 65),
                              
                              fluidRow(
                                column(6, align="center", offset = 3,
@@ -176,8 +180,8 @@ shinyUI(dashboardPage(
                              h4("Data Visualization:"),
                              
                              fluidRow(
-                               column(6,radioButtons("xaxisGrp","Group Variable:", c("1"="1","2"="2"))),
-                               column(6,radioButtons("yaxisGrp","Quantity:", c("1"="1","2"="2")))
+                               column(6,radioButtons("xaxisGrp","Group Variable:", c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"))),
+                               column(6,radioButtons("yaxisGrp","Quantity:", c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents")))
                              ),
                              
                              selectInput("colorViolin","Color",choices = c("Blue+Purple"="BuPu","Dark Color"="Dark2","Orange+Red"="OrRd","Yellow+Green+Blue"="YlGnBu","Accent"="Accent","Paired"="Paired","Red+Blue"="RdYlBu","Purple+Red"="PuRd","Set2"="Set2","Purple+Green"="PRGn")
@@ -211,8 +215,8 @@ shinyUI(dashboardPage(
                              h4("Data Visualization:"),
                              
                              fluidRow(
-                               column(6,radioButtons("gvBox","Group Variable:", c("1"="1","2"="2"))),
-                               column(6,radioButtons("qBox","Quantity:", c("1"="1","2"="2")))
+                               column(6,radioButtons("gvBox","Group Variable:",c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"))),
+                               column(6,radioButtons("qBox","Quantity:", c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents")))
                              ),
                              
                              selectInput("colorBox","Color",choices = c("Blue+Purple"="BuPu","Dark Color"="Dark2","Orange+Red"="OrRd","Yellow+Green+Blue"="YlGnBu","Accent"="Accent","Paired"="Paired","Red+Blue"="RdYlBu","Purple+Red"="PuRd","Set2"="Set2","Purple+Green"="PRGn")
@@ -243,8 +247,8 @@ shinyUI(dashboardPage(
                              h4("Data Visualization:"),
                              
                              fluidRow(
-                               column(6,radioButtons("gvScatter","Group Variable:", c("1"="1","2"="2"))),
-                               column(6,radioButtons("qScatter","Quantity:", c("1"="1","2"="2")))
+                               column(6,radioButtons("gvScatter","Group Variable:",c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"))),
+                               column(6,radioButtons("qScatter","Quantity:", c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents")))
                              ),
                              
                              selectInput("colorScatter","Color",choices = c("Blue+Purple"="BuPu","Dark Color"="Dark2","Orange+Red"="OrRd","Yellow+Green+Blue"="YlGnBu","Accent"="Accent","Paired"="Paired","Red+Blue"="RdYlBu","Purple+Red"="PuRd","Set2"="Set2","Purple+Green"="PRGn")
@@ -277,8 +281,8 @@ shinyUI(dashboardPage(
                              h4("Data Visualization:"),
                              
                              fluidRow(
-                               column(6,radioButtons("gvDensities","Group Variable:", c("1"="1","2"="2"))),
-                               column(6,radioButtons("qDensities","Quantity:", c("1"="1","2"="2")))
+                               column(6,radioButtons("gvDensities","Group Variable:", c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"))),
+                               column(6,radioButtons("qDensities","Quantity:", c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents")))
                              ),
                              selectInput("colorDensities","Color",choices = c("Blue+Purple"="BuPu","Dark Color"="Dark2","Orange+Red"="OrRd","Yellow+Green+Blue"="YlGnBu","Accent"="Accent","Paired"="Paired","Red+Blue"="RdYlBu","Purple+Red"="PuRd","Set2"="Set2","Purple+Green"="PRGn")
                              ),
@@ -326,8 +330,8 @@ shinyUI(dashboardPage(
                              
                              HTML('<p style="color:#808080"> <b> Equal variance:</b> The standard t test assumes equal variances on the two groups. If the user checks this option, the standard t test is run, but if the user unchecks this option, then the Welch t test is run instead (that does not assume equal variances). </p>'),
                              fluidRow(
-                               column(6,radioButtons("groupVar","Group Variable:", c("1"="UnSpecified_Value","2"="UnSpecified_Value"))),
-                               column(6,radioButtons("quantity","Quantity:", c("1"="UnSpecified_Value","2"="UnSpecified_Value")))
+                               column(6,radioButtons("groupVar","Group Variable:", c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"))),
+                               column(6,radioButtons("quantity","Quantity:", c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents")))
                              ),
                              uiOutput("sel1"),
                              uiOutput("sel2"),
@@ -344,8 +348,8 @@ shinyUI(dashboardPage(
             # chi-square
             conditionalPanel(condition="input.testType==0",
                              fluidRow(
-                               column(6,radioButtons("gv1","Group Variable 1:", c("1"="UnSpecified_Value","2"="UnSpecified_Value"))),
-                               column(6,radioButtons("gv2","Group Variable 2:", c("1"="UnSpecified_Value","2"="UnSpecified_Value")))
+                               column(6,radioButtons("gv1","Group Variable 1:", c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"))),
+                               column(6,radioButtons("gv2","Group Variable 2:", c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents")))
                              ),
                              HTML('<p style="color:#808080"> <b>Chi-square test:</b> Pearson\'s chi-square test is used to determine whether there is a statistically significant difference between the expected frequencies and the observed frequencies in one or more categories of a contingency table</p>'),
                              fluidRow(
@@ -366,7 +370,8 @@ shinyUI(dashboardPage(
                    h4("Q: How to get help? "), 
                    p(HTML('<b>A: Soon we will have a google user group to post questions and answers for users of the app.</b>')),
                    h4("Q: Color Palettes Charts: "), 
-                   img(src="color_palettes.png",width=525, height=671)
+                   img(src="color_palettes.png",width=525, height=671),
+                   p(HTML('   The colors palettes here shown come from <a href="https://cran.r-project.org/web/packages/RColorBrewer/index.html">ColorBrewer</a>')),
               )
       )
     ),#tabitems end

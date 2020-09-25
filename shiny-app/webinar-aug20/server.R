@@ -22,72 +22,139 @@ server <- function(input, output,session) {
              sep=input$sep)
     
   })
-  
-  
-  # output$contents <- renderTable({
-  #   data_set()
+  # dsnames0<-c() #a vector to store col names
+  # 
+  # data_set0 <- reactive({
+  #   read.csv("toys.csv", header=T, 
+  #            sep=",")
   # })
   observe({
-    dsnames <- names(data_set())
-    cb_options <- list()
-    cb_options[ dsnames] <- dsnames
-    updateRadioButtons(session, "xaxisGrp",
-                       label = "Group Variable",
-                       choices = cb_options,
-                       selected = "")
-    updateRadioButtons(session, "yaxisGrp",
-                       label = "Quantity",
-                       choices = cb_options,
-                       selected = "")
-    updateRadioButtons(session, "groupVar",
-                       label = "Group Variable",
-                       choices = cb_options,
-                       selected = "")
-    updateRadioButtons(session, "quantity",
-                       label = "Quantity",
-                       choices = cb_options,
-                       selected = "")
-    updateRadioButtons(session, "gv1",
-                       label = "Group Variable 1",
-                       choices = cb_options,
-                       selected = "")
-    updateRadioButtons(session, "gv2",
-                       label = "Group Variable 2",
-                       choices = cb_options,
-                       selected = "")
-    updateRadioButtons(session, "gvBox",
-                       label = "Group Variable",
-                       choices = cb_options,
-                       selected = "")
-    updateRadioButtons(session, "qBox",
-                       label = "Quantity",
-                       choices = cb_options,
-                       selected = "")
-    updateRadioButtons(session, "gvMosaic1",
-                       label = "Group Variable 1",
-                       choices = cb_options,
-                       selected = "")
-    updateRadioButtons(session, "gvMosaic2",
-                       label = "Group Variable 2",
-                       choices = cb_options,
-                       selected = "")
-    updateRadioButtons(session, "gvScatter",
-                       label = "Group Variable",
-                       choices = cb_options,
-                       selected = "")
-    updateRadioButtons(session, "qScatter",
-                       label = "Quantity",
-                       choices = cb_options,
-                       selected = "")
-    updateRadioButtons(session, "gvDensities",
-                       label = "Group Variable",
-                       choices = cb_options,
-                       selected = "")
-    updateRadioButtons(session, "qDensities",
-                       label = "Quantity",
-                       choices = cb_options,
-                       selected = "")
+    if(input$fileType=="uploadFile"){
+      dsnames <- names(data_set())
+      cb_options <- list()
+      cb_options[ dsnames] <- dsnames
+      updateRadioButtons(session, "xaxisGrp",
+                         label = "Group Variable",
+                         choices = cb_options,
+                         selected = "")
+      updateRadioButtons(session, "yaxisGrp",
+                         label = "Quantity",
+                         choices = cb_options,
+                         selected = "")
+      updateRadioButtons(session, "groupVar",
+                         label = "Group Variable",
+                         choices = cb_options,
+                         selected = "")
+      updateRadioButtons(session, "quantity",
+                         label = "Quantity",
+                         choices = cb_options,
+                         selected = "")
+      updateRadioButtons(session, "gv1",
+                         label = "Group Variable 1",
+                         choices = cb_options,
+                         selected = "")
+      updateRadioButtons(session, "gv2",
+                         label = "Group Variable 2",
+                         choices = cb_options,
+                         selected = "")
+      updateRadioButtons(session, "gvBox",
+                         label = "Group Variable",
+                         choices = cb_options,
+                         selected = "")
+      updateRadioButtons(session, "qBox",
+                         label = "Quantity",
+                         choices = cb_options,
+                         selected = "")
+      updateRadioButtons(session, "gvMosaic1",
+                         label = "Group Variable 1",
+                         choices = cb_options,
+                         selected = "")
+      updateRadioButtons(session, "gvMosaic2",
+                         label = "Group Variable 2",
+                         choices = cb_options,
+                         selected = "")
+      updateRadioButtons(session, "gvScatter",
+                         label = "Group Variable",
+                         choices = cb_options,
+                         selected = "")
+      updateRadioButtons(session, "qScatter",
+                         label = "Quantity",
+                         choices = cb_options,
+                         selected = "")
+      updateRadioButtons(session, "gvDensities",
+                         label = "Group Variable",
+                         choices = cb_options,
+                         selected = "")
+      updateRadioButtons(session, "qDensities",
+                         label = "Quantity",
+                         choices = cb_options,
+                         selected = "")
+    }else{
+      updateRadioButtons(session, "xaxisGrp",
+                         label = "Group Variable",
+                         choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
+                         selected = "")
+      updateRadioButtons(session, "yaxisGrp",
+                         label = "Quantity",
+                         choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
+                         selected = "")
+      updateRadioButtons(session, "groupVar",
+                         label = "Group Variable",
+                         choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
+                         selected = "")
+      updateRadioButtons(session, "quantity",
+                         label = "Quantity",
+                         choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
+                         selected = "")
+      updateRadioButtons(session, "gv1",
+                         label = "Group Variable 1",
+                         choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
+                         selected = "")
+      updateRadioButtons(session, "gv2",
+                         label = "Group Variable 2",
+                         choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
+                         selected = "")
+      updateRadioButtons(session, "gvBox",
+                         label = "Group Variable",
+                         choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
+                         selected = "")
+      updateRadioButtons(session, "qBox",
+                         label = "Quantity",
+                         choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
+                         selected = "")
+      updateRadioButtons(session, "gvMosaic1",
+                         label = "Group Variable 1",
+                         choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
+                         selected = "")
+      updateRadioButtons(session, "gvMosaic2",
+                         label = "Group Variable 2",
+                         choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
+                         selected = "")
+      updateRadioButtons(session, "gvScatter",
+                         label = "Group Variable",
+                         choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
+                         selected = "")
+      updateRadioButtons(session, "qScatter",
+                         label = "Quantity",
+                         choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
+                         selected = "")
+      updateRadioButtons(session, "gvDensities",
+                         label = "Group Variable",
+                         choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
+                         selected = "")
+      updateRadioButtons(session, "qDensities",
+                         label = "Quantity",
+                         choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
+                         selected = "")
+    }
+    
   })
+  #####################testing
+  # observeEvent(input$fileType=="sampleFile", updateRadioButtons(session, "gv1",
+  #                                                      label = "Group Variable 1",
+  #                                                      choices = c("xxxx"="x"),
+  #                                                      selected = ""))
+  
   output$choose_dataset <- renderUI({
     selectInput("dataset", "Data set", as.list(data_sets))
   })
@@ -452,21 +519,29 @@ server <- function(input, output,session) {
     # and uploads a file, head of that data file by default,
     # or all rows if selected, will be shown.
     
-    req(input$file1) #to require that user upload a file
+    if(input$fileType=="sampleFile")
+    {
+      df<-read.csv("toys.csv",
+                   header = T,
+                   sep = ",")
+     
+    }
+    else
+    {
+      req(input$file1) #to require that user upload a file
+      tryCatch(
+        {
+          df <- read.csv(input$file1$datapath,
+                         header = input$header,
+                         sep = input$sep)
+        },
+        error = function(e) {
+          # return a safeError if a parsing error occurs
+          stop(safeError(e))
+        }
+      )
+    }
     
-    # when reading semicolon separated files,
-    # having a comma separator causes `read.csv` to error
-    tryCatch(
-      {
-        df <- read.csv(input$file1$datapath,
-                       header = input$header,
-                       sep = input$sep)
-      },
-      error = function(e) {
-        # return a safeError if a parsing error occurs
-        stop(safeError(e))
-      }
-    )
     
     if(input$disp == "head") {
       return(head(df))
@@ -485,21 +560,27 @@ server <- function(input, output,session) {
     # and uploads a file, head of that data file by default,
     # or all rows if selected, will be shown.
     
-    req(input$file1)
-    
-    # when reading semicolon separated files,
-    # having a comma separator causes `read.csv` to error
-    tryCatch(
-      {
-        df <- read.csv(input$file1$datapath,
-                       header = input$header,
-                       sep = input$sep)
-      },
-      error = function(e) {
-        # return a safeError if a parsing error occurs
-        stop(safeError(e))
-      }
-    )
+    if(input$fileType=="sampleFile")
+    {
+      df<-read.csv("toys.csv",
+                   header = T,
+                   sep = ",")
+    }
+    else
+    {
+      req(input$file1) #to require that user upload a file
+      tryCatch(
+        {
+          df <- read.csv(input$file1$datapath,
+                         header = input$header,
+                         sep = input$sep)
+        },
+        error = function(e) {
+          # return a safeError if a parsing error occurs
+          stop(safeError(e))
+        }
+      )
+    }
     
     if (v$doViolinPlot == FALSE) return()
     # fill should contain x var
@@ -546,21 +627,27 @@ server <- function(input, output,session) {
     # and uploads a file, head of that data file by default,
     # or all rows if selected, will be shown.
     
-    req(input$file1)
-    
-    # when reading semicolon separated files,
-    # having a comma separator causes `read.csv` to error
-    tryCatch(
-      {
-        df <- read.csv(input$file1$datapath,
-                       header = input$header,
-                       sep = input$sep)
-      },
-      error = function(e) {
-        # return a safeError if a parsing error occurs
-        stop(safeError(e))
-      }
-    )
+    if(input$fileType=="sampleFile")
+    {
+      df<-read.csv("toys.csv",
+                   header = T,
+                   sep = ",")
+    }
+    else
+    {
+      req(input$file1) #to require that user upload a file
+      tryCatch(
+        {
+          df <- read.csv(input$file1$datapath,
+                         header = input$header,
+                         sep = input$sep)
+        },
+        error = function(e) {
+          # return a safeError if a parsing error occurs
+          stop(safeError(e))
+        }
+      )
+    }
     
     if (v27$doMosaic == FALSE) return()
     # fill should contain x var
@@ -582,7 +669,7 @@ server <- function(input, output,session) {
     plot<-plot+xlab(v25$gvMosaic1)+ylab(v26$gvMosaic2)+ggtitle("Mosaic Plot")+labs(fill=v26$gvMosaic2)+ 
       theme(
         plot.title = element_text(hjust = 0.5),
-        text=element_text(size=9),
+        text=element_text(size=9)
       )
     group_list=unlist(subset(df,select=c(v25$gvMosaic1)))
     colorCount = length(unique(unlist(group_list,use.names=F)))
@@ -592,6 +679,7 @@ server <- function(input, output,session) {
     # FIXME LATER:
     # bias value needs to be tested to get the best level change within color palette
     plot<-plot+scale_fill_manual(values= getPalette)
+    
     
     ggplotly(plot)
     
@@ -614,21 +702,27 @@ server <- function(input, output,session) {
     # and uploads a file, head of that data file by default,
     # or all rows if selected, will be shown.
     
-    req(input$file1)
-    
-    # when reading semicolon separated files,
-    # having a comma separator causes `read.csv` to error
-    tryCatch(
-      {
-        df <- read.csv(input$file1$datapath,
-                       header = input$header,
-                       sep = input$sep)
-      },
-      error = function(e) {
-        # return a safeError if a parsing error occurs
-        stop(safeError(e))
-      }
-    )
+    if(input$fileType=="sampleFile")
+    {
+      df<-read.csv("toys.csv",
+                   header = T,
+                   sep = ",")
+    }
+    else
+    {
+      req(input$file1) #to require that user upload a file
+      tryCatch(
+        {
+          df <- read.csv(input$file1$datapath,
+                         header = input$header,
+                         sep = input$sep)
+        },
+        error = function(e) {
+          # return a safeError if a parsing error occurs
+          stop(safeError(e))
+        }
+      )
+    }
     
     if (v2$doHist == FALSE) return()
     
@@ -666,21 +760,27 @@ server <- function(input, output,session) {
   
   output$scatterPlot<-renderPlotly({
     # FIXME:we want to read the input file only once per session
-    req(input$file1)
-    
-    # when reading semicolon separated files,
-    # having a comma separator causes `read.csv` to error
-    tryCatch(
-      {
-        df <- read.csv(input$file1$datapath,
-                       header = input$header,
-                       sep = input$sep)
-      },
-      error = function(e) {
-        # return a safeError if a parsing error occurs
-        stop(safeError(e))
-      }
-    )
+    if(input$fileType=="sampleFile")
+    {
+      df<-read.csv("toys.csv",
+                   header = T,
+                   sep = ",")
+    }
+    else
+    {
+      req(input$file1) #to require that user upload a file
+      tryCatch(
+        {
+          df <- read.csv(input$file1$datapath,
+                         header = input$header,
+                         sep = input$sep)
+        },
+        error = function(e) {
+          # return a safeError if a parsing error occurs
+          stop(safeError(e))
+        }
+      )
+    }
     
     if (v9$doScatter == FALSE) return()
     
@@ -739,21 +839,27 @@ server <- function(input, output,session) {
     # and uploads a file, head of that data file by default,
     # or all rows if selected, will be shown.
     
-    req(input$file1)
-    
-    # when reading semicolon separated files,
-    # having a comma separator causes `read.csv` to error
-    tryCatch(
-      {
-        df <- read.csv(input$file1$datapath,
-                       header = input$header,
-                       sep = input$sep)
-      },
-      error = function(e) {
-        # return a safeError if a parsing error occurs
-        stop(safeError(e))
-      }
-    )
+    if(input$fileType=="sampleFile")
+    {
+      df<-read.csv("toys.csv",
+                   header = T,
+                   sep = ",")
+    }
+    else
+    {
+      req(input$file1) #to require that user upload a file
+      tryCatch(
+        {
+          df <- read.csv(input$file1$datapath,
+                         header = input$header,
+                         sep = input$sep)
+        },
+        error = function(e) {
+          # return a safeError if a parsing error occurs
+          stop(safeError(e))
+        }
+      )
+    }
     
     if (v10$doBox == FALSE) return()
     # print(v23$gvBox)
@@ -811,21 +917,27 @@ server <- function(input, output,session) {
     # and uploads a file, head of that data file by default,
     # or all rows if selected, will be shown.
     
-    req(input$file1)
-    
-    # when reading semicolon separated files,
-    # having a comma separator causes `read.csv` to error
-    tryCatch(
-      {
-        df <- read.csv(input$file1$datapath,
-                       header = input$header,
-                       sep = input$sep)
-      },
-      error = function(e) {
-        # return a safeError if a parsing error occurs
-        stop(safeError(e))
-      }
-    )
+    if(input$fileType=="sampleFile")
+    {
+      df<-read.csv("toys.csv",
+                   header = T,
+                   sep = ",")
+    }
+    else
+    {
+      req(input$file1) #to require that user upload a file
+      tryCatch(
+        {
+          df <- read.csv(input$file1$datapath,
+                         header = input$header,
+                         sep = input$sep)
+        },
+        error = function(e) {
+          # return a safeError if a parsing error occurs
+          stop(safeError(e))
+        }
+      )
+    }
     
     if (v11$doDensities == FALSE) return()
     
@@ -869,21 +981,27 @@ server <- function(input, output,session) {
   })
   
   output$sel1<-renderUI({
-    req(input$file1)
-    
-    # when reading semicolon separated files,
-    # having a comma separator causes `read.csv` to error
-    tryCatch(
-      {
-        df <- read.csv(input$file1$datapath,
-                       header = input$header,
-                       sep = input$sep)
-      },
-      error = function(e) {
-        # return a safeError if a parsing error occurs
-        stop(safeError(e))
-      }
-    )
+    if(input$fileType=="sampleFile")
+    {
+      df<-read.csv("toys.csv",
+                   header = T,
+                   sep = ",")
+    }
+    else
+    {
+      req(input$file1) #to require that user upload a file
+      tryCatch(
+        {
+          df <- read.csv(input$file1$datapath,
+                         header = input$header,
+                         sep = input$sep)
+        },
+        error = function(e) {
+          # return a safeError if a parsing error occurs
+          stop(safeError(e))
+        }
+      )
+    }
     
     # if (v7$gv == "") return()
     if(v7$gv=="UnSpecified_Value") return()
@@ -895,21 +1013,27 @@ server <- function(input, output,session) {
   })
   
   output$sel2<-renderUI({
-    req(input$file1)
-    
-    # when reading semicolon separated files,
-    # having a comma separator causes `read.csv` to error
-    tryCatch(
-      {
-        df <- read.csv(input$file1$datapath,
-                       header = input$header,
-                       sep = input$sep)
-      },
-      error = function(e) {
-        # return a safeError if a parsing error occurs
-        stop(safeError(e))
-      }
-    )
+    if(input$fileType=="sampleFile")
+    {
+      df<-read.csv("toys.csv",
+                   header = T,
+                   sep = ",")
+    }
+    else
+    {
+      req(input$file1) #to require that user upload a file
+      tryCatch(
+        {
+          df <- read.csv(input$file1$datapath,
+                         header = input$header,
+                         sep = input$sep)
+        },
+        error = function(e) {
+          # return a safeError if a parsing error occurs
+          stop(safeError(e))
+        }
+      )
+    }
     
     # if (v7$gv == "") return()
     if(v7$gv=="UnSpecified_Value") return()
@@ -928,21 +1052,27 @@ server <- function(input, output,session) {
     # and uploads a file, head of that data file by default,
     # or all rows if selected, will be shown.
     
-    req(input$file1)
-    
-    # when reading semicolon separated files,
-    # having a comma separator causes `read.csv` to error
-    tryCatch(
-      {
-        df <- read.csv(input$file1$datapath,
-                       header = input$header,
-                       sep = input$sep)
-      },
-      error = function(e) {
-        # return a safeError if a parsing error occurs
-        stop(safeError(e))
-      }
-    )
+    if(input$fileType=="sampleFile")
+    {
+      df<-read.csv("toys.csv",
+                   header = T,
+                   sep = ",")
+    }
+    else
+    {
+      req(input$file1) #to require that user upload a file
+      tryCatch(
+        {
+          df <- read.csv(input$file1$datapath,
+                         header = input$header,
+                         sep = input$sep)
+        },
+        error = function(e) {
+          # return a safeError if a parsing error occurs
+          stop(safeError(e))
+        }
+      )
+    }
     
     if (v4$doT == FALSE) return()
     # check to see if group variable is categorical
@@ -973,122 +1103,140 @@ server <- function(input, output,session) {
     
   })
   
-  output$levene <- renderPrint({
-    
-    # input$file1 will be NULL initially. After the user selects
-    # and uploads a file, head of that data file by default,
-    # or all rows if selected, will be shown.
-    
-    req(input$file1)
-    
-    # when reading semicolon separated files,
-    # having a comma separator causes `read.csv` to error
-    tryCatch(
-      {
-        df <- read.csv(input$file1$datapath,
-                       header = input$header,
-                       sep = input$sep)
-      },
-      error = function(e) {
-        # return a safeError if a parsing error occurs
-        stop(safeError(e))
-      }
-    )
-    
-    if (v17$doLevene == FALSE) return()
-    
-    # extract var as col obj
-    # print(v7$gv)
-    
-    group_val<-unlist(subset(df, select=c(v7$gv)))
-    quantity<-unlist(subset(df, select=c(v8$q)))
-    
-    # , in the end omits default val set to be True
-    # # important
-    # x = subset(df, select=c(v8$q))[group_val == v14$sel1,]
-    # y = subset(df, select=c(v8$q))[group_val == v15$sel2,]
-    if (v17$doLevene == FALSE) return()
-    
-    leveneTest(quantity~group_val,df, center=mean)
-  })
-  
-  output$fligner <- renderPrint({
-    
-    # input$file1 will be NULL initially. After the user selects
-    # and uploads a file, head of that data file by default,
-    # or all rows if selected, will be shown.
-    
-    req(input$file1)
-    
-    # when reading semicolon separated files,
-    # having a comma separator causes `read.csv` to error
-    tryCatch(
-      {
-        df <- read.csv(input$file1$datapath,
-                       header = input$header,
-                       sep = input$sep)
-      },
-      error = function(e) {
-        # return a safeError if a parsing error occurs
-        stop(safeError(e))
-      }
-    )
-    
-    if (v18$doFligner == FALSE) return()
-    
-    # extract var as col obj
-    # print(v7$gv)
-    
-    group_val<-unlist(subset(df, select=c(v7$gv)))
-    quantity<-unlist(subset(df, select=c(v8$q)))
-    
-    # , in the end omits default val set to be True
-    # # important
-    # x = subset(df, select=c(v8$q))[group_val == v14$sel1,]
-    # y = subset(df, select=c(v8$q))[group_val == v15$sel2,]
-    if (v18$doFligner == FALSE) return()
-    
-    fligner.test(quantity~group_val,df)
-  })
-  
-  output$wilcoxon <- renderPrint({
-    
-    # input$file1 will be NULL initially. After the user selects
-    # and uploads a file, head of that data file by default,
-    # or all rows if selected, will be shown.
-    
-    req(input$file1)
-    
-    # when reading semicolon separated files,
-    # having a comma separator causes `read.csv` to error
-    tryCatch(
-      {
-        df <- read.csv(input$file1$datapath,
-                       header = input$header,
-                       sep = input$sep)
-      },
-      error = function(e) {
-        # return a safeError if a parsing error occurs
-        stop(safeError(e))
-      }
-    )
-    
-    if (v19$doWilcoxon == FALSE) return()
-    
-    # extract var as col obj
-    # print(v7$gv)
-    
-    group_val<-unlist(subset(df, select=c(v7$gv)))
-    quantity<-unlist(subset(df, select=c(v8$q)))
-    
-    # , in the end omits default val set to be True
-    # # important
-    # x = subset(df, select=c(v8$q))[group_val == v14$sel1,]
-    # y = subset(df, select=c(v8$q))[group_val == v15$sel2,]
-    if (v19$doWilcoxon == FALSE) return()
-    
-    wilcox.test(quantity~group_val,df)
-  })
+  # output$levene <- renderPrint({
+  #   
+  #   # input$file1 will be NULL initially. After the user selects
+  #   # and uploads a file, head of that data file by default,
+  #   # or all rows if selected, will be shown.
+  #   
+  #   if(input$fileType=="sampleFile")
+  #   {
+  #     df<-read.csv("toys.csv",
+  #                  header = T,
+  #                  sep = ",")
+  #   }
+  #   else
+  #   {
+  #     req(input$file1) #to require that user upload a file
+  #     tryCatch(
+  #       {
+  #         df <- read.csv(input$file1$datapath,
+  #                        header = input$header,
+  #                        sep = input$sep)
+  #       },
+  #       error = function(e) {
+  #         # return a safeError if a parsing error occurs
+  #         stop(safeError(e))
+  #       }
+  #     )
+  #   }
+  #   
+  #   if (v17$doLevene == FALSE) return()
+  #   
+  #   # extract var as col obj
+  #   # print(v7$gv)
+  #   
+  #   group_val<-unlist(subset(df, select=c(v7$gv)))
+  #   quantity<-unlist(subset(df, select=c(v8$q)))
+  #   
+  #   # , in the end omits default val set to be True
+  #   # # important
+  #   # x = subset(df, select=c(v8$q))[group_val == v14$sel1,]
+  #   # y = subset(df, select=c(v8$q))[group_val == v15$sel2,]
+  #   if (v17$doLevene == FALSE) return()
+  #   
+  #   leveneTest(quantity~group_val,df, center=mean)
+  # })
+  # 
+  # output$fligner <- renderPrint({
+  #   
+  #   # input$file1 will be NULL initially. After the user selects
+  #   # and uploads a file, head of that data file by default,
+  #   # or all rows if selected, will be shown.
+  #   
+  #   if(input$fileType=="sampleFile")
+  #   {
+  #     df<-read.csv("toys.csv",
+  #                  header = T,
+  #                  sep = ",")
+  #   }
+  #   else
+  #   {
+  #     req(input$file1) #to require that user upload a file
+  #     tryCatch(
+  #       {
+  #         df <- read.csv(input$file1$datapath,
+  #                        header = input$header,
+  #                        sep = input$sep)
+  #       },
+  #       error = function(e) {
+  #         # return a safeError if a parsing error occurs
+  #         stop(safeError(e))
+  #       }
+  #     )
+  #   }
+  #   
+  #   if (v18$doFligner == FALSE) return()
+  #   
+  #   # extract var as col obj
+  #   # print(v7$gv)
+  #   
+  #   group_val<-unlist(subset(df, select=c(v7$gv)))
+  #   quantity<-unlist(subset(df, select=c(v8$q)))
+  #   
+  #   # , in the end omits default val set to be True
+  #   # # important
+  #   # x = subset(df, select=c(v8$q))[group_val == v14$sel1,]
+  #   # y = subset(df, select=c(v8$q))[group_val == v15$sel2,]
+  #   if (v18$doFligner == FALSE) return()
+  #   
+  #   fligner.test(quantity~group_val,df)
+  # })
+  # 
+  # output$wilcoxon <- renderPrint({
+  #   
+  #   # input$file1 will be NULL initially. After the user selects
+  #   # and uploads a file, head of that data file by default,
+  #   # or all rows if selected, will be shown.
+  #   
+  #   if(input$fileType=="sampleFile")
+  #   {
+  #     df<-read.csv("toys.csv",
+  #                  header = T,
+  #                  sep = ",")
+  #   }
+  #   else
+  #   {
+  #     req(input$file1) #to require that user upload a file
+  #     tryCatch(
+  #       {
+  #         df <- read.csv(input$file1$datapath,
+  #                        header = input$header,
+  #                        sep = input$sep)
+  #       },
+  #       error = function(e) {
+  #         # return a safeError if a parsing error occurs
+  #         stop(safeError(e))
+  #       }
+  #     )
+  #   }
+  #   
+  #   if (v19$doWilcoxon == FALSE) return()
+  #   
+  #   # extract var as col obj
+  #   # print(v7$gv)
+  #   
+  #   group_val<-unlist(subset(df, select=c(v7$gv)))
+  #   quantity<-unlist(subset(df, select=c(v8$q)))
+  #   
+  #   # , in the end omits default val set to be True
+  #   # # important
+  #   # x = subset(df, select=c(v8$q))[group_val == v14$sel1,]
+  #   # y = subset(df, select=c(v8$q))[group_val == v15$sel2,]
+  #   if (v19$doWilcoxon == FALSE) return()
+  #   
+  #   wilcox.test(quantity~group_val,df)
+  # })
   
   output$chitest<-renderPrint({
     
@@ -1096,22 +1244,27 @@ server <- function(input, output,session) {
     # and uploads a file, head of that data file by default,
     # or all rows if selected, will be shown.
     
-    req(input$file1)
-    
-    # when reading semicolon separated files,
-    # having a comma separator causes `read.csv` to error
-    tryCatch(
-      {
-        df <- read.csv(input$file1$datapath,
-                       header = input$header,
-                       sep = input$sep)
-      },
-      error = function(e) {
-        # return a safeError if a parsing error occurs
-        stop(safeError(e))
-      }
-    )
-    
+    if(input$fileType=="sampleFile")
+    {
+      df<-read.csv("toys.csv",
+                   header = T,
+                   sep = ",")
+    }
+    else
+    {
+      req(input$file1) #to require that user upload a file
+      tryCatch(
+        {
+          df <- read.csv(input$file1$datapath,
+                         header = input$header,
+                         sep = input$sep)
+        },
+        error = function(e) {
+          # return a safeError if a parsing error occurs
+          stop(safeError(e))
+        }
+      )
+    }
     if (v22$doChi == FALSE) return()
     
     # extract var as col obj
