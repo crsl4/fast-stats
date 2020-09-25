@@ -92,31 +92,31 @@ shinyUI(dashboardPage(
                                            "Upload File" = "uploadFile"),
                                selected = "sampleFile"),
                   
-                  # if(input.fileType=="uploadFile"){
-                  #   
-                  # }
-                  fileInput("file1", "Choose CSV File or Drag the file here",
-                            multiple = FALSE,
-                            accept = c("text/csv",
-                                       "text/comma-separated-values,text/plain",
-                                       ".csv")),
+                  conditionalPanel(condition="input.fileType=='uploadFile'", 
+                                   fileInput("file1", "Choose CSV File or Drag the file here",
+                                                                                     multiple = FALSE,
+                                                                                     accept = c("text/csv",
+                                                                                                "text/comma-separated-values,text/plain",
+                                                                                                ".csv")),
+                                   
+                                   # Input: Checkbox if file has header ----
+                                   tags$p("Click the checkbox if file has a header:"),
+                                   checkboxInput("header", "Header", TRUE),
+                                   
+                                   # Input: Select separator ----
+                                   radioButtons("sep", "Choose the separator",
+                                                choices = c(Comma = ",",
+                                                            Semicolon = ";",
+                                                            Tab = "\t"),
+                                                selected = ","),
+                                   
+                                   # Input: Select number of rows to display ----
+                                   radioButtons("disp","Choose to show 'head' or 'all'",
+                                                choices = c(Head = "head",
+                                                            All = "all"),
+                                                selected = "head"),
+                                   ),
                   
-                  # Input: Checkbox if file has header ----
-                  tags$p("Click the checkbox if file has a header:"),
-                  checkboxInput("header", "Header", TRUE),
-                  
-                  # Input: Select separator ----
-                  radioButtons("sep", "Choose the separator",
-                               choices = c(Comma = ",",
-                                           Semicolon = ";",
-                                           Tab = "\t"),
-                               selected = ","),
-                  
-                  # Input: Select number of rows to display ----
-                  radioButtons("disp","Choose to show 'head' or 'all'",
-                               choices = c(Head = "head",
-                                           All = "all"),
-                               selected = "head"),
                   
                   HTML('<p>Data in <a href="http://en.wikipedia.org/wiki/Delimiter-separated_values">delimited text files </a> can be separated by comma, tab or semicolon. 
 				For example, Excel data can be exported in .csv (comma separated) or .tab (tab separated) format. </p>'),
