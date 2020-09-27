@@ -90,7 +90,7 @@ shinyUI(dashboardPage(
                   radioButtons("fileType","Use Sample Data or Upload Data",
                                choices = c("Sample File" = "sampleFile",
                                            "Upload File" = "uploadFile"),
-                               selected = "sampleFile"),
+                               selected = "uploadFile"),
                   
                   conditionalPanel(condition="input.fileType=='uploadFile'", 
                                    fileInput("file1", "Choose CSV File or Drag the file here",
