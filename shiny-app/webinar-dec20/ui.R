@@ -144,7 +144,7 @@ shinyUI(dashboardPage(
                              plotlyOutput("densities") ),
           ),
           box(
-            width = 4, status = "info",solidHeader = T,
+            width = 4, status = "info",solidHeader = T, 
             title = "Data Visualization",
             h4("Plot Option:"),
             

@@ -704,11 +704,6 @@ server <- function(input, output,session) {
     ggplotly(plot)
     
     # ################################################
-    # ggplot(df) +
-    #  geom_mosaic(aes(x=product(gval1), fill=gval2),data=df)+xlab(v25$gvMosaic1)+ylab(v26$gvMosaic2)+ggtitle("Mosaic Plot")
-    # plot<-ggplot(df) +
-    #   geom_mosaic(aes(x=product(cots), fill=generation))+xlab(v25$gvMosaic1)+ylab(v26$gvMosaic2)
-    # ggplotly(plot)
     # something need to note is that ggplotly is not compatiable with geom_mosaic
   })
   
@@ -817,8 +812,9 @@ server <- function(input, output,session) {
     # use subset func to extract col object from dataframe; other func, such as df[...], seems not work at all
     # ggplot2 does not accept list object; must use unlist
     y_val<-unlist(subset(df, select=c(v30$qScatter)))
-    print(x_val)
-    p<-ggplot(df, aes(x = x_val, y = y_val, fill = x_val)) +
+    # x_val_cat=factor(x_val)
+    p<-ggplot(df, aes(x = factor(x_val), y = y_val, fill = factor(x_val))) +
+      xlab(v29$gvScatter)+labs(fill=v29$gvScatter)+ylab(v30$qScatter)+
       geom_point(pch = v34$pointShapeScatter, alpha=v33$transScatter/100, position = position_jitterdodge(jitter.height=0.075, jitter.width=0.1),size=v35$pointSizeScatter)+
       theme(
         plot.title = element_text(hjust=0.5, size=rel(1.8)),
@@ -827,32 +823,27 @@ server <- function(input, output,session) {
         axis.text.x = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
         axis.text.y = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
         panel.background = element_blank(),
-        axis.line = element_line(colour = "grey")##,
+        axis.line = element_line(colour = "grey"),
+        text=element_text(size=9)
       )
     
-    # p<-ggplot(df, aes(y = y_val, x = x_val, fill = x_val)) +
-    #   xlab(v29$gvScatter)+labs(fill=v29$gvScatter)+ylab(v30$qScatter)+
-    #   geom_jitter(pch = v34$pointShapeScatter, alpha=v33$transScatter/100, width=0.2,size=v35$pointSizeScatter)+
-    #   theme(
-    #     plot.title = element_text(hjust=0.5, size=rel(1.8)),
-    #     axis.title.x = element_text(size=rel(1.8)),
-    #     axis.title.y = element_text(size=rel(1.8), angle=90, vjust=0.5, hjust=0.5),
-    #     axis.text.x = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
-    #     axis.text.y = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
-    #     panel.background = element_blank(),
-    #     text=element_text(size=8),
-    #     axis.line = element_line(colour = "grey")##,
-    #   )
+    #############################################################
+    df[[v29$gvScatter]]<-as.factor( df[[v29$gvScatter]])
     group_list=unlist(subset(df,select=c(v29$gvScatter)))
+    # print(class(group_list))
+  
     colorCount = length(unique(unlist(group_list,use.names=F)))   #8, an arbitrary number
-    # length(unique(subset(df, select=c(v29$gvScatter))))
+    
     getPalette <- colorRampPalette(brewer.pal(8, v36$colorScatter),bias=2.5)(colorCount)
-    # FIXME LATER:
-    # bias value needs to be tested to get the best level change within color palette
+    # print(getPalette)
+
     p<-p+scale_fill_manual(values= getPalette)
+    ###########################################################
     if(v53$addRegression==T){
-      p<-p+geom_smooth(method='lm', formula= y~x)
+      # add a aes(group="") solve the problem that one variable is a factor (numerical converts to factor)
+      p<-p+geom_smooth(method='lm',formula=y~x,aes(group = "" ))
     }
+    # p<-scale_color_gradientn(colors=v36$colorScatter)
     ggplotly(p)
     
     
