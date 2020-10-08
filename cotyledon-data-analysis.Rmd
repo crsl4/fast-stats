@@ -531,4 +531,69 @@ Alternative to the t-test when normality is violated. This test does not test eq
 wilcox.test(Cotyledons ~ Generation, dat)
 ```
 
+
 The p-value less than 0.05 allows us to also reject the null hypothesis of equality of distributions which provides evidence that the number of cotyledons on the offspring group is significantly higher than in the parent group.
+=======
+The p-value less than 0.05 allows us to also reject the null hypothesis of equality of distributions which provides evidence that the number of cotyledons on the offspring group is significantly higher than in the parent group.
+
+# New data: `Polycot-data-2020.csv` focusing on chi-square test
+
+
+### Reading the data
+
+Reading in the data (had to remove manually the '#' sign from the column and save as csv file):
+```{r}
+dat = read.table("data/Polycot-data-2020.csv", sep=",",header=TRUE)
+str(dat)
+head(dat)
+summary(dat)
+dat = within(dat, Generation<-factor(Generation, levels=c("P","O")))
+```
+
+Creating categorical variable: dycots/polycots
+
+```{r}
+dat2 = data.frame(generation=dat$Generation)
+dat2$cots = "dicot"
+dat2$cots[dat$Cotyledons > 2] = "polycot"
+dat2 = within(dat2, cots<-factor(cots))
+summary(dat2)
+write.table(dat2,file="data/polycot-data-2020-categories.csv", row.names = FALSE, sep=",")
+
+dt = table(dat2$cots, dat2$generation)
+```
+
+### Data visualization
+```{r}
+library(graphics)
+mosaicplot(dt, shade = TRUE, las=2, main="Cotelydons")
+
+library(ggmosaic)
+ggplot(data = dat2) +
+  geom_mosaic(aes(x=product(cots), fill=generation))
+```
+
+### Data analysis
+```{r}
+dt
+ct = chisq.test(dt)
+
+obs = ct$observed
+exp = ct$expected
+
+df = rbind(obs[1,],exp[1,],obs[2,],exp[2,],colSums(obs))
+rownames(df) = c("dycot observed", "dycot expected", "polycot observed", "polycot expected", "total")
+
+r = rowSums(obs)
+ss = sum(r)
+totals = c(r[1],NA,r[2],NA,ss)
+cbind(df,totals)
+ct$statistic
+ct$p.value
+
+## expected values
+2437*2556/5585
+2437*3029/5585
+3148*2556/5585
+3148*3029/5585
+```
