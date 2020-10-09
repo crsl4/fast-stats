@@ -90,6 +90,9 @@ q1
 - test for equality of variances: select grouping variable (Generation) and quantitative variable (Cotelydons). There is a choice:
     - normality assumed => levene test: leveneTest(Cotyledons ~ Generation, dat, center=mean)
     - normality not assumed => Fligner-Killeen test: fligner.test(Cotyledons ~ Generation, dat)
+
+- wilcoxon-mann-whitney test: select grouping variable (Generation) and quantitative variable (Cotelydons). wilcox.test(Cotyledons ~ Generation, dat)
+=======
 - wilcoxon-mann-whitney test: select grouping variable (Generation) and quantitative variable (Cotelydons). wilcox.test(Cotyledons ~ Generation, dat)
 
 

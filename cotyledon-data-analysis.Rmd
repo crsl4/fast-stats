@@ -531,6 +531,9 @@ Alternative to the t-test when normality is violated. This test does not test eq
 wilcox.test(Cotyledons ~ Generation, dat)
 ```
 
+
+The p-value less than 0.05 allows us to also reject the null hypothesis of equality of distributions which provides evidence that the number of cotyledons on the offspring group is significantly higher than in the parent group.
+=======
 The p-value less than 0.05 allows us to also reject the null hypothesis of equality of distributions which provides evidence that the number of cotyledons on the offspring group is significantly higher than in the parent group.
 
 # New data: `Polycot-data-2020.csv` focusing on chi-square test
