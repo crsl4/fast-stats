@@ -4,19 +4,19 @@ library(shinydashboard)
 # library(dashboardthemes)
 
 shinyUI(dashboardPage(
-  skin="black",
+  skin="blue",
  
   dashboardHeader(
     # theme="blue_gradient",
     
     title="Fast-Stats Web Tool",
-    tags$li(img(src='v_line.png',width=20,height =50),class="dropdown"),
+    tags$li(img(src='blue.png',width=10,height =50),class="dropdown"),
     tags$li(img(src='logo.png',width=175,height =50),class="dropdown"),
-    tags$li(img(src='v_line.png',width=20,height =50),class="dropdown"),
+    tags$li(img(src='blue.png',width=10,height =50),class="dropdown"),
     tags$li(img(src='WIDSimpleAcronym.png',width=80,height =50),class="dropdown"),
-    tags$li(img(src='v_line.png',width=20,height =50),class="dropdown"),
+    tags$li(img(src='blue.png',width=10,height =50),class="dropdown"),
     tags$li(img(src='uw-logo-flush-web.png',width=150,height =50),class="dropdown"),
-    tags$li(img(src='v_line.png',width=20,height =50),class="dropdown")
+    tags$li(img(src='blue.png',width=10,height =50),class="dropdown")
     
     # fix the adjust ratio 75/230
     # "Fast-Stats Web Tool",
@@ -70,7 +70,7 @@ shinyUI(dashboardPage(
     
     tabItems(
       tabItem("about",
-              box( width=12, status="primary",solidHeader = T,
+              box( width=12, status="info",solidHeader = T,
                    title = "Welcome to the WI Fast Stats app!",
                    
                    h4(HTML( 'This is the <a href="https://github.com/crsl4/fast-stats" target="_blank">open-source</a> publicly available web app to analyze data from <a href="https://fastplants.org/" target="_blank">WI Fast Plants</a>.')))
@@ -80,12 +80,12 @@ shinyUI(dashboardPage(
       tabItem("dataUpload",
               fluidRow(
                 box(
-                  width = 8, status = "primary",solidHeader = T,
+                  width = 8, status = "info",solidHeader = T,
                   title = "File Display",
                   tableOutput("contents"),
                 ),
                 box(
-                  width = 4, status = "info", solidHeader = TRUE,
+                  width = 4, status = "success", solidHeader = TRUE,
                   title = "Data Upload",
                   # Input: Select a file ----
                   
@@ -130,7 +130,7 @@ shinyUI(dashboardPage(
         
         fluidRow(
           box(
-            width = 8, status = "primary", solidHeader = TRUE,
+            width = 8, status = "info", solidHeader = TRUE,
             title = "Plot Display",
             conditionalPanel(condition = "input.plotType==0&&input.goMosaic!=0",
                              plotlyOutput("mosaicPlot") ),
@@ -144,7 +144,7 @@ shinyUI(dashboardPage(
                              plotlyOutput("densities") ),
           ),
           box(
-            width = 4, status = "info",solidHeader = T, 
+            width = 4, status = "success",solidHeader = T, 
             title = "Data Visualization",
             h4("Plot Option:"),
             
@@ -310,7 +310,7 @@ shinyUI(dashboardPage(
       ),
      
       tabItem("FAQ",
-              box( width=12, status="primary",solidHeader = T,
+              box( width=12, status="info",solidHeader = T,
                    title="Frequently Asked Questions",
                    h4("Q: How to get help? "), 
                    p(HTML('<b>A: Soon we will have a google user group to post questions and answers for users of the app.</b>')),
