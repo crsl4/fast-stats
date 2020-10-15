@@ -7,9 +7,14 @@ library(graphics)
 library(ggplotify)
 library(thatssorandom)
 library(rsconnect)
-library(viridis)
+# library(viridis)
 library(RColorBrewer)
-# library(shinyjs)
+
+# global variable
+toy<-read.csv("ecosystem-data.csv",
+             header = T,
+             sep = ",")
+
 # Define server logic to read selected file ----
 server <- function(input, output,session) {
   # #################################### 
@@ -18,16 +23,20 @@ server <- function(input, output,session) {
   data_set <- reactive({
     req(input$file1)
     inFile <- input$file1
-    read.csv(inFile$datapath, header=input$header, 
-             sep=input$sep)
+    tryCatch(
+      {
+        df <- read.csv(input$file1$datapath,
+                       header = input$header,
+                       sep = input$sep)
+      },
+      error = function(e) {
+        # return a safeError if a parsing error occurs
+        stop(safeError(e))
+      }
+    )
+    
     
   })
-  # dsnames0<-c() #a vector to store col names
-  # 
-  # data_set0 <- reactive({
-  #   read.csv("ecosystem-data.csv", header=T, 
-  #            sep=",")
-  # })
   observe({
     if(input$fileType=="uploadFile"){
       dsnames <- names(data_set())
@@ -491,27 +500,7 @@ server <- function(input, output,session) {
   }
   
   output$summary <- renderPrint({
-    
-    # input$file1 will be NULL initially. After the user selects
-    # and uploads a file, head of that data file by default,
-    # or all rows if selected, will be shown.
-    
-    req(input$file1)
-    
-    # when reading semicolon separated files,
-    # having a comma separator causes `read.csv` to error
-    tryCatch(
-      {
-        df <- read.csv(input$file1$datapath,
-                       header = input$header,
-                       sep = input$sep)
-      },
-      error = function(e) {
-        # return a safeError if a parsing error occurs
-        stop(safeError(e))
-        # print(safeError(e)), use as debugger
-      }
-    )
+    df<-data_set()
     
     if (v3$doSummary == FALSE) return()
     
@@ -520,32 +509,16 @@ server <- function(input, output,session) {
   })
   
   output$contents <- renderTable({
-    
     # input$file1 will be NULL initially. After the user selects
     # and uploads a file, head of that data file by default,
     # or all rows if selected, will be shown.
-    
     if(input$fileType=="sampleFile")
     {
-      df<-read.csv("ecosystem-data.csv",
-                   header = T,
-                   sep = ",")
-      
+      df<- toy
     }
     else
     {
-      req(input$file1) #to require that user upload a file
-      tryCatch(
-        {
-          df <- read.csv(input$file1$datapath,
-                         header = input$header,
-                         sep = input$sep)
-        },
-        error = function(e) {
-          # return a safeError if a parsing error occurs
-          stop(safeError(e))
-        }
-      )
+      df<-data_set()
     }
     
     
@@ -559,33 +532,13 @@ server <- function(input, output,session) {
   })
   
   output$violinPlot <- renderPlotly({
-    
-    # there must be a way not to repeat the same lines to get df
-    
-    # input$file1 will be NULL initially. After the user selects
-    # and uploads a file, head of that data file by default,
-    # or all rows if selected, will be shown.
-    
     if(input$fileType=="sampleFile")
     {
-      df<-read.csv("ecosystem-data.csv",
-                   header = T,
-                   sep = ",")
+      df<- toy
     }
     else
     {
-      req(input$file1) #to require that user upload a file
-      tryCatch(
-        {
-          df <- read.csv(input$file1$datapath,
-                         header = input$header,
-                         sep = input$sep)
-        },
-        error = function(e) {
-          # return a safeError if a parsing error occurs
-          stop(safeError(e))
-        }
-      )
+      df<-data_set()
     }
     
     if (v$doViolinPlot == FALSE) return()
@@ -615,19 +568,6 @@ server <- function(input, output,session) {
         text=element_text(size=8),
         axis.line = element_line(colour = "grey")##,
       )
-      
-      # ggplot(df, aes(x=x_val, y=y_val, fill=x_val))+geom_violin(alpha=v41$transViolin/100)+xlab(v5$xv)+ylab(v6$yv)+labs(fill=v5$xv)+ggtitle("Violin Plot")+
-      # ylim(c(1,6))+
-      # theme(
-      #   plot.title = element_text(hjust=0.5, size=rel(1.8)),
-      #   axis.title.x = element_text(size=rel(1.8)),
-      #   axis.title.y = element_text(size=rel(1.8), angle=90, vjust=0.5, hjust=0.5),
-      #   axis.text.x = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
-      #   axis.text.y = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
-      #   panel.background = element_blank(),
-      #   text=element_text(size=8),
-      #   axis.line = element_line(colour = "grey")##,
-      # )  
     if(v12$doAddPoints==T){
       plot<-plot+geom_point(pch = v42$pointShapeViolin, alpha=v41$transViolin/100, position = position_jitterdodge(jitter.height=0.05, jitter.width=2.5),size=v43$pointSizeViolin)
     }
@@ -640,33 +580,13 @@ server <- function(input, output,session) {
   })
   
   output$mosaicPlot <- renderPlotly({
-    
-    # there must be a way not to repeat the same lines to get df
-    
-    # input$file1 will be NULL initially. After the user selects
-    # and uploads a file, head of that data file by default,
-    # or all rows if selected, will be shown.
-    
     if(input$fileType=="sampleFile")
     {
-      df<-read.csv("ecosystem-data.csv",
-                   header = T,
-                   sep = ",")
+      df<- toy
     }
     else
     {
-      req(input$file1) #to require that user upload a file
-      tryCatch(
-        {
-          df <- read.csv(input$file1$datapath,
-                         header = input$header,
-                         sep = input$sep)
-        },
-        error = function(e) {
-          # return a safeError if a parsing error occurs
-          stop(safeError(e))
-        }
-      )
+      df<-data_set()
     }
     
     if (v27$doMosaic == FALSE) return()
@@ -707,36 +627,14 @@ server <- function(input, output,session) {
     # something need to note is that ggplotly is not compatiable with geom_mosaic
   })
   
-  # histogram should be the base template
-  # all other plots should follow its styles
   output$histogram <- renderPlotly({
-    
-    # there must be a way not to repeat the same lines to get df
-    
-    # input$file1 will be NULL initially. After the user selects
-    # and uploads a file, head of that data file by default,
-    # or all rows if selected, will be shown.
-    
     if(input$fileType=="sampleFile")
     {
-      df<-read.csv("ecosystem-data.csv",
-                   header = T,
-                   sep = ",")
+      df<- toy
     }
     else
     {
-      req(input$file1) #to require that user upload a file
-      tryCatch(
-        {
-          df <- read.csv(input$file1$datapath,
-                         header = input$header,
-                         sep = input$sep)
-        },
-        error = function(e) {
-          # return a safeError if a parsing error occurs
-          stop(safeError(e))
-        }
-      )
+      df<-data_set()
     }
     
     if (v2$doHist == FALSE) return()
@@ -774,27 +672,13 @@ server <- function(input, output,session) {
   })
   
   output$scatterPlot<-renderPlotly({
-    # FIXME:we want to read the input file only once per session
     if(input$fileType=="sampleFile")
     {
-      df<-read.csv("ecosystem-data.csv",
-                   header = T,
-                   sep = ",")
+      df<- toy
     }
     else
     {
-      req(input$file1) #to require that user upload a file
-      tryCatch(
-        {
-          df <- read.csv(input$file1$datapath,
-                         header = input$header,
-                         sep = input$sep)
-        },
-        error = function(e) {
-          # return a safeError if a parsing error occurs
-          stop(safeError(e))
-        }
-      )
+      df<-data_set()
     }
     
     if (v9$doScatter == FALSE) return()
@@ -850,33 +734,13 @@ server <- function(input, output,session) {
   })
   
   output$boxPlot <- renderPlotly({
-    
-    # there must be a way not to repeat the same lines to get df
-    
-    # input$file1 will be NULL initially. After the user selects
-    # and uploads a file, head of that data file by default,
-    # or all rows if selected, will be shown.
-    
     if(input$fileType=="sampleFile")
     {
-      df<-read.csv("ecosystem-data.csv",
-                   header = T,
-                   sep = ",")
+      df<- toy
     }
     else
     {
-      req(input$file1) #to require that user upload a file
-      tryCatch(
-        {
-          df <- read.csv(input$file1$datapath,
-                         header = input$header,
-                         sep = input$sep)
-        },
-        error = function(e) {
-          # return a safeError if a parsing error occurs
-          stop(safeError(e))
-        }
-      )
+      df<-data_set()
     }
     
     if (v10$doBox == FALSE) return()
@@ -928,33 +792,13 @@ server <- function(input, output,session) {
   })
   
   output$densities<- renderPlotly({
-    
-    # there must be a way not to repeat the same lines to get df
-    
-    # input$file1 will be NULL initially. After the user selects
-    # and uploads a file, head of that data file by default,
-    # or all rows if selected, will be shown.
-    
     if(input$fileType=="sampleFile")
     {
-      df<-read.csv("ecosystem-data.csv",
-                   header = T,
-                   sep = ",")
+      df<- toy
     }
     else
     {
-      req(input$file1) #to require that user upload a file
-      tryCatch(
-        {
-          df <- read.csv(input$file1$datapath,
-                         header = input$header,
-                         sep = input$sep)
-        },
-        error = function(e) {
-          # return a safeError if a parsing error occurs
-          stop(safeError(e))
-        }
-      )
+      df<-data_set()
     }
     
     if (v11$doDensities == FALSE) return()
