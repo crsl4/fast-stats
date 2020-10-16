@@ -11,6 +11,10 @@ library(viridis)
 library(RColorBrewer)
 # library(shinyjs)
 # Define server logic to read selected file ----
+# global variable
+toy<-read.csv("toys.csv",
+              header = T,
+              sep = ",")
 server <- function(input, output,session) {
   # #################################### 
   dsnames<-c() #a vector to store col names
@@ -18,16 +22,18 @@ server <- function(input, output,session) {
   data_set <- reactive({
     req(input$file1)
     inFile <- input$file1
-    read.csv(inFile$datapath, header=input$header, 
-             sep=input$sep)
-    
+    tryCatch(
+      {
+        df <- read.csv(input$file1$datapath,
+                       header = input$header,
+                       sep = input$sep)
+      },
+      error = function(e) {
+        # return a safeError if a parsing error occurs
+        stop(safeError(e))
+      }
+    )
   })
-  # dsnames0<-c() #a vector to store col names
-  # 
-  # data_set0 <- reactive({
-  #   read.csv("toys.csv", header=T, 
-  #            sep=",")
-  # })
   observe({
     if(input$fileType=="uploadFile"){
       dsnames <- names(data_set())
@@ -490,22 +496,7 @@ server <- function(input, output,session) {
     # and uploads a file, head of that data file by default,
     # or all rows if selected, will be shown.
     
-    req(input$file1)
-    
-    # when reading semicolon separated files,
-    # having a comma separator causes `read.csv` to error
-    tryCatch(
-      {
-        df <- read.csv(input$file1$datapath,
-                       header = input$header,
-                       sep = input$sep)
-      },
-      error = function(e) {
-        # return a safeError if a parsing error occurs
-        stop(safeError(e))
-        # print(safeError(e)), use as debugger
-      }
-    )
+    df<-data_set()
     
     if (v3$doSummary == FALSE) return()
     
@@ -521,25 +512,11 @@ server <- function(input, output,session) {
     
     if(input$fileType=="sampleFile")
     {
-      df<-read.csv("toys.csv",
-                   header = T,
-                   sep = ",")
-     
+      df<- toy
     }
     else
     {
-      req(input$file1) #to require that user upload a file
-      tryCatch(
-        {
-          df <- read.csv(input$file1$datapath,
-                         header = input$header,
-                         sep = input$sep)
-        },
-        error = function(e) {
-          # return a safeError if a parsing error occurs
-          stop(safeError(e))
-        }
-      )
+      df<-data_set()
     }
     
     
@@ -562,24 +539,11 @@ server <- function(input, output,session) {
     
     if(input$fileType=="sampleFile")
     {
-      df<-read.csv("toys.csv",
-                   header = T,
-                   sep = ",")
+      df<- toy
     }
     else
     {
-      req(input$file1) #to require that user upload a file
-      tryCatch(
-        {
-          df <- read.csv(input$file1$datapath,
-                         header = input$header,
-                         sep = input$sep)
-        },
-        error = function(e) {
-          # return a safeError if a parsing error occurs
-          stop(safeError(e))
-        }
-      )
+      df<-data_set()
     }
     
     if (v$doViolinPlot == FALSE) return()
@@ -629,24 +593,11 @@ server <- function(input, output,session) {
     
     if(input$fileType=="sampleFile")
     {
-      df<-read.csv("toys.csv",
-                   header = T,
-                   sep = ",")
+      df<- toy
     }
     else
     {
-      req(input$file1) #to require that user upload a file
-      tryCatch(
-        {
-          df <- read.csv(input$file1$datapath,
-                         header = input$header,
-                         sep = input$sep)
-        },
-        error = function(e) {
-          # return a safeError if a parsing error occurs
-          stop(safeError(e))
-        }
-      )
+      df<-data_set()
     }
     
     if (v27$doMosaic == FALSE) return()
@@ -692,36 +643,15 @@ server <- function(input, output,session) {
     # something need to note is that ggplotly is not compatiable with geom_mosaic
   })
   
-  # histogram should be the base template
-  # all other plots should follow its styles
   output$histogram <- renderPlotly({
-    
-    # there must be a way not to repeat the same lines to get df
-    
-    # input$file1 will be NULL initially. After the user selects
-    # and uploads a file, head of that data file by default,
-    # or all rows if selected, will be shown.
     
     if(input$fileType=="sampleFile")
     {
-      df<-read.csv("toys.csv",
-                   header = T,
-                   sep = ",")
+      df<- toy
     }
     else
     {
-      req(input$file1) #to require that user upload a file
-      tryCatch(
-        {
-          df <- read.csv(input$file1$datapath,
-                         header = input$header,
-                         sep = input$sep)
-        },
-        error = function(e) {
-          # return a safeError if a parsing error occurs
-          stop(safeError(e))
-        }
-      )
+      df<-data_set()
     }
     
     if (v2$doHist == FALSE) return()
@@ -759,27 +689,13 @@ server <- function(input, output,session) {
   })
   
   output$scatterPlot<-renderPlotly({
-    # FIXME:we want to read the input file only once per session
     if(input$fileType=="sampleFile")
     {
-      df<-read.csv("toys.csv",
-                   header = T,
-                   sep = ",")
+      df<- toy
     }
     else
     {
-      req(input$file1) #to require that user upload a file
-      tryCatch(
-        {
-          df <- read.csv(input$file1$datapath,
-                         header = input$header,
-                         sep = input$sep)
-        },
-        error = function(e) {
-          # return a safeError if a parsing error occurs
-          stop(safeError(e))
-        }
-      )
+      df<-data_set()
     }
     
     if (v9$doScatter == FALSE) return()
@@ -833,32 +749,13 @@ server <- function(input, output,session) {
   
   output$boxPlot <- renderPlotly({
     
-    # there must be a way not to repeat the same lines to get df
-    
-    # input$file1 will be NULL initially. After the user selects
-    # and uploads a file, head of that data file by default,
-    # or all rows if selected, will be shown.
-    
     if(input$fileType=="sampleFile")
     {
-      df<-read.csv("toys.csv",
-                   header = T,
-                   sep = ",")
+      df<- toy
     }
     else
     {
-      req(input$file1) #to require that user upload a file
-      tryCatch(
-        {
-          df <- read.csv(input$file1$datapath,
-                         header = input$header,
-                         sep = input$sep)
-        },
-        error = function(e) {
-          # return a safeError if a parsing error occurs
-          stop(safeError(e))
-        }
-      )
+      df<-data_set()
     }
     
     if (v10$doBox == FALSE) return()
@@ -911,32 +808,13 @@ server <- function(input, output,session) {
   
   output$densities<- renderPlotly({
     
-    # there must be a way not to repeat the same lines to get df
-    
-    # input$file1 will be NULL initially. After the user selects
-    # and uploads a file, head of that data file by default,
-    # or all rows if selected, will be shown.
-    
     if(input$fileType=="sampleFile")
     {
-      df<-read.csv("toys.csv",
-                   header = T,
-                   sep = ",")
+      df<- toy
     }
     else
     {
-      req(input$file1) #to require that user upload a file
-      tryCatch(
-        {
-          df <- read.csv(input$file1$datapath,
-                         header = input$header,
-                         sep = input$sep)
-        },
-        error = function(e) {
-          # return a safeError if a parsing error occurs
-          stop(safeError(e))
-        }
-      )
+      df<-data_set()
     }
     
     if (v11$doDensities == FALSE) return()
@@ -983,24 +861,11 @@ server <- function(input, output,session) {
   output$sel1<-renderUI({
     if(input$fileType=="sampleFile")
     {
-      df<-read.csv("toys.csv",
-                   header = T,
-                   sep = ",")
+      df<- toy
     }
     else
     {
-      req(input$file1) #to require that user upload a file
-      tryCatch(
-        {
-          df <- read.csv(input$file1$datapath,
-                         header = input$header,
-                         sep = input$sep)
-        },
-        error = function(e) {
-          # return a safeError if a parsing error occurs
-          stop(safeError(e))
-        }
-      )
+      df<-data_set()
     }
     
     # if (v7$gv == "") return()
@@ -1015,24 +880,11 @@ server <- function(input, output,session) {
   output$sel2<-renderUI({
     if(input$fileType=="sampleFile")
     {
-      df<-read.csv("toys.csv",
-                   header = T,
-                   sep = ",")
+      df<- toy
     }
     else
     {
-      req(input$file1) #to require that user upload a file
-      tryCatch(
-        {
-          df <- read.csv(input$file1$datapath,
-                         header = input$header,
-                         sep = input$sep)
-        },
-        error = function(e) {
-          # return a safeError if a parsing error occurs
-          stop(safeError(e))
-        }
-      )
+      df<-data_set()
     }
     
     # if (v7$gv == "") return()
@@ -1054,24 +906,11 @@ server <- function(input, output,session) {
     
     if(input$fileType=="sampleFile")
     {
-      df<-read.csv("toys.csv",
-                   header = T,
-                   sep = ",")
+      df<- toy
     }
     else
     {
-      req(input$file1) #to require that user upload a file
-      tryCatch(
-        {
-          df <- read.csv(input$file1$datapath,
-                         header = input$header,
-                         sep = input$sep)
-        },
-        error = function(e) {
-          # return a safeError if a parsing error occurs
-          stop(safeError(e))
-        }
-      )
+      df<-data_set()
     }
     
     if (v4$doT == FALSE) return()
@@ -1246,24 +1085,11 @@ server <- function(input, output,session) {
     
     if(input$fileType=="sampleFile")
     {
-      df<-read.csv("toys.csv",
-                   header = T,
-                   sep = ",")
+      df<- toy
     }
     else
     {
-      req(input$file1) #to require that user upload a file
-      tryCatch(
-        {
-          df <- read.csv(input$file1$datapath,
-                         header = input$header,
-                         sep = input$sep)
-        },
-        error = function(e) {
-          # return a safeError if a parsing error occurs
-          stop(safeError(e))
-        }
-      )
+      df<-data_set()
     }
     if (v22$doChi == FALSE) return()
     
