@@ -697,7 +697,7 @@ server <- function(input, output,session) {
     # ggplot2 does not accept list object; must use unlist
     y_val<-unlist(subset(df, select=c(v30$qScatter)))
     # x_val_cat=factor(x_val)
-    p<-ggplot(df, aes(x = factor(x_val), y = y_val, fill = factor(x_val))) +
+    p<-ggplot(df, aes(x = x_val, y = y_val,fill=x_val)) +
       xlab(v29$gvScatter)+labs(fill=v29$gvScatter)+ylab(v30$qScatter)+
       geom_point(pch = v34$pointShapeScatter, alpha=v33$transScatter/100, position = position_jitterdodge(jitter.height=0.075, jitter.width=0.1),size=v35$pointSizeScatter)+
       theme(
@@ -712,23 +712,23 @@ server <- function(input, output,session) {
       )
     
     #############################################################
-    df[[v29$gvScatter]]<-as.factor( df[[v29$gvScatter]])
-    group_list=unlist(subset(df,select=c(v29$gvScatter)))
-    # print(class(group_list))
+    # df[[v29$gvScatter]]<-as.factor( df[[v29$gvScatter]])
+    group_list=unlist(subset(df,select=c(as.factor(v29$gvScatter))))
   
     colorCount = length(unique(unlist(group_list,use.names=F)))   #8, an arbitrary number
     
     getPalette <- colorRampPalette(brewer.pal(8, v36$colorScatter),bias=2.5)(colorCount)
     # print(getPalette)
 
-    p<-p+scale_fill_manual(values= getPalette)
+    p<-p+scale_fill_gradient(low=getPalette[1], high=getPalette[length(getPalette)])
     ###########################################################
     if(v53$addRegression==T){
       # add a aes(group="") solve the problem that one variable is a factor (numerical converts to factor)
-      p<-p+geom_smooth(method='lm',formula=y~x,aes(group = "" ))
+      p<-p+geom_smooth(method='lm',formula=y~x)
     }
     # p<-scale_color_gradientn(colors=v36$colorScatter)
     ggplotly(p)
+    # ggplot(p)
     
     
   })
