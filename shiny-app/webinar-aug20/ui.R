@@ -3,26 +3,17 @@ library(plotly)
 library(shinydashboard)
 
 shinyUI(dashboardPage(
-  skin="black",
+  skin="yellow",
   dashboardHeader(
     
     title="Fast-Stats Web Tool",
-    tags$li(img(src='v_line.png',width=20,height =50),class="dropdown"),
+    tags$li(img(src='yellow1.png',width=10,height =50),class="dropdown"),
     tags$li(img(src='logo.png',width=175,height =50),class="dropdown"),
-    tags$li(img(src='v_line.png',width=20,height =50),class="dropdown"),
+    tags$li(img(src='yellow1.png',width=10,height =50),class="dropdown"),
     tags$li(img(src='WIDSimpleAcronym.png',width=80,height =50),class="dropdown"),
-    tags$li(img(src='v_line.png',width=20,height =50),class="dropdown"),
+    tags$li(img(src='yellow1.png',width=10,height =50),class="dropdown"),
     tags$li(img(src='uw-logo-flush-web.png',width=150,height =50),class="dropdown"),
-    tags$li(img(src='v_line.png',width=20,height =50),class="dropdown")
-    
-    # fix the adjust ratio 75/230
-    # "Fast-Stats Web Tool",
-    #           tags$head(tags$style(type="text/css", "label.radio { display: inline-block; }", ".radio input[type=\"radio\"] { float: none; }"),
-    #                     tags$style(type="text/css", "select { max-width: 200px; }"),
-    #                     tags$style(type="text/css", "textarea { max-width: 185px; }"),
-    #                     tags$style(type="text/css", ".jslider { max-width: 200px; }"),
-    #                     tags$style(type='text/css', ".well { max-width: 330px; }"),
-    #                     tags$style(type='text/css', ".span4 { max-width: 330px; }")) 
+    tags$li(img(src='yellow1.png',width=10,height =50),class="dropdown")
   ),
   
   dashboardSidebar(
@@ -83,7 +74,7 @@ shinyUI(dashboardPage(
                   tableOutput("contents"),
                 ),
                 box(
-                  width = 4, status = "info", solidHeader = TRUE,
+                  width = 4, status = "warning", solidHeader = TRUE,
                   title = "Data Upload",
                   # Input: Select a file ----
                   
@@ -142,7 +133,7 @@ shinyUI(dashboardPage(
                              plotlyOutput("densities") ),
           ),
           box(
-            width = 4, status = "info",solidHeader = T,
+            width = 4, status = "warning",solidHeader = T,
             title = "Data Visualization",
             h4("Plot Option:"),
             
@@ -154,8 +145,8 @@ shinyUI(dashboardPage(
                              h4("Data Visualization:"),
                              
                              fluidRow(
-                               column(6,radioButtons("gvMosaic1","Group Variable 1:", c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"))),
-                               column(6,radioButtons("gvMosaic2","Group Variable 2:", c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents")))
+                               column(6,radioButtons("gvMosaic1","Group Variable 1:", c("1"="1","2"="2"))),
+                               column(6,radioButtons("gvMosaic2","Group Variable 2:", c("1"="1","2"="2")))
                              ),
                              selectInput("colorMosaic","Color",choices = c("Blue+Purple"="BuPu","Dark Color"="Dark2","Orange+Red"="OrRd","Yellow+Green+Blue"="YlGnBu","Accent"="Accent","Paired"="Paired","Red+Blue"="RdYlBu","Purple+Red"="PuRd","Set2"="Set2","Purple+Green"="PRGn")
                              ),
@@ -180,8 +171,8 @@ shinyUI(dashboardPage(
                              h4("Data Visualization:"),
                              
                              fluidRow(
-                               column(6,radioButtons("xaxisGrp","Group Variable:", c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"))),
-                               column(6,radioButtons("yaxisGrp","Quantity:", c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents")))
+                               column(6,radioButtons("xaxisGrp","Group Variable:", c("1"="1","2"="2"))),
+                               column(6,radioButtons("yaxisGrp","Quantity:", c("1"="1","2"="2")))
                              ),
                              
                              selectInput("colorViolin","Color",choices = c("Blue+Purple"="BuPu","Dark Color"="Dark2","Orange+Red"="OrRd","Yellow+Green+Blue"="YlGnBu","Accent"="Accent","Paired"="Paired","Red+Blue"="RdYlBu","Purple+Red"="PuRd","Set2"="Set2","Purple+Green"="PRGn")
@@ -215,8 +206,8 @@ shinyUI(dashboardPage(
                              h4("Data Visualization:"),
                              
                              fluidRow(
-                               column(6,radioButtons("gvBox","Group Variable:",c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"))),
-                               column(6,radioButtons("qBox","Quantity:", c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents")))
+                               column(6,radioButtons("gvBox","Group Variable:",c("1"="1","2"="2"))),
+                               column(6,radioButtons("qBox","Quantity:", c("1"="1","2"="2")))
                              ),
                              
                              selectInput("colorBox","Color",choices = c("Blue+Purple"="BuPu","Dark Color"="Dark2","Orange+Red"="OrRd","Yellow+Green+Blue"="YlGnBu","Accent"="Accent","Paired"="Paired","Red+Blue"="RdYlBu","Purple+Red"="PuRd","Set2"="Set2","Purple+Green"="PRGn")
@@ -247,8 +238,8 @@ shinyUI(dashboardPage(
                              h4("Data Visualization:"),
                              
                              fluidRow(
-                               column(6,radioButtons("gvScatter","Group Variable:",c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"))),
-                               column(6,radioButtons("qScatter","Quantity:", c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents")))
+                               column(6,radioButtons("gvScatter","Group Variable:",c("1"="1","2"="2"))),
+                               column(6,radioButtons("qScatter","Quantity:", c("1"="1","2"="2")))
                              ),
                              
                              selectInput("colorScatter","Color",choices = c("Blue+Purple"="BuPu","Dark Color"="Dark2","Orange+Red"="OrRd","Yellow+Green+Blue"="YlGnBu","Accent"="Accent","Paired"="Paired","Red+Blue"="RdYlBu","Purple+Red"="PuRd","Set2"="Set2","Purple+Green"="PRGn")
@@ -281,8 +272,8 @@ shinyUI(dashboardPage(
                              h4("Data Visualization:"),
                              
                              fluidRow(
-                               column(6,radioButtons("gvDensities","Group Variable:", c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"))),
-                               column(6,radioButtons("qDensities","Quantity:", c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents")))
+                               column(6,radioButtons("gvDensities","Group Variable:", c("1"="1","2"="2"))),
+                               column(6,radioButtons("qDensities","Quantity:", c("1"="1","2"="2")))
                              ),
                              selectInput("colorDensities","Color",choices = c("Blue+Purple"="BuPu","Dark Color"="Dark2","Orange+Red"="OrRd","Yellow+Green+Blue"="YlGnBu","Accent"="Accent","Paired"="Paired","Red+Blue"="RdYlBu","Purple+Red"="PuRd","Set2"="Set2","Purple+Green"="PRGn")
                              ),
@@ -317,7 +308,7 @@ shinyUI(dashboardPage(
                              verbatimTextOutput("ttest",placeholder = F))
           ),
           box(
-            width = 4, status = "info",solidHeader = T,
+            width = 4, status = "warning",solidHeader = T,
             title = "Data Analysis",
             
             
@@ -330,8 +321,8 @@ shinyUI(dashboardPage(
                              
                              HTML('<p style="color:#808080"> <b> Equal variance:</b> The standard t test assumes equal variances on the two groups. If the user checks this option, the standard t test is run, but if the user unchecks this option, then the Welch t test is run instead (that does not assume equal variances). </p>'),
                              fluidRow(
-                               column(6,radioButtons("groupVar","Group Variable:", c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"))),
-                               column(6,radioButtons("quantity","Quantity:", c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents")))
+                               column(6,radioButtons("groupVar","Group Variable:", c("1"="1","2"="2"))),
+                               column(6,radioButtons("quantity","Quantity:", c("1"="1","2"="2")))
                              ),
                              uiOutput("sel1"),
                              uiOutput("sel2"),
@@ -348,8 +339,8 @@ shinyUI(dashboardPage(
             # chi-square
             conditionalPanel(condition="input.testType==0",
                              fluidRow(
-                               column(6,radioButtons("gv1","Group Variable 1:", c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"))),
-                               column(6,radioButtons("gv2","Group Variable 2:", c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents")))
+                               column(6,radioButtons("gv1","Group Variable 1:", c("1"="1","2"="2"))),
+                               column(6,radioButtons("gv2","Group Variable 2:", c("1"="1","2"="2")))
                              ),
                              HTML('<p style="color:#808080"> <b>Chi-square test:</b> Pearson\'s chi-square test is used to determine whether there is a statistically significant difference between the expected frequencies and the observed frequencies in one or more categories of a contingency table</p>'),
                              fluidRow(

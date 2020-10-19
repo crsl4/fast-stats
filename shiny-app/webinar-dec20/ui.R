@@ -4,28 +4,19 @@ library(shinydashboard)
 # library(dashboardthemes)
 
 shinyUI(dashboardPage(
-  skin="black",
+  skin="blue",
  
   dashboardHeader(
     # theme="blue_gradient",
     
     title="Fast-Stats Web Tool",
-    tags$li(img(src='v_line.png',width=20,height =50),class="dropdown"),
+    tags$li(img(src='blue.png',width=10,height =50),class="dropdown"),
     tags$li(img(src='logo.png',width=175,height =50),class="dropdown"),
-    tags$li(img(src='v_line.png',width=20,height =50),class="dropdown"),
+    tags$li(img(src='blue.png',width=10,height =50),class="dropdown"),
     tags$li(img(src='WIDSimpleAcronym.png',width=80,height =50),class="dropdown"),
-    tags$li(img(src='v_line.png',width=20,height =50),class="dropdown"),
+    tags$li(img(src='blue.png',width=10,height =50),class="dropdown"),
     tags$li(img(src='uw-logo-flush-web.png',width=150,height =50),class="dropdown"),
-    tags$li(img(src='v_line.png',width=20,height =50),class="dropdown")
-    
-    # fix the adjust ratio 75/230
-    # "Fast-Stats Web Tool",
-    #           tags$head(tags$style(type="text/css", "label.radio { display: inline-block; }", ".radio input[type=\"radio\"] { float: none; }"),
-    #                     tags$style(type="text/css", "select { max-width: 200px; }"),
-    #                     tags$style(type="text/css", "textarea { max-width: 185px; }"),
-    #                     tags$style(type="text/css", ".jslider { max-width: 200px; }"),
-    #                     tags$style(type='text/css', ".well { max-width: 330px; }"),
-    #                     tags$style(type='text/css', ".span4 { max-width: 330px; }")) 
+    tags$li(img(src='blue.png',width=10,height =50),class="dropdown")
   ),
   
   dashboardSidebar(
@@ -85,7 +76,7 @@ shinyUI(dashboardPage(
                   tableOutput("contents"),
                 ),
                 box(
-                  width = 4, status = "info", solidHeader = TRUE,
+                  width = 4, status = "info", solidHeader = T,
                   title = "Data Upload",
                   # Input: Select a file ----
                   
@@ -130,7 +121,7 @@ shinyUI(dashboardPage(
         
         fluidRow(
           box(
-            width = 8, status = "primary", solidHeader = TRUE,
+            width = 8, status = "primary", solidHeader = T,
             title = "Plot Display",
             conditionalPanel(condition = "input.plotType==0&&input.goMosaic!=0",
                              plotlyOutput("mosaicPlot") ),
