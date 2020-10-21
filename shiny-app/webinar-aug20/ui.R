@@ -59,7 +59,7 @@ shinyUI(dashboardPage(
     
     tabItems(
       tabItem("about",
-              box( width=12, status="primary",solidHeader = T,
+              box( width=12, status="warning",solidHeader = T,
                    title = "Welcome to the WI Fast Stats app!",
                    
                    h4(HTML( 'This is the <a href="https://github.com/crsl4/fast-stats" target="_blank">open-source</a> publicly available web app to analyze data from <a href="https://fastplants.org/" target="_blank">WI Fast Plants</a>.')))
@@ -69,7 +69,7 @@ shinyUI(dashboardPage(
       tabItem("dataUpload",
               fluidRow(
                 box(
-                  width = 8, status = "primary",solidHeader = T,
+                  width = 8, status = "warning",solidHeader = T,
                   title = "File Display",
                   tableOutput("contents"),
                 ),
@@ -119,7 +119,7 @@ shinyUI(dashboardPage(
         
         fluidRow(
           box(
-            width = 8, status = "primary", solidHeader = TRUE,
+            width = 8, status = "warning", solidHeader = TRUE,
             title = "Plot Display",
             conditionalPanel(condition = "input.plotType==0&&input.goMosaic!=0",
                              plotlyOutput("mosaicPlot") ),
@@ -298,7 +298,7 @@ shinyUI(dashboardPage(
         "dataAnalysis",
         fluidRow(
           box(
-            width = 8, status = "primary", solidHeader = TRUE,
+            width = 8, status = "warning", solidHeader = TRUE,
             title = "Results Displayed",
             # successfully hide the annoying verbaltext output using conditionalpanel
             # surprised to find that input$actionbuttonID is actually integer, keep adding one as users click the buttons
@@ -356,7 +356,7 @@ shinyUI(dashboardPage(
       ),#tabitem for data analysis ends
       # cannot add extra , if it's the final tab item!
       tabItem("FAQ",
-              box( width=12, status="primary",solidHeader = T,
+              box( width=12, status="warning",solidHeader = T,
                    title="Frequently Asked Questions",
                    h4("Q: How to get help? "), 
                    p(HTML('<b>A: Soon we will have a google user group to post questions and answers for users of the app.</b>')),
