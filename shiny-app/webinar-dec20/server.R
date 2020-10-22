@@ -9,7 +9,7 @@ library(thatssorandom)
 library(rsconnect)
 # library(viridis)
 library(RColorBrewer)
-
+options(shiny.maxRequestSize=10*1024^2)
 # global variable
 toy<-read.csv("ecosystem-data.csv",
              header = T,

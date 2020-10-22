@@ -91,7 +91,7 @@ shinyUI(dashboardPage(
                                              accept = c("text/csv",
                                                         "text/comma-separated-values,text/plain",
                                                         ".csv")),
-                                   
+                                   HTML('<p style="color:#808080"> <b>Warning:</b> The maximum file size should not exceed <b>10MB</b></p>'),
                                    # Input: Checkbox if file has header ----
                                    tags$p("Click the checkbox if file has a header:"),
                                    checkboxInput("header", "Header", TRUE),
