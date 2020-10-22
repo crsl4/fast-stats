@@ -12,6 +12,7 @@ library(RColorBrewer)
 # library(shinyjs)
 # Define server logic to read selected file ----
 # global variable
+options(shiny.maxRequestSize=10*1024^2)
 toy<-read.csv("toys.csv",
               header = T,
               sep = ",")
@@ -22,6 +23,7 @@ server <- function(input, output,session) {
   data_set <- reactive({
     req(input$file1)
     inFile <- input$file1
+    
     tryCatch(
       {
         df <- read.csv(input$file1$datapath,
