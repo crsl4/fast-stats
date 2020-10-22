@@ -62,8 +62,8 @@ shinyUI(dashboardPage(
               box( width=12, status="warning",solidHeader = T,
                    title = "Welcome to the WI Fast Stats app!",
                    
-                   h4(HTML( 'This is the <a href="https://github.com/crsl4/fast-stats" target="_blank">open-source</a> publicly available web app to analyze data from <a href="https://fastplants.org/" target="_blank">WI Fast Plants</a>.')))
-              
+                   h4(HTML( 'WI Fast Stats is the <a href="https://github.com/crsl4/fast-stats" target="_blank">open-source</a> publicly available web app to analyze data from <a href="https://fastplants.org/" target="_blank">WI Fast Plants</a>.')),
+                   h4(HTML( 'This web app is the accompanying tool for the WI Fast Plants webinar: <i>Strategies for adapting WI Fast Plants selection of traits investigations for remote and social distance learning</i>.')))
       ),
       
       tabItem("dataUpload",
@@ -144,6 +144,7 @@ shinyUI(dashboardPage(
             conditionalPanel(condition="input.plotType==0",
                              
                              h4("Data Visualization:"),
+                             HTML("Please select the two variables to use in the plot and click on the button to generate the plot."),
                              
                              fluidRow(
                                column(6,radioButtons("gvMosaic1","Group Variable 1:", c("1"="1","2"="2"))),
@@ -151,7 +152,7 @@ shinyUI(dashboardPage(
                              ),
                              selectInput("colorMosaic","Color",choices = c("Blue+Purple"="BuPu","Dark Color"="Dark2","Orange+Red"="OrRd","Yellow+Green+Blue"="YlGnBu","Accent"="Accent","Paired"="Paired","Red+Blue"="RdYlBu","Purple+Red"="PuRd","Set2"="Set2","Purple+Green"="PRGn")
                              ),
-                             HTML('<p style="color:#808080"> <b>Notice:</b> Click the <b>FAQ</b> tab in the left sidebar to see the detailed color palettes</p>'),
+                             HTML('<p style="color:#808080"> <b>About colors:</b> Click the <b>FAQ</b> tab in the left sidebar for more details on the color palettes</p>'),
                              
                              fluidRow(
                                column(6, align="center", offset = 3,
@@ -170,6 +171,7 @@ shinyUI(dashboardPage(
                              HTML('<p style="color:#808080"> <b>Add data points: </b> This option allows the user to add a scatterplot of the data where each dot corresponds to one observation (row) in the dataset. </p>'),
                              
                              h4("Data Visualization:"),
+                             HTML("Please select the two variables to use in the plot and click on the button to generate the plot."),
                              
                              fluidRow(
                                column(6,radioButtons("xaxisGrp","Group Variable:", c("1"="1","2"="2"))),
@@ -178,7 +180,7 @@ shinyUI(dashboardPage(
                              
                              selectInput("colorViolin","Color",choices = c("Blue+Purple"="BuPu","Dark Color"="Dark2","Orange+Red"="OrRd","Yellow+Green+Blue"="YlGnBu","Accent"="Accent","Paired"="Paired","Red+Blue"="RdYlBu","Purple+Red"="PuRd","Set2"="Set2","Purple+Green"="PRGn")
                              ),
-                             HTML('<p style="color:#808080"> <b>Notice:</b> Click the <b>FAQ</b> tab in the left sidebar in the left sidebar to see the detailed color palettes</p>'),
+                             HTML('<p style="color:#808080"> <b>About colors:</b> Click the <b>FAQ</b> tab in the left sidebar in the left sidebar for more details on the color palettes</p>'),
                              
                              sliderInput("transViolin", "Transparency:",
                                          min = 30, max = 100,
@@ -205,6 +207,7 @@ shinyUI(dashboardPage(
                              HTML('<p style="color:#808080"> <b>Add data points: </b>  This option allows the user to add a scatterplot of the data where each dot corresponds to one observation (row) in the dataset. </p>'),
                              
                              h4("Data Visualization:"),
+                             HTML("Please select the two variables to use in the plot and click on the button to generate the plot."),
                              
                              fluidRow(
                                column(6,radioButtons("gvBox","Group Variable:",c("1"="1","2"="2"))),
@@ -213,7 +216,7 @@ shinyUI(dashboardPage(
                              
                              selectInput("colorBox","Color",choices = c("Blue+Purple"="BuPu","Dark Color"="Dark2","Orange+Red"="OrRd","Yellow+Green+Blue"="YlGnBu","Accent"="Accent","Paired"="Paired","Red+Blue"="RdYlBu","Purple+Red"="PuRd","Set2"="Set2","Purple+Green"="PRGn")
                              ),
-                             HTML('<p style="color:#808080"> <b>Notice:</b> Click the <b>FAQ</b> tab in the left sidebar to see the detailed color palettes</p>'),
+                             HTML('<p style="color:#808080"> <b>About colors:</b> Click the <b>FAQ</b> tab in the left sidebar for more details on color palettes</p>'),
                              
                              sliderInput("transBox", "Transparency:",
                                          min = 30, max = 100,
@@ -237,6 +240,7 @@ shinyUI(dashboardPage(
             conditionalPanel(condition="input.plotType==3",
                              
                              h4("Data Visualization:"),
+                             HTML("Please select the two variables to use in the plot and click on the button to generate the plot."),
                              
                              fluidRow(
                                column(6,radioButtons("gvScatter","Group Variable:",c("1"="1","2"="2"))),
@@ -245,7 +249,7 @@ shinyUI(dashboardPage(
                              
                              selectInput("colorScatter","Color",choices = c("Blue+Purple"="BuPu","Dark Color"="Dark2","Orange+Red"="OrRd","Yellow+Green+Blue"="YlGnBu","Accent"="Accent","Paired"="Paired","Red+Blue"="RdYlBu","Purple+Red"="PuRd","Set2"="Set2","Purple+Green"="PRGn")
                              ),
-                             HTML('<p style="color:#808080"> <b>Notice:</b> Click the <b>FAQ</b> tab in the left sidebar to see the detailed color palettes</p>'),
+                             HTML('<p style="color:#808080"> <b>About colors:</b> Click the <b>FAQ</b> tab in the left sidebar for more details on the color palettes</p>'),
                              
                              sliderInput("transScatter", "Transparency:",
                                          min = 30, max = 100,
@@ -271,6 +275,7 @@ shinyUI(dashboardPage(
             conditionalPanel(condition="input.plotType==4",
                              
                              h4("Data Visualization:"),
+                             HTML("Please select the two variables to use in the plot and click on the button to generate the plot."),
                              
                              fluidRow(
                                column(6,radioButtons("gvDensities","Group Variable:", c("1"="1","2"="2"))),
@@ -278,7 +283,7 @@ shinyUI(dashboardPage(
                              ),
                              selectInput("colorDensities","Color",choices = c("Blue+Purple"="BuPu","Dark Color"="Dark2","Orange+Red"="OrRd","Yellow+Green+Blue"="YlGnBu","Accent"="Accent","Paired"="Paired","Red+Blue"="RdYlBu","Purple+Red"="PuRd","Set2"="Set2","Purple+Green"="PRGn")
                              ),
-                             HTML('<p style="color:#808080"> <b>Notice:</b> Click the <b>FAQ</b> tab in the left sidebar to see the detailed color palettes</p>'),
+                             HTML('<p style="color:#808080"> <b>About colors:</b> Click the <b>FAQ</b> tab in the left sidebar for more details on the color palettes</p>'),
                              
                              sliderInput("transDensities", "Transparency:",
                                          min = 30, max = 100,
