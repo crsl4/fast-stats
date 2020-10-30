@@ -21,9 +21,10 @@ server <- function(input, output,session) {
   dsnames<-c() #a vector to store col names
   
   data_set <- reactive({
+    # if(is.null(input$file1)) return(NULL)
+   
+    # inFile <- input$file1
     req(input$file1)
-    inFile <- input$file1
-    
     tryCatch(
       {
         df <- read.csv(input$file1$datapath,
@@ -36,6 +37,10 @@ server <- function(input, output,session) {
       }
     )
   })
+  output$fileUploaded <- reactive({
+    return(!is.null(data_set()))
+  })
+  outputOptions(output, 'fileUploaded', suspendWhenHidden=FALSE)
   observe({
     if(input$fileType=="uploadFile"){
       dsnames <- names(data_set())
@@ -605,6 +610,7 @@ server <- function(input, output,session) {
     if (v27$doMosaic == FALSE) return()
     # fill should contain x var
     
+    # print(df)
     validate(
       not_categorical(df,v25$gvMosaic1)
     )
@@ -733,16 +739,11 @@ server <- function(input, output,session) {
       )
     group_list=unlist(subset(df,select=c(v29$gvScatter)))
     colorCount = length(unique(unlist(group_list,use.names=F)))   #8, an arbitrary number
-    # length(unique(subset(df, select=c(v29$gvScatter))))
     getPalette <- colorRampPalette(brewer.pal(8, v36$colorScatter),bias=2.5)(colorCount)
     # FIXME LATER:
     # bias value needs to be tested to get the best level change within color palette
     p<-p+scale_fill_manual(values= getPalette)
-    # p<-p+ scale_fill_brewer(palette = v36$colorScatter)+scale_color_brewer(palette = v36$colorScatter)
-    # p<-p+ scale_fill_brewer(palette = v36$colorScatter,direction=-1)+scale_color_brewer(palette = v36$colorScatter,direction=-1)
-    
-    # p<-p+scale_color_viridis(discrete = T, option = v36$colorScatter)+
-    #   scale_fill_viridis(discrete = T) 
+   
     
     ggplotly(p)
     
@@ -898,6 +899,132 @@ server <- function(input, output,session) {
     
     selectInput("group2","Group two:",choices=as.character(unique(unlist(group_list,use.names = F))))
     
+  })
+  
+  output$goMosaic<-renderUI({
+    
+    if(input$fileType=="sampleFile")
+    {
+      df<- toy
+    }
+    else
+    {
+      df<-data_set()
+    }
+    # req(df)
+    fluidRow(
+      column(6, align="center", offset = 3,
+             actionButton("goMosaic", "Mosaic Plot"),
+             tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
+      )
+    )
+  })
+  # outputOptions(output, 'goMosaic')
+  
+  output$goViolin<-renderUI({
+    if(input$fileType=="sampleFile")
+    {
+      df<- toy
+    }
+    else
+    {
+      df<-data_set()
+    }
+    req(df)
+    fluidRow(
+      column(6, align="center", offset = 3,
+             actionButton("goViolin", "Violin Plot"),
+             tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
+      )
+    )
+  })
+  
+  output$goBox<-renderUI({
+    if(input$fileType=="sampleFile")
+    {
+      df<- toy
+    }
+    else
+    {
+      df<-data_set()
+    }
+    req(df)
+    fluidRow(
+      column(6, align="center", offset = 3,
+             actionButton("goBox", "Box Plot"),
+             tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
+      )
+    )
+  })
+  
+  output$goScatter<-renderUI({
+    if(input$fileType=="sampleFile")
+    {
+      df<- toy
+    }
+    else
+    {
+      df<-data_set()
+    }
+    req(df)
+    fluidRow(
+      column(6, align="center", offset = 3,
+             actionButton("goScatter", "Scatter Plot"),
+             tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
+      )
+    )
+  })
+  
+  output$goDensities<-renderUI({
+    if(input$fileType=="sampleFile")
+    {
+      df<- toy
+    }
+    else
+    {
+      df<-data_set()
+    }
+    req(df)
+    fluidRow(
+      column(6, align="center", offset = 3,
+             actionButton("goDensities", "Densities Plot"),
+             tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
+      )
+    )
+  })
+  output$goT<-renderUI({
+    if(input$fileType=="sampleFile")
+    {
+      df<- toy
+    }
+    else
+    {
+      df<-data_set()
+    }
+    req(df)
+    fluidRow(
+      column(6, align="center", offset = 3,
+             actionButton("goT", "T Test"),
+             tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
+      )
+    )
+  })
+  output$goChi<-renderUI({
+    if(input$fileType=="sampleFile")
+    {
+      df<- toy
+    }
+    else
+    {
+      df<-data_set()
+    }
+    req(df)
+    fluidRow(
+      column(6, align="center", offset = 3,
+             actionButton("goChi", "Chi-Square Test"),
+             tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
+      )
+    )
   })
   
   output$ttest <- renderPrint({

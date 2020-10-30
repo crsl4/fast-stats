@@ -84,14 +84,17 @@ shinyUI(dashboardPage(
                                selected = "uploadFile"),
                   
                   conditionalPanel(condition="input.fileType=='uploadFile'", 
+                                   
+                                   HTML('<p style="color:#808080">Data in delimited text files can be separated by comma, tab or semicolon. For example, Excel data can be exported in .csv (comma separated) or .tab (tab separated) format </p>'),
+                                   
                                    fileInput("file1", "Choose CSV File or Drag the file here",
-                                                                                     multiple = FALSE,
-                                                                                     accept = c("text/csv",
-                                                                                                "text/comma-separated-values,text/plain",
-                                                                                                ".csv")),
+                                             multiple = FALSE,
+                                             accept = c("text/csv",
+                                                        "text/comma-separated-values,text/plain",
+                                                        ".csv")),
                                    HTML('<p style="color:#808080"> <b>Warning:</b> The maximum file size should not exceed <b>10MB</b></p>'),
                                    
-                                     # Input: Checkbox if file has header ----
+                                   # Input: Checkbox if file has header ----
                                    tags$p("Click the checkbox if file has a header:"),
                                    checkboxInput("header", "Header", TRUE),
                                    
@@ -102,16 +105,18 @@ shinyUI(dashboardPage(
                                                             Tab = "\t"),
                                                 selected = ","),
                                    
-                                   # Input: Select number of rows to display ----
-                                   radioButtons("disp","Choose to show 'head' or 'all'",
-                                                choices = c(Head = "head",
-                                                            All = "all"),
-                                                selected = "head"),
-                                   ),
+                                   
+                  ),
                   
-                  
-                  HTML('<p>Data in <a href="http://en.wikipedia.org/wiki/Delimiter-separated_values">delimited text files </a> can be separated by comma, tab or semicolon. 
-				For example, Excel data can be exported in .csv (comma separated) or .tab (tab separated) format. </p>'),
+                  conditionalPanel(condition="input.fileType=='sampleFile'", 
+                                   HTML('<p style="color:#808080">The sample data included here mimics the structure of a dataset the students will have after following the experiments described in the webinar </p>'),
+                                   
+                  ),
+                  # Input: Select number of rows to display ----
+                  radioButtons("disp","Choose to show 'head' or 'all'",
+                               choices = c(Head = "head",
+                                           All = "all"),
+                               selected = "head"),
                 )
               )
       ),
@@ -121,7 +126,7 @@ shinyUI(dashboardPage(
         fluidRow(
           box(
             width = 8, status = "warning", solidHeader = TRUE,
-            title = "Plot Display",
+            title = "Plot Display", footer="Notice: Point on the plot to see more information about it and zoom/download options",
             conditionalPanel(condition = "input.plotType==0&&input.goMosaic!=0",
                              plotlyOutput("mosaicPlot") ),
             conditionalPanel(condition = "input.plotType==1&&input.goViolin!=0",
@@ -130,7 +135,7 @@ shinyUI(dashboardPage(
                              plotlyOutput("boxPlot") ),
             conditionalPanel(condition = "input.plotType==3&&input.goScatter!=0",
                              plotlyOutput("scatterPlot") ),
-            conditionalPanel(condition = "input.plotType==4&&input.goDensities!=0",
+            conditionalPanel(condition = "input.plotType==4&&input.goDesnities!=0",
                              plotlyOutput("densities") ),
           ),
           box(
@@ -143,6 +148,8 @@ shinyUI(dashboardPage(
             # mosaic plot
             conditionalPanel(condition="input.plotType==0",
                              
+                             HTML('<p style="color:#808080"> <b>Mosaic plot:</b> Plot to visualize contigency tables of frequencies among categorical variables </p>'),
+                             
                              h4("Data Visualization:"),
                              
                              fluidRow(
@@ -153,17 +160,15 @@ shinyUI(dashboardPage(
                              ),
                              HTML('<p style="color:#808080"> <b>Notice:</b> Click the <b>FAQ</b> tab in the left sidebar to see the detailed color palettes</p>'),
                              
-                             fluidRow(
-                               column(6, align="center", offset = 3,
-                                      actionButton("goMosaic", "Mosaic Plot"),
-                                      tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
-                               ),
-                             ),
-                             HTML('<p style="color:#808080"> <b>Mosaic plot:</b> Plot to visualize contigency tables of frequencies among categorical variables </p>'),
+                           uiOutput("goMosaic")
+                             
+                            
             ),
             
             # violinplot
             conditionalPanel(condition="input.plotType==1",
+                             
+                             HTML('<p style="color:#808080"> <b>Violin Plot:</b> Plot a numerical variable ("Quantity") by groups ("Group variable"). It is similar to the box plot but it also shows the distribution and spread of the data. </p>'),
                              
                              checkboxInput("addPoints", "Add data points", T),
                              
@@ -190,16 +195,13 @@ shinyUI(dashboardPage(
                              
                              selectInput("pointShapeViolin","Point Shape",choices =c("Solid Circle"=19,"Bullet"=20,"Filled Circle"=21,"Filled Square"=22,"Filled Diamond"=23,"Filled Triangle Point-Up"=24, "Filled Triangle Point-down"=25)),
                              
-                             fluidRow(
-                               column(6, align="center", offset = 3,
-                                      actionButton("goViolin", "Violin Plot"),
-                                      tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
-                               ),
-                             ),
-                             HTML('<p style="color:#808080"> <b>Violin Plot:</b> Plot a numerical variable ("Quantity") by groups ("Group variable"). It is similar to the box plot but it also shows the distribution and spread of the data. </p>'),
+                             uiOutput("goViolin")
+                           
             ),
             # boxplot
             conditionalPanel(condition="input.plotType==2",
+                             
+                             HTML('<p style="color:#808080"> <b>Box Plot:</b> Plot a numerical variable ("Quantity") by groups ("Group variable"). Solid black line in the box represents the median, and the upper and lower edges of the box represent the 3rd and 1st quartiles respectively. </p>'),
                              checkboxInput("addPoints2", "Add data points", T),
                              
                              HTML('<p style="color:#808080"> <b>Add data points: </b>  This option allows the user to add a scatterplot of the data where each dot corresponds to one observation (row) in the dataset. </p>'),
@@ -224,17 +226,13 @@ shinyUI(dashboardPage(
                                          value = 2),
                              
                              selectInput("pointShapeBox","Point Shape",choices =c("Solid Circle"=19,"Bullet"=20,"Filled Circle"=21,"Filled Square"=22,"Filled Diamond"=23,"Filled Triangle Point-Up"=24, "Filled Triangle Point-down"=25)),
-                             fluidRow(
-                               column(6, align="center", offset = 3,
-                                      actionButton("goBox", "Box Plot"),
-                                      tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
-                               )
-                             ),
-                             HTML('<p style="color:#808080"> <b>Box Plot:</b> Plot a numerical variable ("Quantity") by groups ("Group variable"). Solid black line in the box represents the median, and the upper and lower edges of the box represent the 3rd and 1st quartiles respectively. </p>'),
+                             uiOutput("goBox")
+                           
                              
             ),
             # scatterplot
             conditionalPanel(condition="input.plotType==3",
+                             HTML('<p style="color:#808080"> <b>Scatter Plot:</b> Plot that shows the relationship between two numerical variables </p>'),
                              
                              h4("Data Visualization:"),
                              
@@ -258,17 +256,13 @@ shinyUI(dashboardPage(
                              selectInput("pointShapeScatter","Point Shape",choices =c("Solid Circle"=19,"Bullet"=20,"Filled Circle"=21,"Filled Square"=22,"Filled Diamond"=23,"Filled Triangle Point-Up"=24, "Filled Triangle Point-down"=25)),
                              
                              
-                             fluidRow(
-                               column(6, align="center", offset = 3,
-                                      actionButton("goScatter", "Scatter Plot"),
-                                      tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
-                               )
-                             ),
-                             HTML('<p style="color:#808080"> <b>Scatter Plot:</b> Plot that shows the relationship between two numerical variables </p>'),
+                             uiOutput("goScatter")
+                            
                              
             ),
             # densities
             conditionalPanel(condition="input.plotType==4",
+                             HTML('<p style="color:#808080"> <b>Densities Plot:</b> Plot that represents the distribution of a numeric variable (like a smoothed histogram) </p>'),
                              
                              h4("Data Visualization:"),
                              
@@ -284,13 +278,8 @@ shinyUI(dashboardPage(
                                          min = 30, max = 100,
                                          value = 65),
                              
-                             fluidRow(
-                               column(6, align="center", offset = 3,
-                                      actionButton("goDensities", "Densities Plot"),
-                                      tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
-                               )
-                             ),
-                             HTML('<p style="color:#808080"> <b>Densities Plot:</b> Plot that represents the distribution of a numeric variable (like a smoothed histogram) </p>')
+                             uiOutput("goDensities")
+                             
             ),
           )
         )
@@ -328,12 +317,7 @@ shinyUI(dashboardPage(
                              uiOutput("sel1"),
                              uiOutput("sel2"),
                              HTML('<p style="color:#808080"> <b>T test:</b> Statistical test of the null hypothesis of equality of means of a numerical variable ("Quantity") on two groups ("Group variable"). If the selected group variable has more than two categories, the user will select the two groups to compare. </p>'),
-                             fluidRow(
-                               column(6, align="center", offset = 3,
-                                      actionButton("goT", "T-Test"), 
-                                      tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
-                               )
-                             ),
+                            uiOutput("goT"),
                              HTML('<p style="color:#808080"> <b>How to interpret the result?</b> If the p-value is less than 0.05, we reject the null hypothesis of equality of means. The confidence interval represents the interval for the difference of means. </p>'),
                              HTML('<p style="color:#808080"> <b>Assumptions of t test:</b> The t test assumes normality, equal variance and independence. Take a look at <a href="https://wolfganghuber.shinyapps.io/t-test-normality-and-independence/" target="_blank">this link</a> that illustrate how important normality and independence are in the t test results. </p>'),
             ),
@@ -344,12 +328,7 @@ shinyUI(dashboardPage(
                                column(6,radioButtons("gv2","Group Variable 2:", c("1"="1","2"="2")))
                              ),
                              HTML('<p style="color:#808080"> <b>Chi-square test:</b> Pearson\'s chi-square test is used to determine whether there is a statistically significant difference between the expected frequencies and the observed frequencies in one or more categories of a contingency table</p>'),
-                             fluidRow(
-                               column(6, align="center", offset = 3,
-                                      actionButton("goChi", "Chi-Square Test"), 
-                                      tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
-                               )
-                             ),
+                           uiOutput("goChi"),
                              HTML('<p style="color:#808080"> <b>How to interpret the result?</b> If the p-value is less than 0.05, we reject the null hypothesis that in the population there is no difference between the classes (reject independence). </p>')
             )#conditionpanel ends
           )#box ends
