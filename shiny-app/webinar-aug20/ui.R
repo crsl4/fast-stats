@@ -62,7 +62,8 @@ shinyUI(dashboardPage(
               box( width=12, status="warning",solidHeader = T,
                    title = "Welcome to the WI Fast Stats app!",
                    
-                   h4(HTML( 'This is the <a href="https://github.com/crsl4/fast-stats" target="_blank">open-source</a> publicly available web app to analyze data from <a href="https://fastplants.org/" target="_blank">WI Fast Plants</a>.')))
+                   h4(HTML( 'WI Fast Stats is the <a href="https://github.com/crsl4/fast-stats" target="_blank">open-source</a> publicly available web app to analyze data from <a href="https://fastplants.org/" target="_blank">WI Fast Plants</a>.')),
+                   h4(HTML( 'This web app is the accompanying tool for the WI Fast Plants webinar: <a href="https://fastplants.org/2020/08/06/new-fast-plants-polycots-selection/" target="_blank"><i>Strategies for adapting WI Fast Plants selection of traits investigations for remote and social distance learning</i></a>.')))
               
       ),
       
@@ -126,7 +127,7 @@ shinyUI(dashboardPage(
         fluidRow(
           box(
             width = 8, status = "warning", solidHeader = TRUE,
-            title = "Plot Display", footer="Notice: Point on the plot to see more information about it and zoom/download options",
+            title = "Plot Display", 
             conditionalPanel(condition = "input.plotType==0&&input.goMosaic!=0",
                              plotlyOutput("mosaicPlot") ),
             conditionalPanel(condition = "input.plotType==1&&input.goViolin!=0",
@@ -135,7 +136,7 @@ shinyUI(dashboardPage(
                              plotlyOutput("boxPlot") ),
             conditionalPanel(condition = "input.plotType==3&&input.goScatter!=0",
                              plotlyOutput("scatterPlot") ),
-            conditionalPanel(condition = "input.plotType==4&&input.goDesnities!=0",
+            conditionalPanel(condition = "input.plotType==4&&input.goDensities!=0",
                              plotlyOutput("densities") ),
           ),
           box(
@@ -158,10 +159,14 @@ shinyUI(dashboardPage(
                              ),
                              selectInput("colorMosaic","Color",choices = c("Blue+Purple"="BuPu","Dark Color"="Dark2","Orange+Red"="OrRd","Yellow+Green+Blue"="YlGnBu","Accent"="Accent","Paired"="Paired","Red+Blue"="RdYlBu","Purple+Red"="PuRd","Set2"="Set2","Purple+Green"="PRGn")
                              ),
-                             HTML('<p style="color:#808080"> <b>Notice:</b> Click the <b>FAQ</b> tab in the left sidebar to see the detailed color palettes</p>'),
+                             HTML('<p style="color:#808080"> <b>About colors:</b> Click the <b>FAQ</b> tab in the left sidebar for more details on the color palettes</p>'),
                              
-                           uiOutput("goMosaic")
-                             
+                             fluidRow(
+                               column(6, align="center", offset = 3,
+                                      actionButton("goMosaic", "Mosaic Plot"),
+                                      tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
+                               )
+                             )
                             
             ),
             
@@ -183,7 +188,7 @@ shinyUI(dashboardPage(
                              
                              selectInput("colorViolin","Color",choices = c("Blue+Purple"="BuPu","Dark Color"="Dark2","Orange+Red"="OrRd","Yellow+Green+Blue"="YlGnBu","Accent"="Accent","Paired"="Paired","Red+Blue"="RdYlBu","Purple+Red"="PuRd","Set2"="Set2","Purple+Green"="PRGn")
                              ),
-                             HTML('<p style="color:#808080"> <b>Notice:</b> Click the <b>FAQ</b> tab in the left sidebar in the left sidebar to see the detailed color palettes</p>'),
+                             HTML('<p style="color:#808080"> <b>About colors:</b> Click the <b>FAQ</b> tab in the left sidebar for more details on the color palettes</p>'),
                              
                              sliderInput("transViolin", "Transparency:",
                                          min = 30, max = 100,
@@ -195,7 +200,12 @@ shinyUI(dashboardPage(
                              
                              selectInput("pointShapeViolin","Point Shape",choices =c("Solid Circle"=19,"Bullet"=20,"Filled Circle"=21,"Filled Square"=22,"Filled Diamond"=23,"Filled Triangle Point-Up"=24, "Filled Triangle Point-down"=25)),
                              
-                             uiOutput("goViolin")
+                             fluidRow(
+                               column(6, align="center", offset = 3,
+                                      actionButton("goViolin", "Violin Plot"),
+                                      tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
+                               )
+                             )
                            
             ),
             # boxplot
@@ -215,7 +225,7 @@ shinyUI(dashboardPage(
                              
                              selectInput("colorBox","Color",choices = c("Blue+Purple"="BuPu","Dark Color"="Dark2","Orange+Red"="OrRd","Yellow+Green+Blue"="YlGnBu","Accent"="Accent","Paired"="Paired","Red+Blue"="RdYlBu","Purple+Red"="PuRd","Set2"="Set2","Purple+Green"="PRGn")
                              ),
-                             HTML('<p style="color:#808080"> <b>Notice:</b> Click the <b>FAQ</b> tab in the left sidebar to see the detailed color palettes</p>'),
+                             HTML('<p style="color:#808080"> <b>About colors:</b> Click the <b>FAQ</b> tab in the left sidebar for more details on the color palettes</p>'),
                              
                              sliderInput("transBox", "Transparency:",
                                          min = 30, max = 100,
@@ -226,8 +236,12 @@ shinyUI(dashboardPage(
                                          value = 2),
                              
                              selectInput("pointShapeBox","Point Shape",choices =c("Solid Circle"=19,"Bullet"=20,"Filled Circle"=21,"Filled Square"=22,"Filled Diamond"=23,"Filled Triangle Point-Up"=24, "Filled Triangle Point-down"=25)),
-                             uiOutput("goBox")
-                           
+                             fluidRow(
+                               column(6, align="center", offset = 3,
+                                      actionButton("goBox", "Box Plot"),
+                                      tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
+                               )
+                             )
                              
             ),
             # scatterplot
@@ -243,7 +257,7 @@ shinyUI(dashboardPage(
                              
                              selectInput("colorScatter","Color",choices = c("Blue+Purple"="BuPu","Dark Color"="Dark2","Orange+Red"="OrRd","Yellow+Green+Blue"="YlGnBu","Accent"="Accent","Paired"="Paired","Red+Blue"="RdYlBu","Purple+Red"="PuRd","Set2"="Set2","Purple+Green"="PRGn")
                              ),
-                             HTML('<p style="color:#808080"> <b>Notice:</b> Click the <b>FAQ</b> tab in the left sidebar to see the detailed color palettes</p>'),
+                             HTML('<p style="color:#808080"> <b>About colors:</b> Click the <b>FAQ</b> tab in the left sidebar for more details on the color palettes</p>'),
                              
                              sliderInput("transScatter", "Transparency:",
                                          min = 30, max = 100,
@@ -256,7 +270,12 @@ shinyUI(dashboardPage(
                              selectInput("pointShapeScatter","Point Shape",choices =c("Solid Circle"=19,"Bullet"=20,"Filled Circle"=21,"Filled Square"=22,"Filled Diamond"=23,"Filled Triangle Point-Up"=24, "Filled Triangle Point-down"=25)),
                              
                              
-                             uiOutput("goScatter")
+                             fluidRow(
+                               column(6, align="center", offset = 3,
+                                      actionButton("goScatter", "Scatter Plot"),
+                                      tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
+                               )
+                             )
                             
                              
             ),
@@ -272,13 +291,18 @@ shinyUI(dashboardPage(
                              ),
                              selectInput("colorDensities","Color",choices = c("Blue+Purple"="BuPu","Dark Color"="Dark2","Orange+Red"="OrRd","Yellow+Green+Blue"="YlGnBu","Accent"="Accent","Paired"="Paired","Red+Blue"="RdYlBu","Purple+Red"="PuRd","Set2"="Set2","Purple+Green"="PRGn")
                              ),
-                             HTML('<p style="color:#808080"> <b>Notice:</b> Click the <b>FAQ</b> tab in the left sidebar to see the detailed color palettes</p>'),
+                             HTML('<p style="color:#808080"> <b>About colors:</b> Click the <b>FAQ</b> tab in the left sidebar for more details on the color palettes</p>'),
                              
                              sliderInput("transDensities", "Transparency:",
                                          min = 30, max = 100,
                                          value = 65),
                              
-                             uiOutput("goDensities")
+                             fluidRow(
+                               column(6, align="center", offset = 3,
+                                      actionButton("goDensities", "Densities Plot"),
+                                      tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
+                               )
+                             )
                              
             ),
           )
@@ -293,9 +317,9 @@ shinyUI(dashboardPage(
             # successfully hide the annoying verbaltext output using conditionalpanel
             # surprised to find that input$actionbuttonID is actually integer, keep adding one as users click the buttons
             conditionalPanel(condition="input.testType==0&&input.goChi!=0",
-                             verbatimTextOutput("chitest",placeholder = F)),
+                             verbatimTextOutput("chitest")),
             conditionalPanel(condition="input.testType==1&&input.goT!=0",
-                             verbatimTextOutput("ttest",placeholder = F))
+                             verbatimTextOutput("ttest"))
           ),
           box(
             width = 4, status = "warning",solidHeader = T,
@@ -311,24 +335,34 @@ shinyUI(dashboardPage(
                              
                              HTML('<p style="color:#808080"> <b> Equal variance:</b> The standard t test assumes equal variances on the two groups. If the user checks this option, the standard t test is run, but if the user unchecks this option, then the Welch t test is run instead (that does not assume equal variances). </p>'),
                              fluidRow(
-                               column(6,radioButtons("groupVar","Group Variable:", c("1"="1","2"="2"))),
-                               column(6,radioButtons("quantity","Quantity:", c("1"="1","2"="2")))
+                               column(6,radioButtons("groupVar","Group Variable:", c("1"="UnSpecified_Value","2"="UnSpecified_Value"))),
+                               column(6,radioButtons("quantity","Quantity:", c("1"="UnSpecified_Value","2"="UnSpecified_Value")))
                              ),
                              uiOutput("sel1"),
                              uiOutput("sel2"),
                              HTML('<p style="color:#808080"> <b>T test:</b> Statistical test of the null hypothesis of equality of means of a numerical variable ("Quantity") on two groups ("Group variable"). If the selected group variable has more than two categories, the user will select the two groups to compare. </p>'),
-                            uiOutput("goT"),
+                             fluidRow(
+                               column(6, align="center", offset = 3,
+                                      actionButton("goT", "T Test"),
+                                      tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
+                               )
+                             ),
                              HTML('<p style="color:#808080"> <b>How to interpret the result?</b> If the p-value is less than 0.05, we reject the null hypothesis of equality of means. The confidence interval represents the interval for the difference of means. </p>'),
                              HTML('<p style="color:#808080"> <b>Assumptions of t test:</b> The t test assumes normality, equal variance and independence. Take a look at <a href="https://wolfganghuber.shinyapps.io/t-test-normality-and-independence/" target="_blank">this link</a> that illustrate how important normality and independence are in the t test results. </p>'),
             ),
             # chi-square
             conditionalPanel(condition="input.testType==0",
                              fluidRow(
-                               column(6,radioButtons("gv1","Group Variable 1:", c("1"="1","2"="2"))),
-                               column(6,radioButtons("gv2","Group Variable 2:", c("1"="1","2"="2")))
+                               column(6,radioButtons("gv1","Group Variable 1:", c("1"="UnSpecified_Value","2"="UnSpecified_Value"))),
+                               column(6,radioButtons("gv2","Group Variable 2:", c("1"="UnSpecified_Value","2"="UnSpecified_Value")))
                              ),
                              HTML('<p style="color:#808080"> <b>Chi-square test:</b> Pearson\'s chi-square test is used to determine whether there is a statistically significant difference between the expected frequencies and the observed frequencies in one or more categories of a contingency table</p>'),
-                           uiOutput("goChi"),
+                             fluidRow(
+                               column(6, align="center", offset = 3,
+                                      actionButton("goChi", "Chi Sqaure Test"),
+                                      tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
+                               )
+                             ),
                              HTML('<p style="color:#808080"> <b>How to interpret the result?</b> If the p-value is less than 0.05, we reject the null hypothesis that in the population there is no difference between the classes (reject independence). </p>')
             )#conditionpanel ends
           )#box ends
@@ -340,6 +374,8 @@ shinyUI(dashboardPage(
                    title="Frequently Asked Questions",
                    h4("Q: How to get help? "), 
                    p(HTML('<b>A: Soon we will have a google user group to post questions and answers for users of the app.</b>')),
+                   h4("Q: Webinar Links: "),  
+                   p(HTML('WI Fast Plants webinar: <a href="https://fastplants.org/2020/08/06/new-fast-plants-polycots-selection/" target="_blank"><i>Strategies for adapting WI Fast Plants selection of traits investigations for remote and social distance learning</i></a>.')),
                    h4("Q: Color Palettes Charts: "), 
                    img(src="color_palettes.png",width=525, height=671),
                    p(HTML('   The colors palettes here shown come from <a href="https://cran.r-project.org/web/packages/RColorBrewer/index.html">ColorBrewer</a>')),

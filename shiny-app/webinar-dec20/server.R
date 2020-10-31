@@ -7,7 +7,6 @@ library(graphics)
 library(ggplotify)
 library(thatssorandom)
 library(rsconnect)
-# library(viridis)
 library(RColorBrewer)
 options(shiny.maxRequestSize=10*1024^2)
 # global variable
@@ -530,6 +529,7 @@ server <- function(input, output,session) {
   not_empty<-function(df){
     if(is.null(df))
       showNotification("Please upload data file first!",duration=3,type = "error")
+    
     
   }
   
