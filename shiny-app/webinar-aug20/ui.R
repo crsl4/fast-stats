@@ -64,7 +64,6 @@ shinyUI(dashboardPage(
                    
                    h4(HTML( 'WI Fast Stats is the <a href="https://github.com/crsl4/fast-stats" target="_blank">open-source</a> publicly available web app to analyze data from <a href="https://fastplants.org/" target="_blank">WI Fast Plants</a>.')),
                    h4(HTML( 'This web app is the accompanying tool for the WI Fast Plants webinar: <a href="https://fastplants.org/2020/08/06/new-fast-plants-polycots-selection/" target="_blank"><i>Strategies for adapting WI Fast Plants selection of traits investigations for remote and social distance learning</i></a>.')))
-              
       ),
       
       tabItem("dataUpload",
