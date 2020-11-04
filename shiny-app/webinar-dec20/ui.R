@@ -282,16 +282,15 @@ shinyUI(dashboardPage(
       ),
      
       tabItem("FAQ",
-              box( width=12, status="primary",solidHeader = T,
+              box( width=12, status="warning",solidHeader = T,
                    title="Frequently Asked Questions",
                    h4("Q: How to get help? "), 
                    p(HTML('<b>A: Soon we will have a google user group to post questions and answers for users of the app.</b>')),
                    h4("Q: Webinar Links: "),  
-                   p(HTML('WI Fast Plants webinar: <a href="https://fastplants.org/2020/08/06/new-fast-plants-polycots-selection/" target="_blank"><i>Strategies for adapting WI Fast Plants selection of traits investigations for remote and social distance learning</i></a>.')),
+                   p(HTML('<b>A: WI Fast Plants webinar: <a href="https://fastplants.org/2020/08/06/new-fast-plants-polycots-selection/" target="_blank"><i>Strategies for adapting WI Fast Plants selection of traits investigations for remote and social distance learning</i></a>.</b>')),
                    h4("Q: Color Palettes Charts: "), 
+                   p(HTML('<b>A: The colors palettes here shown come from <a href="https://cran.r-project.org/web/packages/RColorBrewer/index.html">ColorBrewer</a></b>')),
                    img(src="color_palettes.png",width=525, height=671),
-                   p(HTML('   The colors palettes here shown come from <a href="https://cran.r-project.org/web/packages/RColorBrewer/index.html">ColorBrewer</a>')),
-                  
                    
               )
       )
