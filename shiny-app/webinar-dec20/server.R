@@ -7,7 +7,6 @@ library(graphics)
 library(ggplotify)
 library(thatssorandom)
 library(rsconnect)
-# library(viridis)
 library(RColorBrewer)
 options(shiny.maxRequestSize=10*1024^2)
 # global variable
@@ -21,6 +20,7 @@ server <- function(input, output,session) {
   dsnames<-c() #a vector to store col names
   
   data_set <- reactive({
+    if(is.null(input$file1)) return(NULL)
     req(input$file1)
     inFile <- input$file1
     tryCatch(
@@ -172,6 +172,15 @@ server <- function(input, output,session) {
   observeEvent(input$goViolin, {
     # 0 will be coerced to FALSE
     # 1+ will be coerced to TRUE
+    if(input$fileType=="sampleFile")
+    {
+      df<- toy
+    }
+    else
+    {
+      df<-data_set()
+    }
+    validate(not_empty(df))
     v$doViolinPlot <- input$goViolin
     
   })
@@ -224,6 +233,15 @@ server <- function(input, output,session) {
   observeEvent(input$goScatter, {
     # 0 will be coerced to FALSE
     # 1+ will be coerced to TRUE
+    if(input$fileType=="sampleFile")
+    {
+      df<- toy
+    }
+    else
+    {
+      df<-data_set()
+    }
+    validate(not_empty(df))
     v9$doScatter <- input$goScatter
   })
   
@@ -231,6 +249,15 @@ server <- function(input, output,session) {
   observeEvent(input$goBox, {
     # 0 will be coerced to FALSE
     # 1+ will be coerced to TRUE
+    if(input$fileType=="sampleFile")
+    {
+      df<- toy
+    }
+    else
+    {
+      df<-data_set()
+    }
+    validate(not_empty(df))
     v10$doBox <- input$goBox
   })
   
@@ -499,6 +526,13 @@ server <- function(input, output,session) {
     }
   }
   
+  not_empty<-function(df){
+    if(is.null(df))
+      showNotification("Please upload data file first!",duration=3,type = "error")
+    
+    
+  }
+  
   output$summary <- renderPrint({
     df<-data_set()
     
@@ -525,13 +559,14 @@ server <- function(input, output,session) {
     if(input$disp == "head") {
       return(head(df))
     }
-    else {
+    else{
       return(df)
     }
     
   })
   
   output$violinPlot <- renderPlotly({
+    
     if(input$fileType=="sampleFile")
     {
       df<- toy
@@ -540,7 +575,7 @@ server <- function(input, output,session) {
     {
       df<-data_set()
     }
-    
+    # req(df)
     if (v$doViolinPlot == FALSE) return()
     # fill should contain x var
     
@@ -575,8 +610,8 @@ server <- function(input, output,session) {
     colorCount=length(unique(unlist(group_list,use.names = F)))
     getPalette<-colorRampPalette(brewer.pal(8,v44$colorViolin),bias=2.5)(colorCount)
     plot<-plot+scale_fill_manual(values=getPalette)
-    ggplotly(plot)
-    # ggplot(plot)
+   
+    ggplotly(plot,tooltip = c("x", "y"))%>% config(displaylogo = FALSE,displayModeBar = T)
   })
   
   output$mosaicPlot <- renderPlotly({
@@ -699,7 +734,7 @@ server <- function(input, output,session) {
     # x_val_cat=factor(x_val)
     p<-ggplot(df, aes(x = x_val, y = y_val,fill=x_val)) +
       xlab(v29$gvScatter)+labs(fill=v29$gvScatter)+ylab(v30$qScatter)+
-      geom_point(pch = v34$pointShapeScatter, alpha=v33$transScatter/100, position = position_jitterdodge(jitter.height=0.075, jitter.width=0.1),size=v35$pointSizeScatter)+
+      geom_point(aes(colour = x_val), show.legend = FALSE,pch = v34$pointShapeScatter, alpha=v33$transScatter/100, position = position_jitterdodge(jitter.height=0.075, jitter.width=0.1),size=v35$pointSizeScatter)+
       theme(
         plot.title = element_text(hjust=0.5, size=rel(1.8)),
         axis.title.x = element_text(size=rel(1.8)),
@@ -727,8 +762,7 @@ server <- function(input, output,session) {
       p<-p+geom_smooth(method='lm',formula=y~x)
     }
     # p<-scale_color_gradientn(colors=v36$colorScatter)
-    ggplotly(p)
-    # ggplot(p)
+    ggplotly(p,tooltip = c("x", "y"))%>% config(displaylogo = FALSE,displayModeBar = T)
     
     
   })
@@ -788,7 +822,7 @@ server <- function(input, output,session) {
     
     
     # return (plot)# object returned here must has a parenthesis
-    ggplotly(plot)
+    ggplotly(plot,tooltip = c("x", "y"))%>% config(displaylogo = FALSE,displayModeBar = T)
   })
   
   output$densities<- renderPlotly({
@@ -841,6 +875,63 @@ server <- function(input, output,session) {
     ggplotly(p)
     
   })
+  
+  # output$goViolin<-renderUI({
+  #   if(input$fileType=="sampleFile")
+  #   {
+  #     df<- toy
+  #   }
+  #   else
+  #   {
+  #     df<-data_set()
+  #   }
+  #   req(df)
+  #   fluidRow(
+  #     column(6, align="center", offset = 3,
+  #            actionButton("goViolin", "Violin Plot"),
+  #            tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
+  #     )
+  #   )
+  # })
+  # 
+  # output$goBox<-renderUI({
+  #   if(input$fileType=="sampleFile")
+  #   {
+  #     df<- toy
+  #   }
+  #   else
+  #   {
+  #     df<-data_set()
+  #   }
+  #   req(df)
+  #   fluidRow(
+  #     column(6, align="center", offset = 3,
+  #            actionButton("goBox", "Box Plot"),
+  #            tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
+  #     )
+  #   )
+  # })
+  # 
+  # output$goScatter<-renderUI({
+  #   if(input$fileType=="sampleFile")
+  #   {
+  #     df<- toy
+  #   }
+  #   else
+  #   {
+  #     df<-data_set()
+  #   }
+  #   req(df)
+  #   fluidRow(
+  #     column(6, align="center", offset = 3,
+  #            actionButton("goScatter", "Scatter Plot"),
+  #            tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
+  #     )
+  #   )
+  # })
+  #  
+  
+  
   
   
 }
