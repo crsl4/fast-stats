@@ -155,7 +155,7 @@ shinyUI(dashboardPage(
                              HTML('<p style="color:#808080"> <b>Mosaic plot:</b> Plot to visualize contigency tables of frequencies among categorical variables </p>'),
                              
                              h4("Data Visualization:"),
-                             HTML("Please select the two variables to use in the plot and click on the button to generate the plot."),
+                             HTML('<p style="color:#808080">Please select the two variables to use in the plot and click on the button to generate the plot.</p>'),
                              
                              fluidRow(
                                column(6,radioButtons("gvMosaic1","Group Variable 1:", c("1"="1","2"="2"))),
@@ -184,7 +184,7 @@ shinyUI(dashboardPage(
                              HTML('<p style="color:#808080"> <b>Add data points: </b> This option allows the user to add a scatterplot of the data where each dot corresponds to one observation (row) in the dataset. </p>'),
                              
                              h4("Data Visualization:"),
-                             HTML("Please select the two variables to use in the plot and click on the button to generate the plot."),
+                             HTML('<p style="color:#808080">Please select the two variables to use in the plot and click on the button to generate the plot.</p>'),
                              
                              fluidRow(
                                column(6,radioButtons("xaxisGrp","Group Variable:", c("1"="1","2"="2"))),
@@ -226,7 +226,7 @@ shinyUI(dashboardPage(
                              HTML('<p style="color:#808080"> <b>Add data points: </b>  This option allows the user to add a scatterplot of the data where each dot corresponds to one observation (row) in the dataset. </p>'),
                              
                              h4("Data Visualization:"),
-                             HTML("Please select the two variables to use in the plot and click on the button to generate the plot."),
+                             HTML('<p style="color:#808080">Please select the two variables to use in the plot and click on the button to generate the plot.</p>'),
                              
                              fluidRow(
                                column(6,radioButtons("gvBox","Group Variable:",c("1"="1","2"="2"))),
@@ -263,7 +263,7 @@ shinyUI(dashboardPage(
                              HTML('<p style="color:#808080"> <b>Scatter Plot:</b> Plot that shows the relationship between two numerical variables </p>'),
                              
                              h4("Data Visualization:"),
-                             HTML("Please select the two variables to use in the plot and click on the button to generate the plot."),
+                             HTML('<p style="color:#808080">Please select the two variables to use in the plot and click on the button to generate the plot.</p>'),
                              
                              fluidRow(
                                column(6,radioButtons("gvScatter","Group Variable:",c("1"="1","2"="2"))),
@@ -299,7 +299,7 @@ shinyUI(dashboardPage(
                              HTML('<p style="color:#808080"> <b>Densities Plot:</b> Plot that represents the distribution of a numeric variable (like a smoothed histogram) </p>'),
                              
                              h4("Data Visualization:"),
-                             HTML("Please select the two variables to use in the plot and click on the button to generate the plot."),
+                             HTML('<p style="color:#808080">Please select the two variables to use in the plot and click on the button to generate the plot.</p>'),
                              
                              fluidRow(
                                column(6,radioButtons("gvDensities","Group Variable:", c("1"="1","2"="2"))),
