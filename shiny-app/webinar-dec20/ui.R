@@ -161,7 +161,7 @@ shinyUI(dashboardPage(
             conditionalPanel(condition="input.plotType==0",
                              
                              h4("Data Visualization:"),
-                             HTML("Please select the two variables to use in the plot and click on the button to generate the plot."),
+                             HTML('<p style="color:#808080">Please select the two variables to use in the plot and click on the button to generate the plot.</p>'),
                              
                              fluidRow(
                                column(6,radioButtons("gvMosaic1","Group Variable 1:", c("1"="1","2"="2"))),
@@ -191,9 +191,8 @@ shinyUI(dashboardPage(
                              HTML('<p style="color:#808080"> <b>Add data points: </b> This option allows the user to add a scatterplot of the data where each dot corresponds to one observation (row) in the dataset. </p>'),
                              
                              h4("Data Visualization:"),
-                             HTML("Please select the two variables to use in the plot and click on the button to generate the plot."),
-                             
                              HTML('<p style="color:#808080">Please select the two variables to use in the plot and click on the button to generate the plot.</p>'),
+                             
                              
                              fluidRow(
                                column(6,radioButtons("xaxisGrp","Group Variable:", c("1"="1","2"="2"))),
@@ -236,8 +235,6 @@ shinyUI(dashboardPage(
                              HTML('<p style="color:#808080"> <b>Add data points: </b>  This option allows the user to add a scatterplot of the data where each dot corresponds to one observation (row) in the dataset. </p>'),
                              
                              h4("Data Visualization:"),
-                             HTML("Please select the two variables to use in the plot and click on the button to generate the plot."),
-                             
                              HTML('<p style="color:#808080">Please select the two variables to use in the plot and click on the button to generate the plot.</p>'),
                              
                              fluidRow(
@@ -273,7 +270,6 @@ shinyUI(dashboardPage(
                              HTML('<p style="color:#808080"> <b>Scatter Plot:</b> Plot that shows the relationship between two numerical variables </p>'),
                              
                              h4("Data Visualization:"),
-                             HTML("Please select the two variables to use in the plot and click on the button to generate the plot."),
                              
                              HTML('<p style="color:#808080">Please select the two variables to use in the plot and click on the button to generate the plot.</p>'),
                              
@@ -322,11 +318,10 @@ shinyUI(dashboardPage(
                    h4("Q: How to get help? "), 
                    p(HTML('<b>A: Soon we will have a google user group to post questions and answers for users of the app.</b>')),
                    h4("Q: Webinar Links: "),  
-                   p(HTML('WI Fast Plants webinar: <a href="https://fastplants.org/2020/08/06/new-fast-plants-polycots-selection/" target="_blank"><i>Strategies for adapting WI Fast Plants selection of traits investigations for remote and social distance learning</i></a>.')),
+                   p(HTML('<b>A: WI Fast Plants webinar: <a href="https://fastplants.org/2020/08/06/new-fast-plants-polycots-selection/" target="_blank"><i>Strategies for adapting WI Fast Plants selection of traits investigations for remote and social distance learning</i></a>.</b>')),
                    h4("Q: Color Palettes Charts: "), 
+                   p(HTML('<b>A: The colors palettes here shown come from <a href="https://cran.r-project.org/web/packages/RColorBrewer/index.html">ColorBrewer</a></b>')),
                    img(src="color_palettes.png",width=525, height=671),
-                   p(HTML('   The colors palettes here shown come from <a href="https://cran.r-project.org/web/packages/RColorBrewer/index.html">ColorBrewer</a>')),
-                  
                    
               )
       )
