@@ -10,7 +10,8 @@ shinyUI(dashboardPage(
   dashboardHeader(
     # theme="blue_gradient",
     
-    title="Fast-Stats Web Tool",
+    title= tags$a(href='#',
+                  tags$img(src='fast-stats-logo-blue-1.png',width=210,height =50)),
     tags$li(img(src='blue.png',width=10,height =50),class="dropdown"),
     tags$li(img(src='logo.png',width=175,height =50),class="dropdown"),
     tags$li(img(src='blue.png',width=10,height =50),class="dropdown"),
