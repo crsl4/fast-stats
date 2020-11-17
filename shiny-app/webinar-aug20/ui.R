@@ -6,7 +6,8 @@ shinyUI(dashboardPage(
   skin="yellow",
   dashboardHeader(
     
-    title="Fast-Stats Web Tool",
+    title= tags$a(href='#',
+                  tags$img(src='fast-stats-logo-yellow-1.png',width=210,height =50)),
     tags$li(img(src='yellow1.png',width=10,height =50),class="dropdown"),
     tags$li(img(src='logo.png',width=175,height =50),class="dropdown"),
     tags$li(img(src='yellow1.png',width=10,height =50),class="dropdown"),
@@ -64,7 +65,14 @@ shinyUI(dashboardPage(
                    
                    h4(HTML( 'WI Fast Stats is the <a href="https://github.com/crsl4/fast-stats" target="_blank">open-source</a> publicly available web app to analyze data from <a href="https://fastplants.org/" target="_blank">WI Fast Plants</a>.')),
 
-                   h4(HTML( 'This web app is the accompanying tool for the WI Fast Plants webinar: <a href="https://fastplants.org/2020/08/06/new-fast-plants-polycots-selection/" target="_blank"><i>Strategies for adapting WI Fast Plants selection of traits investigations for remote and social distance learning</i></a>.')))
+                   h4(HTML( 'This web app is the accompanying tool for the WI Fast Plants webinar: <a href="https://fastplants.org/2020/08/06/new-fast-plants-polycots-selection/" target="_blank"><i>Strategies for adapting WI Fast Plants selection of traits investigations for remote and social distance learning</i></a>.')),
+                   
+                   h4(HTML( 'A video of the Data Analysis part can be found <a href="https://www.currikistudio.org/playlist/6155/activity/167241/preview/lti" target="_blank">here</a>.'))
+                   
+                   ),
+              
+             
+              
 
 
                 
