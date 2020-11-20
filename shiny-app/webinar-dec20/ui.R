@@ -10,7 +10,8 @@ shinyUI(dashboardPage(
   dashboardHeader(
     # theme="blue_gradient",
     
-    title="Fast-Stats Web Tool",
+    title= tags$a(href='#',
+                  tags$img(src='fast-stats-logo-blue-1.png',width=210,height =50)),
     tags$li(img(src='blue.png',width=10,height =50),class="dropdown"),
     tags$li(img(src='logo.png',width=175,height =50),class="dropdown"),
     tags$li(img(src='blue.png',width=10,height =50),class="dropdown"),
@@ -63,11 +64,11 @@ shinyUI(dashboardPage(
     tabItems(
       tabItem("about",
               box( width=12, status="primary",solidHeader = T,
-                   title = "Welcome to the WI Fast Stats app!",
+                   title = "Welcome to the WI Fast Stats app: Ecosystem!",
                    
                    h4(HTML( 'WI Fast Stats is the <a href="https://github.com/crsl4/fast-stats" target="_blank">open-source</a> publicly available web app to analyze data from <a href="https://fastplants.org/" target="_blank">WI Fast Plants</a>.')),
 
-                   h4(HTML( 'This web app is the accompanying tool for the WI Fast Plants webinar: <a href="https://fastplants.org/2020/08/06/new-fast-plants-polycots-selection/" target="_blank"><i>Strategies for adapting WI Fast Plants selection of traits investigations for remote and social distance learning</i></a>.')))
+                   h4(HTML( 'This web app is the accompanying tool for the WI Fast Plants webinar: <a href="https://register.gotowebinar.com/register/1900289654623158541" target="_blank"><i>Teaching Middle-level and Upper-elementary Students Ecosystem Concepts with Hands-on Fast Plants Investigations</i></a>.')))
 
               
       ),
@@ -316,9 +317,9 @@ shinyUI(dashboardPage(
               box( width=12, status="primary",solidHeader = T,
                    title="Frequently Asked Questions",
                    h4("Q: How to get help? "), 
-                   p(HTML('<b>A: Soon we will have a google user group to post questions and answers for users of the app.</b>')),
-                   h4("Q: Webinar Links: "),  
-                   p(HTML('<b>A: WI Fast Plants webinar: <a href="https://fastplants.org/2020/08/06/new-fast-plants-polycots-selection/" target="_blank"><i>Strategies for adapting WI Fast Plants selection of traits investigations for remote and social distance learning</i></a>.</b>')),
+                   p(HTML('<b>A: Check out the WI Fast Stats google user group where people post questions/answers. You can join to post questions: <a href="https://groups.google.com/g/wi-fast-stats/">https://groups.google.com/g/wi-fast-stats</a></b>')),
+                   h4("Q: Where can I find the information about the WI Fast Plants Webinar?"),  
+                   p(HTML('<b>A: WI Fast Plants webinar: <a href="https://register.gotowebinar.com/register/1900289654623158541" target="_blank"><i>Teaching Middle-level and Upper-elementary Students Ecosystem Concepts with Hands-on Fast Plants Investigations</i></a>.</b>')),
                    h4("Q: Color Palettes Charts: "), 
                    p(HTML('<b>A: The colors palettes here shown come from <a href="https://cran.r-project.org/web/packages/RColorBrewer/index.html">ColorBrewer</a></b>')),
                    img(src="color_palettes.png",width=525, height=671),
