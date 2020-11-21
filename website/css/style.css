@@ -1057,7 +1057,8 @@ background-position-y: 70px;
 .points{ 
 	margin-bottom: 10px;
 	font-size:14px;
-	padding-left:0px;
+    padding-left:0px;
+    /* color: #FFFF00; */
 }
 .about-us p{
 	/*font-size: 0.9375em;*/
@@ -1084,10 +1085,27 @@ background-position-y: 70px;
 	position: absolute;
 	font-family: FontAwesome;
 	font-size: 1.125em;
-	color: #F74D4D;
+    color: #F74D4D;
 	left: 0px;
 	top: 3px;
 }
+.about-us .points2{
+	position: relative;
+	list-style-type: none;
+	padding: 5px 0 5px 30px;
+	color: #010100;
+}
+
+.about-us .points2:before{
+	content: "\f058";
+	position: absolute;
+	font-family: FontAwesome;
+	font-size: 1.125em;
+    color: #FFFF00;
+	left: 0px;
+	top: 3px;
+}
+
 
 .about-us-link a:first-child{
 	margin-left: 0;
