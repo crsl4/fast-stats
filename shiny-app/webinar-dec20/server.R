@@ -10,7 +10,7 @@ library(rsconnect)
 library(RColorBrewer)
 options(shiny.maxRequestSize=10*1024^2)
 # global variable
-toy<-read.csv("ecosystem-data.csv",
+toy<-read.csv("2016-brassica.csv",
              header = T,
              sep = ",")
 
@@ -101,59 +101,59 @@ server <- function(input, output,session) {
     }else{
       updateRadioButtons(session, "xaxisGrp",
                          label = "Group Variable",
-                         choices = c("Osmocote"="Osmocote","PlantID"="PlantID","Height"="Height","CotWidth"="CotWidth","Hairs"="Hairs","Flowers"="Flowers", "Bracts"="Bracts","Branches"="Branches","Pods"="Pods"),
+                         choices = c("Plant"="Plant","Treatment"="Treatment","Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length"),
                          selected = "")
       updateRadioButtons(session, "yaxisGrp",
                          label = "Quantity",
-                         choices = c("Osmocote"="Osmocote","PlantID"="PlantID","Height"="Height","CotWidth"="CotWidth","Hairs"="Hairs","Flowers"="Flowers", "Bracts"="Bracts","Branches"="Branches","Pods"="Pods"),
+                         choices = c("Plant"="Plant","Treatment"="Treatment","Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length"),
                          selected = "")
       updateRadioButtons(session, "groupVar",
                          label = "Group Variable",
-                         choices = c("Osmocote"="Osmocote","PlantID"="PlantID","Height"="Height","CotWidth"="CotWidth","Hairs"="Hairs","Flowers"="Flowers", "Bracts"="Bracts","Branches"="Branches","Pods"="Pods"),
+                         choices = c("Plant"="Plant","Treatment"="Treatment","Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length"),
                          selected = "")
       updateRadioButtons(session, "quantity",
                          label = "Quantity",
-                         choices = c("Osmocote"="Osmocote","PlantID"="PlantID","Height"="Height","CotWidth"="CotWidth","Hairs"="Hairs","Flowers"="Flowers", "Bracts"="Bracts","Branches"="Branches","Pods"="Pods"),
+                         choices = c("Plant"="Plant","Treatment"="Treatment","Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length"),
                          selected = "")
       updateRadioButtons(session, "gv1",
                          label = "Group Variable 1",
-                         choices = c("Osmocote"="Osmocote","PlantID"="PlantID","Height"="Height","CotWidth"="CotWidth","Hairs"="Hairs","Flowers"="Flowers", "Bracts"="Bracts","Branches"="Branches","Pods"="Pods"),
+                         choices = c("Plant"="Plant","Treatment"="Treatment","Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length"),
                          selected = "")
       updateRadioButtons(session, "gv2",
                          label = "Group Variable 2",
-                         choices = c("Osmocote"="Osmocote","PlantID"="PlantID","Height"="Height","CotWidth"="CotWidth","Hairs"="Hairs","Flowers"="Flowers", "Bracts"="Bracts","Branches"="Branches","Pods"="Pods"),
+                         choices = c("Plant"="Plant","Treatment"="Treatment","Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length"),
                          selected = "")
       updateRadioButtons(session, "gvBox",
                          label = "Group Variable",
-                         choices = c("Osmocote"="Osmocote","PlantID"="PlantID","Height"="Height","CotWidth"="CotWidth","Hairs"="Hairs","Flowers"="Flowers", "Bracts"="Bracts","Branches"="Branches","Pods"="Pods"),
+                         choices = c("Plant"="Plant","Treatment"="Treatment","Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length"),
                          selected = "")
       updateRadioButtons(session, "qBox",
                          label = "Quantity",
-                         choices = c("Osmocote"="Osmocote","PlantID"="PlantID","Height"="Height","CotWidth"="CotWidth","Hairs"="Hairs","Flowers"="Flowers", "Bracts"="Bracts","Branches"="Branches","Pods"="Pods"),
+                         choices = c("Plant"="Plant","Treatment"="Treatment","Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length"),
                          selected = "")
       updateRadioButtons(session, "gvMosaic1",
                          label = "Group Variable 1",
-                         choices = c("Osmocote"="Osmocote","PlantID"="PlantID","Height"="Height","CotWidth"="CotWidth","Hairs"="Hairs","Flowers"="Flowers", "Bracts"="Bracts","Branches"="Branches","Pods"="Pods"),
+                         choices = c("Plant"="Plant","Treatment"="Treatment","Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length"),
                          selected = "")
       updateRadioButtons(session, "gvMosaic2",
                          label = "Group Variable 2",
-                         choices = c("Osmocote"="Osmocote","PlantID"="PlantID","Height"="Height","CotWidth"="CotWidth","Hairs"="Hairs","Flowers"="Flowers", "Bracts"="Bracts","Branches"="Branches","Pods"="Pods"),
+                         choices = c("Plant"="Plant","Treatment"="Treatment","Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length"),
                          selected = "")
       updateRadioButtons(session, "gvScatter",
-                         label = "Quantity 1",
-                         choices = c("Osmocote"="Osmocote","PlantID"="PlantID","Height"="Height","CotWidth"="CotWidth","Hairs"="Hairs","Flowers"="Flowers", "Bracts"="Bracts","Branches"="Branches","Pods"="Pods"),
+                         label = "Quantity 1/Group Variable",
+                         choices = c("Plant"="Plant","Treatment"="Treatment","Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length"),
                          selected = "")
       updateRadioButtons(session, "qScatter",
                          label = "Quantity 2",
-                         choices = c("Osmocote"="Osmocote","PlantID"="PlantID","Height"="Height","CotWidth"="CotWidth","Hairs"="Hairs","Flowers"="Flowers", "Bracts"="Bracts","Branches"="Branches","Pods"="Pods"),
+                         choices = c("Plant"="Plant","Treatment"="Treatment","Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length"),
                          selected = "")
       updateRadioButtons(session, "gvDensities",
                          label = "Group Variable",
-                         choices = c("Osmocote"="Osmocote","PlantID"="PlantID","Height"="Height","CotWidth"="CotWidth","Hairs"="Hairs","Flowers"="Flowers", "Bracts"="Bracts","Branches"="Branches","Pods"="Pods"),
+                         choices = c("Plant"="Plant","Treatment"="Treatment","Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length"),
                          selected = "")
       updateRadioButtons(session, "qDensities",
                          label = "Quantity",
-                         choices = c("Osmocote"="Osmocote","PlantID"="PlantID","Height"="Height","CotWidth"="CotWidth","Hairs"="Hairs","Flowers"="Flowers", "Bracts"="Bracts","Branches"="Branches","Pods"="Pods"),
+                         choices = c("Plant"="Plant","Treatment"="Treatment","Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length"),
                          selected = "")
     }
     
@@ -471,6 +471,18 @@ server <- function(input, output,session) {
     # 1+ will be coerced to TRUE
     v53$addRegression<- input$addRegression
   })
+  v54 <- reactiveValues(addLine =0)
+  observeEvent(input$addLine, {
+    # 0 will be coerced to FALSE
+    # 1+ will be coerced to TRUE
+    v54$addLine<- input$addLine
+  })
+  v55 <- reactiveValues(addComment =0)
+  observeEvent(input$addComment, {
+    # 0 will be coerced to FALSE
+    # 1+ will be coerced to TRUE
+    v55$addComment<- input$addComment
+  })
   
   
   not_equalGV<-function(input1, input2){
@@ -718,50 +730,78 @@ server <- function(input, output,session) {
     
     if (v9$doScatter == FALSE) return()
     
-    validate(
-      not_quantity(df,v29$gvScatter)
-    )
+    # validate(
+    #   not_quantity(df,v29$gvScatter)
+    # )
     validate(
       not_quantity(df,v30$qScatter)
     )
     
-    
-    x_val<-unlist(subset(df, select=c(v29$gvScatter)))
-    # notice that v5$xv here is character, not col obj; but ggplot needs to accept col obj
-    # use subset func to extract col object from dataframe; other func, such as df[...], seems not work at all
-    # ggplot2 does not accept list object; must use unlist
-    y_val<-unlist(subset(df, select=c(v30$qScatter)))
-    # x_val_cat=factor(x_val)
-    p<-ggplot(df, aes(x = x_val, y = y_val,fill=x_val)) +
-      xlab(v29$gvScatter)+labs(fill=v29$gvScatter)+ylab(v30$qScatter)+
-      geom_point(aes(colour = x_val), show.legend = FALSE,pch = v34$pointShapeScatter, alpha=v33$transScatter/100, position = position_jitterdodge(jitter.height=0.075, jitter.width=0.1),size=v35$pointSizeScatter)+
-      theme(
-        plot.title = element_text(hjust=0.5, size=rel(1.8)),
-        axis.title.x = element_text(size=rel(1.8)),
-        axis.title.y = element_text(size=rel(1.8), angle=90, vjust=0.5, hjust=0.5),
-        axis.text.x = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
-        axis.text.y = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
-        panel.background = element_blank(),
-        axis.line = element_line(colour = "grey"),
-        text=element_text(size=9)
-      )
-    
-    #############################################################
-    # df[[v29$gvScatter]]<-as.factor( df[[v29$gvScatter]])
-    group_list=unlist(subset(df,select=c(as.factor(v29$gvScatter))))
-  
-    colorCount = length(unique(unlist(group_list,use.names=F)))   #8, an arbitrary number
-    
-    getPalette <- colorRampPalette(brewer.pal(8, v36$colorScatter),bias=2.5)(colorCount)
-    # print(getPalette)
-
-    p<-p+scale_fill_gradient(low=getPalette[1], high=getPalette[length(getPalette)])
-    ###########################################################
-    if(v53$addRegression==T){
-      # add a aes(group="") solve the problem that one variable is a factor (numerical converts to factor)
-      p<-p+geom_smooth(method='lm',formula=y~x)
+    if (class(df[[v29$gvScatter]])=="numeric"||class(df[[v29$gvScatter]])=="integer"||class(df[[v29$gvScatter]])=="complex")
+    {
+      x_val<-unlist(subset(df, select=c(v29$gvScatter)))
+      y_val<-unlist(subset(df, select=c(v30$qScatter)))
+      p<-ggplot(df, aes(x = x_val, y = y_val,fill=x_val)) +
+        xlab(v29$gvScatter)+labs(fill=v29$gvScatter)+ylab(v30$qScatter)+
+        geom_point(aes(colour = x_val), show.legend = FALSE,pch = v34$pointShapeScatter, alpha=v33$transScatter/100, position = position_jitterdodge(jitter.height=0.075, jitter.width=0.1),size=v35$pointSizeScatter)+
+        theme(
+          plot.title = element_text(hjust=0.5, size=rel(1.8)),
+          axis.title.x = element_text(size=rel(1.8)),
+          axis.title.y = element_text(size=rel(1.8), angle=90, vjust=0.5, hjust=0.5),
+          axis.text.x = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+          axis.text.y = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+          panel.background = element_blank(),
+          axis.line = element_line(colour = "grey"),
+          text=element_text(size=9)
+        )
+      
+      #############################################################
+      # df[[v29$gvScatter]]<-as.factor( df[[v29$gvScatter]])
+      group_list=unlist(subset(df,select=c(as.factor(v29$gvScatter))))
+      
+      colorCount = length(unique(unlist(group_list,use.names=F)))   #8, an arbitrary number
+      
+      getPalette <- colorRampPalette(brewer.pal(8, v36$colorScatter),bias=2.5)(colorCount)
+      # print(getPalette)
+      
+      p<-p+scale_fill_gradient(low=getPalette[1], high=getPalette[length(getPalette)])
+      ###########################################################
+      if(v53$addRegression==T){
+        # add a aes(group="") solve the problem that one variable is a factor (numerical converts to factor)
+        p<-p+geom_smooth(method='lm',formula=y~x)
+      }
+      # p<-scale_color_gradientn(colors=v36$colorScatter)
     }
-    # p<-scale_color_gradientn(colors=v36$colorScatter)
+    else #in this case, group variable
+    {
+      x_val<-unlist(subset(df, select=c(v29$gvScatter)))
+      y_val<-unlist(subset(df, select=c(v30$qScatter)))
+      p<-ggplot(df, aes(x = x_val, y = y_val,fill=x_val)) +
+        xlab(v29$gvScatter)+labs(fill=v29$gvScatter)+ylab(v30$qScatter)+
+        geom_jitter(pch = v34$pointShapeScatter, alpha=v33$transScatter/100, width=0.2,size=v35$pointSizeScatter)+
+        theme(
+          plot.title = element_text(hjust=0.5, size=rel(1.8)),
+          axis.title.x = element_text(size=rel(1.8)),
+          axis.title.y = element_text(size=rel(1.8), angle=90, vjust=0.5, hjust=0.5),
+          axis.text.x = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+          axis.text.y = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
+          panel.background = element_blank(),
+          axis.line = element_line(colour = "grey"),
+          text=element_text(size=9)
+        )
+      #############################################################
+      # df[[v29$gvScatter]]<-as.factor( df[[v29$gvScatter]])
+      group_list=unlist(subset(df,select=c(v29$gvScatter)))
+      
+      colorCount = length(unique(unlist(group_list,use.names=F)))   #8, an arbitrary number
+      
+      getPalette <- colorRampPalette(brewer.pal(8, v36$colorScatter),bias=2.5)(colorCount)
+      # print(getPalette)
+      
+      p<-p+scale_fill_manual(values=getPalette)
+      ###########################################################
+    }
+    
     ggplotly(p,tooltip = c("x", "y"))%>% config(displaylogo = FALSE,displayModeBar = T)
     
     
@@ -875,6 +915,41 @@ server <- function(input, output,session) {
     ggplotly(p)
     
   })
+  
+  output$addLine<-renderUI(
+    {
+      if(input$fileType=="sampleFile")
+      {
+        df<- toy
+      }
+      else
+      {
+        df<-data_set()
+      }
+      if(class(df[[v29$gvScatter]])!="numeric"&&class(df[[v29$gvScatter]])!="integer"&&class(df[[v29$gvScatter]])!="complex"){return()}
+      
+      checkboxInput("addRegression", "Add a linear regression line", T)
+      
+      # 
+    }
+  )
+  output$addComment<-renderUI(
+    {
+      if(input$fileType=="sampleFile")
+      {
+        df<- toy
+      }
+      else
+      {
+        df<-data_set()
+      }
+      if(class(df[[v29$gvScatter]])!="numeric"&&class(df[[v29$gvScatter]])!="integer"&&class(df[[v29$gvScatter]])!="complex"){return()}
+      
+      HTML('<p style="color:#808080"> <b>Add a linear regression line:</b> Automatic computation of slope and intercept for the best line explaining the dots. The line includes a confidence region around it in gray.</p>')
+    }
+  )
+    
+    
   
   # output$goViolin<-renderUI({
   #   if(input$fileType=="sampleFile")

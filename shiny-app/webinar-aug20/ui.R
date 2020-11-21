@@ -187,10 +187,6 @@ shinyUI(dashboardPage(
                              
                              HTML('<p style="color:#808080"> <b>Violin Plot:</b> Plot a numerical variable ("Quantity") by groups ("Group variable"). It is similar to the box plot but it also shows the distribution and spread of the data. </p>'),
                              
-                             checkboxInput("addPoints", "Add data points", T),
-                             
-                             HTML('<p style="color:#808080"> <b>Add data points: </b> This option allows the user to add a scatterplot of the data where each dot corresponds to one observation (row) in the dataset. </p>'),
-                             
                              h4("Data Visualization:"),
                              HTML('<p style="color:#808080">Please select the two variables to use in the plot and click on the button to generate the plot.</p>'),
                              
@@ -199,13 +195,20 @@ shinyUI(dashboardPage(
                                column(6,radioButtons("yaxisGrp","Quantity:", c("1"="1","2"="2")))
                              ),
                              
+                             checkboxInput("addPoints", "Add data points", T),
+                             
+                             HTML('<p style="color:#808080"> <b>Add data points: </b> This option allows the user to add a scatterplot of the data where each dot corresponds to one observation (row) in the dataset. </p>'),
+                             
+                             
                              selectInput("colorViolin","Color",choices = c("Blue+Purple"="BuPu","Dark Color"="Dark2","Orange+Red"="OrRd","Yellow+Green+Blue"="YlGnBu","Accent"="Accent","Paired"="Paired","Red+Blue"="RdYlBu","Purple+Red"="PuRd","Set2"="Set2","Purple+Green"="PRGn")
                              ),
 
                           
 
                              HTML('<p style="color:#808080"> <b>About colors:</b> Click the <b>FAQ</b> tab in the left sidebar for more details on the color palettes</p>'),
-
+                             
+                             selectInput("pointShapeViolin","Point Shape",choices =c("Solid Circle"=19,"Bullet"=20,"Filled Circle"=21,"Filled Square"=22,"Filled Diamond"=23,"Filled Triangle Point-Up"=24, "Filled Triangle Point-down"=25)),
+                             
                              
                              sliderInput("transViolin", "Transparency:",
                                          min = 30, max = 100,
@@ -215,7 +218,6 @@ shinyUI(dashboardPage(
                                          min = 0, max = 10,
                                          value = 1),
                              
-                             selectInput("pointShapeViolin","Point Shape",choices =c("Solid Circle"=19,"Bullet"=20,"Filled Circle"=21,"Filled Square"=22,"Filled Diamond"=23,"Filled Triangle Point-Up"=24, "Filled Triangle Point-down"=25)),
                              
                              fluidRow(
                                column(6, align="center", offset = 3,
@@ -229,9 +231,6 @@ shinyUI(dashboardPage(
             conditionalPanel(condition="input.plotType==2",
                              
                              HTML('<p style="color:#808080"> <b>Box Plot:</b> Plot a numerical variable ("Quantity") by groups ("Group variable"). Solid black line in the box represents the median, and the upper and lower edges of the box represent the 3rd and 1st quartiles respectively. </p>'),
-                             checkboxInput("addPoints2", "Add data points", T),
-                             
-                             HTML('<p style="color:#808080"> <b>Add data points: </b>  This option allows the user to add a scatterplot of the data where each dot corresponds to one observation (row) in the dataset. </p>'),
                              
                              h4("Data Visualization:"),
                              HTML('<p style="color:#808080">Please select the two variables to use in the plot and click on the button to generate the plot.</p>'),
@@ -241,6 +240,10 @@ shinyUI(dashboardPage(
                                column(6,radioButtons("qBox","Quantity:", c("1"="1","2"="2")))
                              ),
                              
+                             checkboxInput("addPoints2", "Add data points", T),
+                             
+                             HTML('<p style="color:#808080"> <b>Add data points: </b>  This option allows the user to add a scatterplot of the data where each dot corresponds to one observation (row) in the dataset. </p>'),
+                             
                              selectInput("colorBox","Color",choices = c("Blue+Purple"="BuPu","Dark Color"="Dark2","Orange+Red"="OrRd","Yellow+Green+Blue"="YlGnBu","Accent"="Accent","Paired"="Paired","Red+Blue"="RdYlBu","Purple+Red"="PuRd","Set2"="Set2","Purple+Green"="PRGn")
                              ),
 
@@ -248,6 +251,7 @@ shinyUI(dashboardPage(
 
                              HTML('<p style="color:#808080"> <b>About colors:</b> Click the <b>FAQ</b> tab in the left sidebar for more details on color palettes</p>'),
 
+                             selectInput("pointShapeBox","Point Shape",choices =c("Solid Circle"=19,"Bullet"=20,"Filled Circle"=21,"Filled Square"=22,"Filled Diamond"=23,"Filled Triangle Point-Up"=24, "Filled Triangle Point-down"=25)),
                              
                              sliderInput("transBox", "Transparency:",
                                          min = 30, max = 100,
@@ -257,7 +261,7 @@ shinyUI(dashboardPage(
                                          min = 0, max = 10,
                                          value = 2),
                              
-                             selectInput("pointShapeBox","Point Shape",choices =c("Solid Circle"=19,"Bullet"=20,"Filled Circle"=21,"Filled Square"=22,"Filled Diamond"=23,"Filled Triangle Point-Up"=24, "Filled Triangle Point-down"=25)),
+                             
                              fluidRow(
                                column(6, align="center", offset = 3,
                                       actionButton("goBox", "Box Plot"),
@@ -282,6 +286,8 @@ shinyUI(dashboardPage(
                              ),
                              HTML('<p style="color:#808080"> <b>About colors:</b> Click the <b>FAQ</b> tab in the left sidebar for more details on the color palettes</p>'),
                              
+                             selectInput("pointShapeScatter","Point Shape",choices =c("Solid Circle"=19,"Bullet"=20,"Filled Circle"=21,"Filled Square"=22,"Filled Diamond"=23,"Filled Triangle Point-Up"=24, "Filled Triangle Point-down"=25)),
+                             
                              sliderInput("transScatter", "Transparency:",
                                          min = 30, max = 100,
                                          value = 65),
@@ -290,7 +296,7 @@ shinyUI(dashboardPage(
                                          min = 0, max = 10,
                                          value = 2),
                              
-                             selectInput("pointShapeScatter","Point Shape",choices =c("Solid Circle"=19,"Bullet"=20,"Filled Circle"=21,"Filled Square"=22,"Filled Diamond"=23,"Filled Triangle Point-Up"=24, "Filled Triangle Point-down"=25)),
+                             
                              
                              
                              fluidRow(
@@ -400,6 +406,8 @@ shinyUI(dashboardPage(
                    p(HTML('<b>A: Check out the WI Fast Stats google user group where people post questions/answers. You can join to post questions: <a href="https://groups.google.com/g/wi-fast-stats/">https://groups.google.com/g/wi-fast-stats</a></b>')),
                    h4("Q: Where can I find the information about the WI Fast Plants Webinar?"),  
                    p(HTML('<b>A: WI Fast Plants webinar: <a href="https://fastplants.org/2020/08/06/new-fast-plants-polycots-selection/" target="_blank"><i>Strategies for adapting WI Fast Plants selection of traits investigations for remote and social distance learning</i></a>.</b>')),
+                   h4("Q: Where can I find the webinar slides for the Data science part?"),
+                   p(HTML('<b>A: The webinar slides are in the WI Fast Stats github repo <a href="https://github.com/crsl4/fast-stats" target="_blank">here</a></b>')),
                    h4("Q: Color Palettes Charts: "), 
                    p(HTML('<b>A: The colors palettes here shown come from <a href="https://cran.r-project.org/web/packages/RColorBrewer/index.html">ColorBrewer</a></b>')),
                    img(src="color_palettes.png",width=525, height=671),
