@@ -41,6 +41,8 @@ We will do the plots only for X=osmocote, Y=height, but these same plots can be 
 ```{r, echo=FALSE}
 p2 = ggplot(dat2, aes(x = Osmocote, y = Height, fill = Osmocote)) +
   geom_point(pch = 21, alpha=0.3, position = position_jitterdodge(jitter.height=0.075, jitter.width=0.1))+
+  #scale_fill_gradient2()+
+  scale_colour_gradientn(colours = terrain.colors(10)) +
   theme(
         plot.title = element_text(hjust=0.5, size=rel(1.8)),
         axis.title.x = element_text(size=rel(1.8)),
@@ -51,6 +53,14 @@ p2 = ggplot(dat2, aes(x = Osmocote, y = Height, fill = Osmocote)) +
         axis.line = element_line(colour = "grey")##,
         )
 p2
+
+## testing the scale_fill_gradient
+library(RColorBrewer)
+group_list=unlist(subset(dat2,select=c(as.factor(Osmocote))))
+colorCount = length(unique(unlist(group_list,use.names=F)))
+getPalette <- colorRampPalette(brewer.pal(8, "OrRd"),bias=2.5)(colorCount)
+
+p2 + scale_fill_gradient(low=getPalette[1], high=getPalette[length(getPalette)])
 ```
 
 We want to give people the option to add a linear regression line:
