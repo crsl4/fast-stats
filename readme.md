@@ -45,6 +45,11 @@ From R, run the following command:
 
 and it should launch the app in your default web browser.
 
+# Example Usage
+
+See details in [DOCS.md](https://github.com/crsl4/fast-stats/blob/master/DOCS.md)
+
+
 # Previous Version
 
 

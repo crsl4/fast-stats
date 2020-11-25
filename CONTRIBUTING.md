@@ -15,7 +15,7 @@ example that makes the issue, and Python version used by you.
 
 To make contributions to WI-Fast-Stats, you need to set up your [GitHub](https://github.com) 
 account if you do not have and sign in, and request your change(s) or contribution via 
-opening a pull request against the ``master``
+opening a pull request against the ``development``
 branch in your fork of the [WI-Fast-Stats repository](https://github.com/crsl4/fast-stats). 
 
 Please use the following steps:
