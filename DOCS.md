@@ -1,11 +1,15 @@
-# Example (Website)
-We created an animated website which serves as a medium to a collection of R-developed web apps that provide Data Visualization and Data Analysis tools for WI Fast Plants data. The website consists of 6 sections:
-* Home
+# WI Fast Stats Documentation
+
+WI Fast Stats is an animated website which serves as a medium to a collection of R-developed web apps that provide Data Visualization and Data Analysis tools for WI Fast Plants data. 
+
+The main website consists of 6 sections:
+* [Home](#home)
 * About
 * Web Apps
 * Webinars
 * Source Code
 * FAQ
+
 ## Home
 The Home page is a collection of animation using WI Fast Plants pictures.
 ![Home-web](https://github.com/crsl4/fast-stats/blob/master/figures/home_web.png?raw=true)

@@ -3,7 +3,7 @@
 - WI Fast Stats is an integrated animated web page with a collection of R-developed web apps that provide Data Visualization and Data Analysis tools for [WI Fast Plants](https://fastplants.org/) data
 - WI Fast Stats is a user-friendly easy-to-use interface that will render Data Science accessible to K-16 teachers and students currently using [WI Fast Plants](https://fastplants.org/) lesson plans
 - Users do not need to have strong programming or mathematical background to use WI Fast Stats 
-- The web apps are simple to use, well documented, and freely available
+- The web apps are simple to use, well documented, and freely available!
 
 # Usage
 
