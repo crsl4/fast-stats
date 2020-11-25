@@ -24,7 +24,7 @@ $ git clone git@github.com:your-username/fast-stats.git
 4. Make your change(s) in the `master` (or `development`) branch of your cloned fork
 5. Make sure that all tests are passed without any errors (upcoming automatic testing available in WI Fast Stats)
 6. Push your change(s) to your fork in your GitHub account
-- [Submit a pull request](https://github.com/crsl4/fast-stats/pulls) describing what problem has been solved and linking to the issue you had opened in step 1
+7. [Submit a pull request](https://github.com/crsl4/fast-stats/pulls) describing what problem has been solved and linking to the issue you had opened in step 1
 
 Your contribution will be checked and merged into the original repository. You will be contacted if there is any problem in your contribution
 
