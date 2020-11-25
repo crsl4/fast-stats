@@ -71,3 +71,6 @@ See details in [CONTRIBUTING.md](https://github.com/crsl4/fast-stats/blob/master
 
 # License
 WI Fast Stats is licensed under the [MIT](https://opensource.org/licenses/MIT) licence. &copy; Claudia Solis-Lemus (2020)
+
+# Citation
+If you use the website or web apps in your work, we ask that you cite the following paper: xxxx
