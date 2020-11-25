@@ -31,7 +31,8 @@ The Source Code page presents the link to the Github repository.
 ![source-code](https://github.com/crsl4/fast-stats/blob/master/figures/sourcecode_web.png?raw=true)
 
 ## FAQ
-As intended, the FAQ section contains questions and answers related to web apps and webinars. Please share your ideas on Google User Group or Google form. We'd love to hear your feedback!
+As intended, the FAQ section contains questions and answers related to web apps and webinars. 
+
 ![faq-web](https://github.com/crsl4/fast-stats/blob/master/figures/faq_web.png?raw=true)
 
 # Web Apps Documentation
@@ -42,15 +43,15 @@ The web app consists of four main tabs:
 * [Data Upload](#data-upload)
 * [Data Visualization](#data-visualization)
 * [Data Analysis](#data-analysis)
-* [FAQ](#faq)
+* [FAQ](#faq2)
 
 ![Home](https://github.com/crsl4/fast-stats/blob/master/figures/home.png?raw=true) 
 
 ## Data Upload
 
-Click Data Upload in the sidepanel to begin uploading the file. The dataset file should be in csv format and it will uploaded using the Data Upload box. Data should be numeric or factored and should not contain any NULL/NaN/NA values. The file should be no larger than 10MB.
+Click Data Upload in the sidepanel to upload a data file. The dataset should be in csv format and it will be uploaded using the Data Upload box. Data should be numeric or factored and should not contain any NULL/NaN/NA values. The file should be no larger than 10MB.
 
-WI Fast Stats web app comes with a sample dataset and in the example below, we will use the "Sample dataset", which is the cotyledon dataset.
+WI Fast Stats web app comes with a sample dataset and in the example below, we will use the "Sample dataset".
 
 ![Structure](https://github.com/crsl4/fast-stats/blob/master/figures/upload_file.png?raw=true)
 
@@ -67,13 +68,13 @@ Choose a graph from the Plot Type selector, which contains 5 types of plots for 
 
 Choose the variables you want to compare with in the radio buttons. You must select the variables corresponding to the type specified above, e.g., group variables (factor type) or quantity variables (numeric type); otherwise, the system will throw a warning message, indicating that the variable that you have selected is invalid. 
 
-There are also four interactive functions that increases the flexibility of the graphs:
+There are also four interactive functions that provide flexibility to the plot:
 * Color
 * Point Shape
 * Transparency
 * Point Size
 
-We provide up to 10 color palattes, 7 kinds of point shape, transparency scalar, and point size scalar in this application. The default settings are: Blue+Purple color palettes, point shape, 65% transparency, and point size 1. Try to use different combinations and parameters to visualize the outputs!
+We provide up to 10 color palettes, 7 kinds of point shape, transparency scalar, and point size scalar in this application. The default settings are: Blue+Purple color palettes, circle point shape, 65% transparency, and point size 1. Try to use different combinations and parameters to visualize the outputs!
 
 After everything is set, click on the button below and the plot will automatically be displayed in the Plot Display box. On the top right corner of the plot, there is a line of tools provided by [Plotly](https://plotly.com/r/) which allow users to download the plot as .png format, zoom in/out the plot, perform Lasso Select, and use compare tooltip to fully interact with the plots.
 
@@ -94,7 +95,7 @@ The Data Analysis section also depends on the specific web app. For example, the
 
 
 
-## FAQ
+## FAQ {#faq2}
 Finally, click FAQ in the sidepanel to see more related information about this app and the webinars. 
 
 ![faq](https://github.com/crsl4/fast-stats/blob/master/figures/faq.png?raw=true)
