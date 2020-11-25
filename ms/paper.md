@@ -8,7 +8,7 @@ tags:
 - high school
 - middle school
 - education
-date: "21 November 2020"
+date: "25 November 2020"
 output: pdf_document
 authors:
 - name: Yizhou Liu
@@ -39,42 +39,42 @@ Each web app corresponds to a educational unit linked to a specific WI Fast Plan
 In this sense, `WI Fast Stats` was designed to be used by both K-16 teachers and by
 students from elementary school to college. A preliminary version of a web app has already been used in a 2020 WI Fast Plants webinar with over 300 high-school teachers across the U.S. in attendance. Based on the comments at the webinar and follow-up messages, the attendees were deeply impressed by the potential of the web app to revolutionize the manner in which they currently teach Data Science in the classroom. 
 
-`WI Fast Stats` is a user-friendly easy-to-use interface that will render Data Science accessible to teachers and students without strong programming or mathematical background. Because `WI Fast Stats` was also created and is maintained at the University of Wisconsin-Madison, it is the perfect companion to the already widely successful educational tool of WI Fast Plants. `WI Fast Stats` will evolve alongside WI Fast Plants by fulfilling the Data Science needs of the thousands of teachers and students around the world who currently use WI Fast Plants to learn the marvelous complexities of nature.
+`WI Fast Stats` is a user-friendly easy-to-use interface that will render Data Science accessible to teachers and students without strong programming or mathematical background. Because `WI Fast Stats` was also created and is maintained at the University of Wisconsin-Madison, it is the perfect companion to the already widely successful educational tool of WI Fast Plants. `WI Fast Stats` will evolve alongside WI Fast Plants by fulfilling the Data Science needs of the thousands of teachers and students around the world who currently use WI Fast Plants to learn the complexities of plants and the biological world.
 
 
 # Description of the website
 
-`WI Fast Stats` is an integrated animated web page which hosts a collection of web applications and relevant webinars for WI Fast Plants. The web page contains six modules including Home, About, Webapps, Webinars, Source Code, and FAQ [@fig:web1, @fig:web2]. The Home page utilizes `animate.css` to construct the animation with three scrolling images retrieved from WI Fast Plants. `Font-awesome.css` offers a fantastic mode to show buttons representing the links of our web applications as well as the Github source code. We also built a timeline to store all the webinar-related information.
+`WI Fast Stats` is an integrated animated web page which hosts a collection of web applications and relevant webinars for WI Fast Plants. The web page contains six modules including Home, About, Webapps, Webinars, Source Code, and FAQ (Figures \ref{figweb1} and \ref{figweb2}). The Home page utilizes `animate.css` to construct the animation with three scrolling images retrieved from WI Fast Plants. `Font-awesome.css` offers a fantastic mode to show buttons representing the links of our web applications as well as the Github source code. We also built a timeline to store all the webinar-related information.
 
-![WI Fast Stats website home page.\label{fig:web1}](website1.png)
+![WI Fast Stats website home page.\label{figweb1}](website1.png)
 
-![WI Fast Stats website comprises different web apps each corresponding to a given WI Fast Plants webinar.\label{fig:web2}](website2.png)
+![WI Fast Stats website comprises different web apps each corresponding to a given WI Fast Plants webinar.\label{figweb2}](website2.png)
 
 # Description of the web apps
 
 The web apps within `WI Fast Stats` provide an interactive and easy-to-use platform for data visualization and data analysis for data collected in accordance to the WI Fast Plants webinars and educational materials.
-The web apps are based on the R shiny package and contain three main modules: Data Summary, Data Visualization, and Data Analysis which are built with the ShinyDashboard framework [@fig:webapp1, @fig:webapp2]. 
+The web apps are based on the `R shiny` package and contain three main modules: Data Summary, Data Visualization, and Data Analysis which are built with the `ShinyDashboard` framework (Figures \ref{figwebapp1} and \ref{figwebapp2}). 
 
-The Data Upload section allows the users to upload their own collected data based on their fast plants experiments, or to utilize the already loaded sample dataset which illustrates the same educational outcomes intended in the webinar without having to run the experiments themselves.
+The Data Upload section allows the users to upload their own collected data based on their fast plants experiments, or to utilize the already loaded sample dataset which illustrates the same educational outcomes intended in the webinar without having to run the experiments.
 In addition, this section also provides a summary button to show only first rows of the dataset or the whole dataset.
 
-The Data Visualization section allows the users to create five plots: Mosaic plot, Scatter plot, Box plot, Violin plot, and Density plot. It utilizes the ggplot2 library to declaratively create graphs based on particular group variables and quantity variables. Furthermore, the Plotly library extends the features of the plot by adding Lasso Select, autoscale, and data-toggle tooltip. Finally, color palettes, transparency, point size, and point shape are available options to improve the overall appearance of the graph. 
+The Data Visualization section allows the users to create five plots: Mosaic plot, Scatter plot, Box plot, Violin plot, and Density plot. It utilizes the `ggplot2` library to declaratively create graphs based on particular group variables and quantity variables. Furthermore, the `Plotly` library extends the features of the plot by adding `Lasso Select`, `autoscale`, and `data-toggle` tooltip. Finally, color palettes, transparency, point size, and point shape are available options to improve the overall appearance of the graph. 
 
 The Data Analysis section (not present in web apps tailored at middle school students) allows the user to perform statistical tests like the Chi-Square Test and the T-Test to compare the characteristics of the plants under different environmental or experimental settings.
 
-Finally, the web apps maintain a validator system detecting any illegal actions done by users and providing meaningful error messages. The website and web apps are accompanied by a specialized Google user group (wi-fast-stats) for general questions.
+Finally, the web apps maintain a validator system detecting any illegal actions done by users and providing meaningful error messages. The website and web apps are accompanied by a specialized Google user group (`wi-fast-stats`) for general questions.
 
 
-![WI Fast Stats web app corresponding to the WI Fast Plants webinar on the selection of polycot plants.\label{fig:webapp1}](webapp1.png)
+![WI Fast Stats web app corresponding to the WI Fast Plants webinar on the selection of polycot plants.\label{figwebapp1}](webapp1.png)
 
-![WI Fast Stats web app corresponding to the WI Fast Plants webinar on the effect of the ecosystem on the plants.\label{fig:webapp2}](webapp2.png)
+![WI Fast Stats web app corresponding to the WI Fast Plants webinar on the effect of the ecosystem on the plants.\label{figwebapp2}](webapp2.png)
 
 # Future work
 
-`WI Fast Stats` will be continuously evolving to provide data visualization and data analysis capabilities to the ever-growing needs of the WI Fast Plants community.
+`WI Fast Stats` will be continuously evolving to provide data visualization and data analysis capabilities for the ever-growing needs of the WI Fast Plants community.
 
 # Acknowledgements
 
-This work was supported by the Department of Energy [DE-SC0021016 to CSL]. We thank Hedi Baxter and everybody involved in WI Fast Plants for inviting us to work with them on the creation of these Data Science educational tools. Finally, we acknowledge the work in [@Hotaling2020] which helped us improve the scientific writing of this manuscript.
+This work was supported by the Department of Energy [DE-SC0021016 to CSL]. We thank Hedi Baxter Lauffer and everybody involved in WI Fast Plants for inviting us to work with them on the creation of these Data Science educational open-source tools. Finally, we acknowledge the work in [@Hotaling2020] which helped us improve the scientific writing of this manuscript.
 
 # References
