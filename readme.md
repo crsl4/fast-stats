@@ -73,6 +73,12 @@ WI Fast Stats is licensed under the [MIT](https://opensource.org/licenses/MIT) l
 # Citation
 If you use the WI Fast Stats website or web apps in your work, we ask that you cite the following paper: xxxx
 
+# Feedback, issues and questions
+
+- Join the [Google user group](https://groups.google.com/g/wi-fast-stats/) for general questions about the WI Fast Stats website and web apps
+- Issues reports are encouraged through the [GitHub issue tracker](https://github.com/crsl4/fast-stats/issues)
+- Feedback is always welcome via the following [google form](https://docs.google.com/forms/d/e/1FAIpQLSdhpEMMHht3oN6XKwp7oHuCRYLLFgixtZ6z_1a0IC7CXLXPdA/viewform)
+
 
 # Previous WI Fast Stats Version
 
