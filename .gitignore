@@ -92,11 +92,8 @@ Backup[ ]of[ ]*.numbers/
 *.csv
 
 # inkscape drawings
-*.svg
 *.eps
-*.jpg
 *.jpeg
-*.png
 *.dot
 *.json
 
@@ -130,11 +127,6 @@ Backup[ ]of[ ]*.numbers/
 *.freq
 *.nosex
 
-## html
-*.html
-*.css
-*.js
-*.ttf
 
 ### sequences
 *.aln
