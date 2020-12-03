@@ -50,22 +50,30 @@ a, a:hover, a:active {
 
 /*carousel*/
 .carousel-fade .carousel-inner .item {
+    width: 100%;
+    margin: auto;
   transition-property: opacity;
 }
 .carousel-fade .carousel-inner .item,
 .carousel-fade .carousel-inner .active.left,
 .carousel-fade .carousel-inner .active.right {
+    width: 100%;
+    margin: auto;
   opacity: 0;
 }
 .carousel-fade .carousel-inner .active,
 .carousel-fade .carousel-inner .next.left,
 .carousel-fade .carousel-inner .prev.right {
+    width: 100%;
+    margin: auto;
   opacity: 1;
 }
 .carousel-fade .carousel-inner .next,
 .carousel-fade .carousel-inner .prev,
 .carousel-fade .carousel-inner .active.left,
 .carousel-fade .carousel-inner .active.right {
+    width: 100%;
+    margin: auto;
   left: 0;
   transform: translate3d(0,0,0);
 }
@@ -78,13 +86,13 @@ a, a:hover, a:active {
   height: 100%;
 }
 .item:nth-child(1) {
-  background: darkred;
+  background: #C0C0C0;
 }
 .item:nth-child(2) {
-  background: red;
+  background: #C0C0C0;
 }
 .item:nth-child(3) {
-  background: orange;
+  background: #C0C0C0;
 }
 .caption {
 position: absolute;
