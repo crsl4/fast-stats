@@ -3,8 +3,8 @@
 # Overview
 WI Fast Stats is an integrated animated web page which serves as a medium to a collection of R-developed web apps that provide Data Visualization and Data Analysis tools for [WI Fast Plants](https://fastplants.org/) data, built by ggplot2, Plotly, and Graphics libraries. WI Fast Stats also serves as a user-friendly easy-to-use interface that will render Data Science accessible to K-16 teachers and students without strong programming or mathematical background. The app is simple to use, well documented, and freely available. It is the first and only dedicated tool tailored at WI Fast Plants data and educational objectives. 
 # Getting Started
-The WI Fast Stats web app can be found at https://my-data-analysis-work.shinyapps.io/webinar-cotyledon/.
-* a temporary link
+The WI Fast Stats web app can be found at https://wi-fast-stats.wid.wisc.edu/.
+
 # Running Locally
 
 The easiest way to use Wi Fast Stats is via the web app linked above. But you can also run it locally if you wish.
@@ -33,6 +33,7 @@ list.of.packages <- c(
   "pracma", 
   "ggplotify", 
   "thatssorandom", 
+  "viridis",
   "rsconnect")
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[, "Package"])]
 if(length(new.packages)) install.packages(new.packages)
