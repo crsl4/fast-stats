@@ -9,10 +9,10 @@
 
 - WI Fast Stats is browser-based, and thus, no installation is needed
 - Users simply need to click on any of the following links
-  - WI Fast Stats: Integrated web page with access to all available web apps
+  - [WI Fast Stats](https://wi-fast-stats.wid.wisc.edu/): Integrated web page with access to all available web apps
   - Specific web apps: Each web app is tailored at a specific WI Fast Plants dataset and webinar. Currently, we have implemented web apps for the following webinars:
-    - August 2020: New WI Fast Plants polycot selection data
-    - December 2020: Hands-on WI Fast Plants study on ecosystem
+    - [August 2020](https://wi-fast-stats.wid.wisc.edu/cotyledon): New WI Fast Plants polycot selection data
+    - [December 2020](https://wi-fast-stats.wid.wisc.edu/ecosystem): Hands-on WI Fast Plants study on ecosystem
 
 More details are available in the documentation: [DOCS.md](https://github.com/crsl4/fast-stats/blob/master/DOCS.md)
 
