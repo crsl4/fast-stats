@@ -407,7 +407,7 @@ shinyUI(dashboardPage(
                    h4("Q: Where can I find the information about the WI Fast Plants Webinar?"),  
                    p(HTML('<b>A: WI Fast Plants webinar: <a href="https://fastplants.org/2020/08/06/new-fast-plants-polycots-selection/" target="_blank"><i>Strategies for adapting WI Fast Plants selection of traits investigations for remote and social distance learning</i></a>.</b>')),
                    h4("Q: Where can I find the webinar slides for the Data science part?"),
-                   p(HTML('<b>A: The webinar slides are in the WI Fast Stats github repo <a href="https://github.com/crsl4/fast-stats" target="_blank">here</a></b>')),
+                   p(HTML('<b>A: The webinar slides are in the WI Fast Stats github repo <a href="https://github.com/crsl4/fast-stats/blob/master/slides/aug20-cotelydon.pdf" target="_blank">here</a></b>')),
                    h4("Q: I found a bug or error in the code, how can I report it?"),
                    p(HTML('<b>A: You should file an issue in the github repo: <a href="https://github.com/crsl4/fast-stats/issues" target="_blank">https://github.com/crsl4/fast-stats/issues</a></b>')),
                    h4("Q: How can I provide positive (or constructive) feedback?"),
