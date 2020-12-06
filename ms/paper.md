@@ -69,7 +69,7 @@ Finally, the web apps maintain a validator system detecting any illegal actions 
 
 ![WI Fast Stats web app corresponding to the WI Fast Plants webinar on the selection of polycot plants: \url{https://wi-fast-stats.wid.wisc.edu/cotyledon/}.\label{figwebapp1}](webapp1.png)
 
-![WI Fast Stats web app corresponding to the WI Fast Plants webinar on the effect of the ecosystem on the plants.: \url{https://wi-fast-stats.wid.wisc.edu/ecosystem/} \label{figwebapp2}](webapp2.png)
+![WI Fast Stats web app corresponding to the WI Fast Plants webinar on the effect of the ecosystem on the plants.: \url{https://wi-fast-stats.wid.wisc.edu/ecosystem/}. \label{figwebapp2}](webapp2.png)
 
 # Future work
 
