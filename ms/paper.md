@@ -29,14 +29,14 @@ affiliations:
 
 [WI Fast Plants](https://fastplants.org/) [@williams1986rapid] were developed as a research tool at the University of Wisconsin-Madison and have been used by K-16 teachers around the world for nearly 30 years as an educational model-organism. As the name suggest, WI Fast Plants have a short time from planting to flowering (about 2 weeks), and thus, these plants are used in classrooms to engage learners of all ages and grade levels into the investigation of plant life cycles, the growth of flowers, the role of environmental factors on plants, the energy transformation of plants, the genetics of hybrids among many other topics.
 
-Thousands of students from elementary school to college level grow WI Fast Plants in class or at home, and collect data from their experiments, yet they do not have any user-friendly tool to visualize or analyze these data. Existing Data Science platforms such as CODAP [@codap] are either too complicated to use or expensive. Furthermore, existing interfaces are not tailored at WI Fast Plants data or educational objectives, and lack the flexibility to evolve alongside the lesson options provided by WI Fast Plants.
+Thousands of students from elementary school to college level grow WI Fast Plants in class or at home, and collect data from their experiments, yet they do not have any user-friendly tool to visualize or analyze these data. Existing Data Science platforms such as CODAP [@codap] are either too complicated to use or expensive. Furthermore, existing interfaces are not tailored to WI Fast Plants data or educational objectives, and lack the flexibility to evolve alongside the lesson options provided by WI Fast Plants.
 
 # Statement of need
 
 [`WI Fast Stats`](https://wi-fast-stats.wid.wisc.edu/) is an integrated animated web page which serves as a medium to a collection of R-developed web apps that provide Data Visualization and Data Analysis tools for WI Fast Plants data. 
 Each web app corresponds to a educational unit linked to a specific WI Fast Plants webinar and it serves two main functions: 1) K-16 teachers attending the WI Fast Plants webinar will learn how to design Data Science exercises through the web app for their students and 2) students can use the web app independently to learn about visualization and analysis via the publicly available sample datasets and educational materials.
 
-In this sense, `WI Fast Stats` was designed to be used by both K-16 teachers and by
+In this sense, `WI Fast Stats` is designed to be used by both K-16 teachers and by
 students from elementary school to college. A preliminary version of a web app has already been used in a 2020 WI Fast Plants webinar with over 300 high-school teachers across the U.S. in attendance. Based on the comments at the webinar and follow-up messages, the attendees were deeply impressed by the potential of the web app to revolutionize the manner in which they currently teach Data Science in the classroom. 
 
 `WI Fast Stats` is a user-friendly easy-to-use interface that will render Data Science accessible to teachers and students without strong programming or mathematical background. Because `WI Fast Stats` was also created and is maintained at the University of Wisconsin-Madison, it is the perfect companion to the already widely successful educational tool of WI Fast Plants. `WI Fast Stats` will evolve alongside WI Fast Plants by fulfilling the Data Science needs of the thousands of teachers and students around the world who currently use WI Fast Plants to learn the complexities of plants and the biological world.
@@ -62,7 +62,7 @@ In addition, this section also provides a summary button to show only first rows
 
 The Data Visualization section allows the users to create five plots: Mosaic plot, Scatter plot, Box plot, Violin plot, and Density plot. It utilizes the `ggplot2` library to declaratively create graphs based on particular group variables and quantity variables. Furthermore, the `Plotly` library extends the features of the plot by adding `Lasso Select`, `autoscale`, and `data-toggle` tooltip. Finally, color palettes, transparency, point size, and point shape are available options to improve the overall appearance of the graph. 
 
-The Data Analysis section (not present in web apps tailored at middle school students) allows the user to perform statistical tests like the chi-square test and the t test to compare the characteristics of the plants under different environmental or experimental settings.
+The Data Analysis section (not present in web apps tailored to middle school students) allows the user to perform statistical tests like the chi-square test and the t test to compare the characteristics of the plants under different environmental or experimental settings.
 
 Finally, the web apps maintain a validator system detecting any illegal actions done by users and providing meaningful error messages. The website and web apps are accompanied by a specialized Google user group (`wi-fast-stats`) for general questions.
 
