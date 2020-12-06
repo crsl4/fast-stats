@@ -33,7 +33,7 @@ Thousands of students from elementary school to college level grow WI Fast Plant
 
 # Statement of need
 
-`WI Fast Stats` is an integrated animated web page which serves as a medium to a collection of R-developed web apps that provide Data Visualization and Data Analysis tools for WI Fast Plants data. 
+[`WI Fast Stats`](https://wi-fast-stats.wid.wisc.edu/) is an integrated animated web page which serves as a medium to a collection of R-developed web apps that provide Data Visualization and Data Analysis tools for WI Fast Plants data. 
 Each web app corresponds to a educational unit linked to a specific WI Fast Plants webinar and it serves two main functions: 1) K-16 teachers attending the WI Fast Plants webinar will learn how to design Data Science exercises through the web app for their students and 2) students can use the web app independently to learn about visualization and analysis via the publicly available sample datasets and educational materials.
 
 In this sense, `WI Fast Stats` was designed to be used by both K-16 teachers and by
@@ -44,9 +44,11 @@ students from elementary school to college. A preliminary version of a web app h
 
 # Description of the website
 
-`WI Fast Stats` is an integrated animated web page which hosts a collection of web applications and relevant webinars for WI Fast Plants. The web page contains six modules including Home, About, Webapps, Webinars, Source Code, and FAQ (Figures \ref{figweb1} and \ref{figweb2}). The Home page utilizes `animate.css` to construct the animation with three scrolling images retrieved from WI Fast Plants. `Font-awesome.css` offers a fantastic mode to show buttons representing the links of our web applications as well as the Github source code. We also built a timeline to store all the webinar-related information.
+`WI Fast Stats` (\url{https://wi-fast-stats.wid.wisc.edu/}) is an integrated animated web page which hosts a collection of web applications and relevant webinars for WI Fast Plants. The web page contains six modules including Home, About, Webapps, Webinars, Source Code, and FAQ (Figures \ref{figweb1} and \ref{figweb2}). The Home page utilizes `animate.css` to construct the animation with three scrolling images retrieved from WI Fast Plants. `Font-awesome.css` offers a fantastic mode to show buttons representing the links of our web applications as well as the Github source code. We also built a timeline to store all the webinar-related information.
 
-![WI Fast Stats website home page.\label{figweb1}](website1.png)
+The web page and accompanying web apps are all open-source with the code stored in the GitHub repository: \url{https://github.com/crsl4/fast-stats}.
+
+![WI Fast Stats website home page: \url{https://wi-fast-stats.wid.wisc.edu/}.\label{figweb1}](website1.png)
 
 ![WI Fast Stats website comprises different web apps each corresponding to a given WI Fast Plants webinar.\label{figweb2}](website2.png)
 
@@ -65,9 +67,9 @@ The Data Analysis section (not present in web apps tailored at middle school stu
 Finally, the web apps maintain a validator system detecting any illegal actions done by users and providing meaningful error messages. The website and web apps are accompanied by a specialized Google user group (`wi-fast-stats`) for general questions.
 
 
-![WI Fast Stats web app corresponding to the WI Fast Plants webinar on the selection of polycot plants.\label{figwebapp1}](webapp1.png)
+![WI Fast Stats web app corresponding to the WI Fast Plants webinar on the selection of polycot plants: \url{https://wi-fast-stats.wid.wisc.edu/cotyledon/}.\label{figwebapp1}](webapp1.png)
 
-![WI Fast Stats web app corresponding to the WI Fast Plants webinar on the effect of the ecosystem on the plants.\label{figwebapp2}](webapp2.png)
+![WI Fast Stats web app corresponding to the WI Fast Plants webinar on the effect of the ecosystem on the plants.: \url{https://wi-fast-stats.wid.wisc.edu/ecosystem/} \label{figwebapp2}](webapp2.png)
 
 # Future work
 
@@ -75,6 +77,6 @@ Finally, the web apps maintain a validator system detecting any illegal actions 
 
 # Acknowledgements
 
-This work was supported by the Department of Energy [DE-SC0021016 to CSL]. We thank Hedi Baxter Lauffer and everybody involved in WI Fast Plants for inviting us to work with them on the creation of these Data Science educational open-source tools. Finally, we acknowledge the work in [@Hotaling2020] which helped us improve the scientific writing of this manuscript.
+This work was supported by the Department of Energy [DE-SC0021016 to CSL]. We thank Hedi Baxter Lauffer and everybody at WI Fast Plants for inviting us to work with them on the creation of these Data Science educational open-source tools. Finally, we acknowledge the work in [@Hotaling2020] which helped us improve the scientific writing of this manuscript.
 
 # References
