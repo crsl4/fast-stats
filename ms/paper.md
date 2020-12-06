@@ -62,7 +62,7 @@ In addition, this section also provides a summary button to show only first rows
 
 The Data Visualization section allows the users to create five plots: Mosaic plot, Scatter plot, Box plot, Violin plot, and Density plot. It utilizes the `ggplot2` library to declaratively create graphs based on particular group variables and quantity variables. Furthermore, the `Plotly` library extends the features of the plot by adding `Lasso Select`, `autoscale`, and `data-toggle` tooltip. Finally, color palettes, transparency, point size, and point shape are available options to improve the overall appearance of the graph. 
 
-The Data Analysis section (not present in web apps tailored at middle school students) allows the user to perform statistical tests like the Chi-Square Test and the T-Test to compare the characteristics of the plants under different environmental or experimental settings.
+The Data Analysis section (not present in web apps tailored at middle school students) allows the user to perform statistical tests like the chi-square test and the t test to compare the characteristics of the plants under different environmental or experimental settings.
 
 Finally, the web apps maintain a validator system detecting any illegal actions done by users and providing meaningful error messages. The website and web apps are accompanied by a specialized Google user group (`wi-fast-stats`) for general questions.
 
