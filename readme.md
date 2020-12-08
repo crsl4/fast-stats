@@ -72,7 +72,17 @@ See details on how to contribute in [CONTRIBUTING.md](https://github.com/crsl4/f
 WI Fast Stats is licensed under the [MIT](https://opensource.org/licenses/MIT) licence. &copy; Claudia Solis-Lemus (2020)
 
 # Citation
-If you use the WI Fast Stats website or web apps in your work, we ask that you cite the following paper: xxxx
+If you use the WI Fast Stats website or web apps in your work, we ask that you cite [the following paper](https://arxiv.org/abs/2012.03290):
+```
+@misc{liu2020wi,
+      title={WI Fast Stats: a collection of web apps for the visualization and analysis of WI Fast Plants data}, 
+      author={Yizhou Liu and Claudia Solis-Lemus},
+      year={2020},
+      eprint={2012.03290},
+      archivePrefix={arXiv},
+      primaryClass={q-bio.OT}
+}
+```
 
 # Feedback, issues and questions
 
