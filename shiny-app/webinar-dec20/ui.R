@@ -327,7 +327,7 @@ shinyUI(dashboardPage(
                    h4("Q: How can I provide positive (or constructive) feedback?"),
                    p(HTML(' <b>A: Users feedback is very important to us! Please use <a href="https://forms.gle/PQS92afdhLHwK6kG6" target="_blank">this form </a></b>')),
                    h4("Q: If I use the website and web apps in my work, how do I cite them?"),
-                   p(HTML('<b>  A: If you use the website or web apps in your work, we ask that you cite the following paper:</b>')),
+                   p(HTML('<b>  A: If you use the website or web apps in your work, we ask that you cite <a href="https://arxiv.org/abs/2012.03290" target="_blank">this paper </a></b>')),
                    h4("Q: Color Palettes Charts: "), 
                    p(HTML('<b>A: The colors palettes here shown come from <a href="https://cran.r-project.org/web/packages/RColorBrewer/index.html" target="_blank">ColorBrewer</a></b>')),
                    img(src="color_palettes.png",width=525, height=671),
