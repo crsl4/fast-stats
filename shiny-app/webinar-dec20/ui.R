@@ -68,7 +68,7 @@ shinyUI(dashboardPage(
                    
                    h4(HTML( 'WI Fast Stats is the <a href="https://github.com/crsl4/fast-stats" target="_blank">open-source</a> publicly available web app to analyze data from <a href="https://fastplants.org/" target="_blank">WI Fast Plants</a>.')),
 
-                   h4(HTML( 'This web app is the accompanying tool for the WI Fast Plants webinar: <a href="https://register.gotowebinar.com/register/1900289654623158541" target="_blank"><i>Teaching Middle-level and Upper-elementary Students Ecosystem Concepts with Hands-on Fast Plants Investigations</i></a>.')))
+                   h4(HTML( 'This web app is the accompanying tool for the WI Fast Plants webinar: <a href="https://www.carolina.com/knowledge/2020/10/20/webinar-student-designed-ecosystem-experiments-in-middle-grades" target="_blank"><i>Teaching Middle-level and Upper-elementary Students Ecosystem Concepts with Hands-on Fast Plants Investigations</i></a>.')))
 
               
       ),
