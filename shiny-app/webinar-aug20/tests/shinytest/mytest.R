@@ -1,0 +1,13 @@
+app <- ShinyDriver$new("../../")
+app$snapshotInit("mytest")
+
+app$setInputs(sidebarCollapsed = FALSE)
+app$setInputs(sidebarCollapsed = TRUE)
+app$setInputs(sidebarCollapsed = FALSE)
+app$setInputs(fileType = "sampleFile")
+app$setInputs(gvMosaic1 = "plant.ID")
+app$setInputs(gvMosaic2 = "cotyledons")
+app$setInputs(goMosaic = "click")
+app$setInputs(gvMosaic1 = "parents")
+app$setInputs(gvMosaic2 = "generation")
+app$snapshot()
