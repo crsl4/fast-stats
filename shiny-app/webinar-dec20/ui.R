@@ -68,7 +68,7 @@ shinyUI(dashboardPage(
                    
                    h4(HTML( 'WI Fast Stats is the <a href="https://github.com/crsl4/fast-stats" target="_blank">open-source</a> publicly available web app to analyze data from <a href="https://fastplants.org/" target="_blank">WI Fast Plants</a>.')),
 
-                   h4(HTML( 'This web app is the accompanying tool for the WI Fast Plants webinar: <a href="https://register.gotowebinar.com/register/1900289654623158541" target="_blank"><i>Teaching Middle-level and Upper-elementary Students Ecosystem Concepts with Hands-on Fast Plants Investigations</i></a>.')))
+                   h4(HTML( 'This web app is the accompanying tool for the WI Fast Plants webinar: <a href="https://www.carolina.com/knowledge/2020/10/20/webinar-student-designed-ecosystem-experiments-in-middle-grades" target="_blank"><i>Teaching Middle-level and Upper-elementary Students Ecosystem Concepts with Hands-on Fast Plants Investigations</i></a>.')))
 
               
       ),
@@ -320,12 +320,14 @@ shinyUI(dashboardPage(
                    p(HTML('<b>A: Check out the WI Fast Stats google user group where people post questions/answers. You can join to post questions: <a href="https://groups.google.com/g/wi-fast-stats/">https://groups.google.com/g/wi-fast-stats</a></b>')),
                    h4("Q: Where can I find the information about the WI Fast Plants Webinar?"),  
                    p(HTML('<b>A: WI Fast Plants webinar: <a href="https://register.gotowebinar.com/register/1900289654623158541" target="_blank"><i>Teaching Middle-level and Upper-elementary Students Ecosystem Concepts with Hands-on Fast Plants Investigations</i></a>.</b>')),
+                   h4("Q: Where can I find the webinar slides for the Data science part?"),
+                   p(HTML('<b>A: The webinar slides are in the WI Fast Stats github repo <a href="https://github.com/crsl4/fast-stats/blob/master/slides/dec20-ecosystem.pdf" target="_blank">here</a></b>')),
                    h4("Q: I found a bug or error in the code, how can I report it?"),
                    p(HTML('<b>A: You should file an issue in the github repo: <a href="https://github.com/crsl4/fast-stats/issues" target="_blank">https://github.com/crsl4/fast-stats/issues</a></b>')),
                    h4("Q: How can I provide positive (or constructive) feedback?"),
                    p(HTML(' <b>A: Users feedback is very important to us! Please use <a href="https://forms.gle/PQS92afdhLHwK6kG6" target="_blank">this form </a></b>')),
                    h4("Q: If I use the website and web apps in my work, how do I cite them?"),
-                   p(HTML('<b>  A: If you use the website or web apps in your work, we ask that you cite the following paper:</b>')),
+                   p(HTML('<b>  A: If you use the website or web apps in your work, we ask that you cite <a href="https://arxiv.org/abs/2012.03290" target="_blank">this paper </a></b>')),
                    h4("Q: Color Palettes Charts: "), 
                    p(HTML('<b>A: The colors palettes here shown come from <a href="https://cran.r-project.org/web/packages/RColorBrewer/index.html" target="_blank">ColorBrewer</a></b>')),
                    img(src="color_palettes.png",width=525, height=671),
