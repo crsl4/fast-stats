@@ -9,6 +9,7 @@ library(thatssorandom)
 library(rsconnect)
 library(viridis)
 library(RColorBrewer)
+library(dplyr)
 # library(shinyjs)
 # Define server logic to read selected file ----
 # global variable
@@ -62,11 +63,11 @@ server <- function(input, output,session) {
                          choices = cb_options,
                          selected = "")
       updateRadioButtons(session, "gv1",
-                         label = "Group Variable 1",
+                         label = "Group Variable",
                          choices = cb_options,
                          selected = "")
       updateRadioButtons(session, "gv2",
-                         label = "Group Variable 2",
+                         label = "Quantity Variable",
                          choices = cb_options,
                          selected = "")
       updateRadioButtons(session, "gvBox",
@@ -119,19 +120,19 @@ server <- function(input, output,session) {
                          choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
                          selected = "")
       updateRadioButtons(session, "gv1",
-                         label = "Group Variable 1",
-                         choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
-                         selected = "")
-      updateRadioButtons(session, "gv2",
-                         label = "Group Variable 2",
-                         choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
-                         selected = "")
-      updateRadioButtons(session, "gvBox",
                          label = "Group Variable",
                          choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
                          selected = "")
-      updateRadioButtons(session, "qBox",
+      updateRadioButtons(session, "gv2",
                          label = "Quantity",
+                         choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
+                         selected = "")
+      updateRadioButtons(session, "gvBox",
+                         label = "Group Variable 1",
+                         choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
+                         selected = "")
+      updateRadioButtons(session, "qBox",
+                         label = "Group Variable 2",
                          choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
                          selected = "")
       updateRadioButtons(session, "gvMosaic1",
@@ -1009,163 +1010,34 @@ server <- function(input, output,session) {
     validate(
       not_quantity(df,v8$q)
     )
-    group_val<-unlist(subset(df, select=c(v7$gv)))
+    
+    group_var<-unlist(subset(df, select=c(v7$gv)))
+    q_var<-unlist(subset(df, select=c(v8$q)))
+    
+    
+    group_by(df,v7$gv) %>%
+      summarise(
+        count = n(),
+        mean = mean(q_var, na.rm = TRUE),
+        sd = sd(q_var, na.rm = TRUE)
+      )
     
     # , in the end omits default val set to be True
     # # important
-    x = subset(df, select=c(v8$q))[group_val == v14$sel1,]
-    y = subset(df, select=c(v8$q))[group_val == v15$sel2,]
+    # x = subset(df, select=c(v8$q))[group_val == v14$sel1,]
+    # y = subset(df, select=c(v8$q))[group_val == v15$sel2,]
     # check if two group variables are equal
-    validate(
-      not_equalGV2(v14$sel1,v15$sel2)
-    )
-    # print()
-    # print(y)
-    if(v16$doEqualVar==T){
-      t.test(x,y,var.equal = T)
-    }
-    else{
-      t.test(x,y)
-    }
+    # if(v16$doEqualVar==T){
+    #   t.test(x,y,var.equal = T)
+    # }
+    # else{
+    #   t.test(x,y)
+    # }
     
   })
   
-  # output$levene <- renderPrint({
-  #   
-  #   # input$file1 will be NULL initially. After the user selects
-  #   # and uploads a file, head of that data file by default,
-  #   # or all rows if selected, will be shown.
-  #   
-  #   if(input$fileType=="sampleFile")
-  #   {
-  #     df<-read.csv("toys.csv",
-  #                  header = T,
-  #                  sep = ",")
-  #   }
-  #   else
-  #   {
-  #     req(input$file1) #to require that user upload a file
-  #     tryCatch(
-  #       {
-  #         df <- read.csv(input$file1$datapath,
-  #                        header = input$header,
-  #                        sep = input$sep)
-  #       },
-  #       error = function(e) {
-  #         # return a safeError if a parsing error occurs
-  #         stop(safeError(e))
-  #       }
-  #     )
-  #   }
-  #   
-  #   if (v17$doLevene == FALSE) return()
-  #   
-  #   # extract var as col obj
-  #   # print(v7$gv)
-  #   
-  #   group_val<-unlist(subset(df, select=c(v7$gv)))
-  #   quantity<-unlist(subset(df, select=c(v8$q)))
-  #   
-  #   # , in the end omits default val set to be True
-  #   # # important
-  #   # x = subset(df, select=c(v8$q))[group_val == v14$sel1,]
-  #   # y = subset(df, select=c(v8$q))[group_val == v15$sel2,]
-  #   if (v17$doLevene == FALSE) return()
-  #   
-  #   leveneTest(quantity~group_val,df, center=mean)
-  # })
-  # 
-  # output$fligner <- renderPrint({
-  #   
-  #   # input$file1 will be NULL initially. After the user selects
-  #   # and uploads a file, head of that data file by default,
-  #   # or all rows if selected, will be shown.
-  #   
-  #   if(input$fileType=="sampleFile")
-  #   {
-  #     df<-read.csv("toys.csv",
-  #                  header = T,
-  #                  sep = ",")
-  #   }
-  #   else
-  #   {
-  #     req(input$file1) #to require that user upload a file
-  #     tryCatch(
-  #       {
-  #         df <- read.csv(input$file1$datapath,
-  #                        header = input$header,
-  #                        sep = input$sep)
-  #       },
-  #       error = function(e) {
-  #         # return a safeError if a parsing error occurs
-  #         stop(safeError(e))
-  #       }
-  #     )
-  #   }
-  #   
-  #   if (v18$doFligner == FALSE) return()
-  #   
-  #   # extract var as col obj
-  #   # print(v7$gv)
-  #   
-  #   group_val<-unlist(subset(df, select=c(v7$gv)))
-  #   quantity<-unlist(subset(df, select=c(v8$q)))
-  #   
-  #   # , in the end omits default val set to be True
-  #   # # important
-  #   # x = subset(df, select=c(v8$q))[group_val == v14$sel1,]
-  #   # y = subset(df, select=c(v8$q))[group_val == v15$sel2,]
-  #   if (v18$doFligner == FALSE) return()
-  #   
-  #   fligner.test(quantity~group_val,df)
-  # })
-  # 
-  # output$wilcoxon <- renderPrint({
-  #   
-  #   # input$file1 will be NULL initially. After the user selects
-  #   # and uploads a file, head of that data file by default,
-  #   # or all rows if selected, will be shown.
-  #   
-  #   if(input$fileType=="sampleFile")
-  #   {
-  #     df<-read.csv("toys.csv",
-  #                  header = T,
-  #                  sep = ",")
-  #   }
-  #   else
-  #   {
-  #     req(input$file1) #to require that user upload a file
-  #     tryCatch(
-  #       {
-  #         df <- read.csv(input$file1$datapath,
-  #                        header = input$header,
-  #                        sep = input$sep)
-  #       },
-  #       error = function(e) {
-  #         # return a safeError if a parsing error occurs
-  #         stop(safeError(e))
-  #       }
-  #     )
-  #   }
-  #   
-  #   if (v19$doWilcoxon == FALSE) return()
-  #   
-  #   # extract var as col obj
-  #   # print(v7$gv)
-  #   
-  #   group_val<-unlist(subset(df, select=c(v7$gv)))
-  #   quantity<-unlist(subset(df, select=c(v8$q)))
-  #   
-  #   # , in the end omits default val set to be True
-  #   # # important
-  #   # x = subset(df, select=c(v8$q))[group_val == v14$sel1,]
-  #   # y = subset(df, select=c(v8$q))[group_val == v15$sel2,]
-  #   if (v19$doWilcoxon == FALSE) return()
-  #   
-  #   wilcox.test(quantity~group_val,df)
-  # })
   
-  output$chitest<-renderPrint({
+  output$anovatest<-renderPrint({
     # input$file1 will be NULL initially. After the user selects
     # and uploads a file, head of that data file by default,
     # or all rows if selected, will be shown.
@@ -1181,23 +1053,13 @@ server <- function(input, output,session) {
     req(df)   #really helpful for avoid printing null when file is null
     if (v22$doChi == FALSE) return()
     
-    
-    # extract var as col obj
-    # print(v7$gv)
-    
-    # , in the end omits default val set to be True
-    # # important
-    # x = subset(df, select=c(v8$q))[group_val == v14$sel1,]
-    # y = subset(df, select=c(v8$q))[group_val == v15$sel2,]
-    # if (v22$doChi == FALSE) return()
-    # if(is.null(df)) return()
-    
     validate(
       not_categorical(df,v20$gv1)
       
     )
+    # this we assume that gv2 is quantity
     validate(
-      not_categorical(df,v21$gv2)
+      not_quantity(df,v21$gv2)
     )
     
     # check if two group variables are equal
@@ -1207,17 +1069,22 @@ server <- function(input, output,session) {
     # print(v20$gv1)
     
     group_variable1<-unlist(subset(df, select=c(v20$gv1)))
-    group_variable2<-unlist(subset(df, select=c(v21$gv2)))
+    q_variable2<-unlist(subset(df, select=c(v21$gv2)))
     # print(v22$doChi)
     # print(class(subset(df, select=c(v20$gv1))))
-    dt <- table(group_variable1, group_variable2)
-    ct<-chisq.test(dt)
-    cat("Observed values:\n")
-    print(ct$observed)
-    cat("\n\n\nExpected values:\n")
-    print(ct$expected)
-    cat("\n\n")
-    chisq.test(dt)
+    
+    
+    res.aov <- aov(q_variable2 ~ group_variable1, data = df)
+    summary(res.aov)
+    
+    # # dt <- table(group_variable1, q_variable2)
+    # # ct<-chisq.test(dt)
+    # cat("Observed values:\n")
+    # print(ct$observed)
+    # cat("\n\n\nExpected values:\n")
+    # print(ct$expected)
+    # cat("\n\n")
+    # chisq.test(dt)
     # the test result cannot be assigned to a variable, otherwise it might get some unexpected errors
   })
   
