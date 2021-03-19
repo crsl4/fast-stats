@@ -14,7 +14,7 @@ library(dplyr)
 # Define server logic to read selected file ----
 # global variable
 options(shiny.maxRequestSize=10*1024^2)
-toy<-read.csv("toys.csv",
+toy<-read.csv("2016-brassica.csv",
               header = T,
               sep = ",")
 server <- function(input, output,session) {
@@ -105,59 +105,59 @@ server <- function(input, output,session) {
     }else{
       updateRadioButtons(session, "xaxisGrp",
                          label = "Group Variable",
-                         choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
+                         choices = c("Plant"="Plant","Treatment"="Treatment","Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length"),
                          selected = "")
       updateRadioButtons(session, "yaxisGrp",
                          label = "Quantity",
-                         choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
+                         choices = c("Plant"="Plant","Treatment"="Treatment","Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length"),
                          selected = "")
       updateRadioButtons(session, "groupVar",
                          label = "Group Variable",
-                         choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
+                         choices = c("Plant"="Plant","Treatment"="Treatment","Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length"),
                          selected = "")
       updateRadioButtons(session, "quantity",
                          label = "Quantity",
-                         choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
+                         choices = c("Plant"="Plant","Treatment"="Treatment","Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length"),
                          selected = "")
       updateRadioButtons(session, "gv1",
                          label = "Group Variable",
-                         choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
+                         choices = c("Plant"="Plant","Treatment"="Treatment","Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length"),
                          selected = "")
       updateRadioButtons(session, "gv2",
                          label = "Quantity",
-                         choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
+                         choices = c("Plant"="Plant","Treatment"="Treatment","Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length"),
                          selected = "")
       updateRadioButtons(session, "gvBox",
                          label = "Group Variable 1",
-                         choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
+                         choices = c("Plant"="Plant","Treatment"="Treatment","Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length"),
                          selected = "")
       updateRadioButtons(session, "qBox",
                          label = "Group Variable 2",
-                         choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
+                         choices = c("Plant"="Plant","Treatment"="Treatment","Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length"),
                          selected = "")
       updateRadioButtons(session, "gvMosaic1",
                          label = "Group Variable 1",
-                         choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
+                         choices = c("Plant"="Plant","Treatment"="Treatment","Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length"),
                          selected = "")
       updateRadioButtons(session, "gvMosaic2",
                          label = "Group Variable 2",
-                         choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
+                         choices = c("Plant"="Plant","Treatment"="Treatment","Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length"),
                          selected = "")
       updateRadioButtons(session, "gvScatter",
                          label = "Group Variable",
-                         choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
+                         choices = c("Plant"="Plant","Treatment"="Treatment","Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length"),
                          selected = "")
       updateRadioButtons(session, "qScatter",
                          label = "Quantity",
-                         choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
+                         choices = c("Plant"="Plant","Treatment"="Treatment","Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length"),
                          selected = "")
       updateRadioButtons(session, "gvDensities",
                          label = "Group Variable",
-                         choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
+                         choices = c("Plant"="Plant","Treatment"="Treatment","Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length"),
                          selected = "")
       updateRadioButtons(session, "qDensities",
                          label = "Quantity",
-                         choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
+                         choices = c("Plant"="Plant","Treatment"="Treatment","Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length"),
                          selected = "")
     }
     
@@ -986,7 +986,7 @@ server <- function(input, output,session) {
   # outputOptions(output, 'goMosaic')
   
   
-  
+  # summarise acutally
   output$ttest <- renderPrint({
     
     # input$file1 will be NULL initially. After the user selects
@@ -1015,7 +1015,7 @@ server <- function(input, output,session) {
     q_var<-unlist(subset(df, select=c(v8$q)))
     
     
-    group_by(df,v7$gv) %>%
+    group_by(df,df[[v7$gv]]) %>%
       summarise(
         count = n(),
         mean = mean(q_var, na.rm = TRUE),
@@ -1072,10 +1072,13 @@ server <- function(input, output,session) {
     q_variable2<-unlist(subset(df, select=c(v21$gv2)))
     # print(v22$doChi)
     # print(class(subset(df, select=c(v20$gv1))))
+    # sub=unique(unlist(group_variable1,use.names = F))
+    # print(class(q_variable2))
+    # print(group_variable1)
+    aov.model <- aov(q_variable2 ~ df[[v20$gv1]], data = df)
+    summary(aov.model)
+    # print(aov.model$coefficients)
     
-    
-    res.aov <- aov(q_variable2 ~ group_variable1, data = df)
-    summary(res.aov)
     
     # # dt <- table(group_variable1, q_variable2)
     # # ct<-chisq.test(dt)

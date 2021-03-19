@@ -7,7 +7,7 @@ shinyUI(dashboardPage(
   dashboardHeader(
     
     title= tags$a(href='#',
-                  tags$img(src='fast-stats-logo-yellow-1.png',width=210,height =50)),
+                  tags$img(src='fast-stats-logo-red-1.png',width=210,height =50)),
     tags$li(img(src='red.png',width=10,height =50),class="dropdown"),
     tags$li(img(src='logo.png',width=175,height =50),class="dropdown"),
     tags$li(img(src='red.png',width=10,height =50),class="dropdown"),
@@ -369,7 +369,7 @@ shinyUI(dashboardPage(
                                       tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
                                )
                              ),
-                             # HTML('<p style="color:#808080"> <b>How to interpret the result?</b> If the p-value is less than 0.05, we reject the null hypothesis of equality of means. The confidence interval represents the interval for the difference of means. </p>'),
+                             HTML('<p style="color:#808080"> <b>descriptions come here</b>  </p>'),
                              # HTML('<p style="color:#808080"> <b>Assumptions of t test:</b> The t test assumes normality, equal variance and independence. Take a look at <a href="https://wolfganghuber.shinyapps.io/t-test-normality-and-independence/" target="_blank">this link</a> that illustrate how important normality and independence are in the t test results. </p>'),
             ),
             # chi-square
@@ -385,6 +385,7 @@ shinyUI(dashboardPage(
                                       tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
                                )
                              ),
+                             HTML('<p style="color:#808080"> <b>descriptions come here</b>  </p>'),
                              # HTML('<p style="color:#808080"> <b>How to interpret the result?</b> If the p-value is less than 0.05, we reject the null hypothesis that in the population there is no difference between the classes (reject independence). </p>')
             )#conditionpanel ends
           )#box ends
