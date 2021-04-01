@@ -1013,13 +1013,16 @@ server <- function(input, output,session) {
     
     group_var<-unlist(subset(df, select=c(v7$gv)))
     q_var<-unlist(subset(df, select=c(v8$q)))
+    Group_Variable<-as.factor(group_var)
     
     
-    group_by(df,df[[v7$gv]]) %>%
+    df%>%
+    group_by(df[v7$gv]) %>%
       summarise(
         count = n(),
-        mean = mean(q_var, na.rm = TRUE),
-        sd = sd(q_var, na.rm = TRUE)
+        across(starts_with(v8$q), list(mean=mean,sd=sd)),
+        # mean = mean(q_var, na.rm = TRUE),
+        # sd = sd(q_var, na.rm = TRUE)
       )
     
     # , in the end omits default val set to be True
@@ -1075,8 +1078,11 @@ server <- function(input, output,session) {
     # sub=unique(unlist(group_variable1,use.names = F))
     # print(class(q_variable2))
     # print(group_variable1)
-    aov.model <- aov(q_variable2 ~ df[[v20$gv1]], data = df)
-    summary(aov.model)
+    Quantity<-q_variable2 
+    Group_Variable<-as.factor(group_variable1)
+    # print(v20$gv1)
+    lm.model <- lm( Quantity~ Group_Variable, data = df)
+    summary(lm.model)
     # print(aov.model$coefficients)
     
     

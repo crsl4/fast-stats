@@ -348,7 +348,7 @@ shinyUI(dashboardPage(
           box(
             width = 4, status = "danger",solidHeader = T,
             title = "Data Analysis",
-            selectInput("testType","Test Type",choices =c("Anova Test"=0,"Summarise"=1)),
+            selectInput("testType","Test Type",choices =c("Lm Test"=0,"Summarise"=1)),
             # t-test
             conditionalPanel(condition="input.testType==1",
                              # h4("Data Analysis Option:"),
@@ -363,29 +363,31 @@ shinyUI(dashboardPage(
                              # uiOutput("sel1"),
                              # uiOutput("sel2"),
                              # HTML('<p style="color:#808080"> <b>T test:</b> Statistical test of the null hypothesis of equality of means of a numerical variable ("Quantity") on two groups ("Group variable"). If the selected group variable has more than two categories, the user will select the two groups to compare. </p>'),
+                             HTML('<p style="color:#808080"> <b>summarize test: </b>  </p>'),
                              fluidRow(
                                column(6, align="center", offset = 3,
                                       actionButton("goT", "Summarise"),
                                       tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
                                )
                              ),
-                             HTML('<p style="color:#808080"> <b>descriptions come here</b>  </p>'),
+                             HTML('<p style="color:#808080"> <b>Other descriptions come here</b>  </p>'),
                              # HTML('<p style="color:#808080"> <b>Assumptions of t test:</b> The t test assumes normality, equal variance and independence. Take a look at <a href="https://wolfganghuber.shinyapps.io/t-test-normality-and-independence/" target="_blank">this link</a> that illustrate how important normality and independence are in the t test results. </p>'),
             ),
-            # chi-square
+            # lm test
             conditionalPanel(condition="input.testType==0",
                              fluidRow(
                                column(6,radioButtons("gv1","Group Variable:", c("1"="UnSpecified_Value","2"="UnSpecified_Value"))),
                                column(6,radioButtons("gv2","Quantity Variable:", c("1"="UnSpecified_Value","2"="UnSpecified_Value")))
                              ),
                              # HTML('<p style="color:#808080"> <b>Chi-square test:</b> Pearson\'s chi-square test is used to determine whether there is a statistically significant difference between the expected frequencies and the observed frequencies in one or more categories of a contingency table</p>'),
+                             HTML('<p style="color:#808080"> <b>lm() test:</b>  </p>'),
                              fluidRow(
                                column(6, align="center", offset = 3,
-                                      actionButton("goChi", "Anova Test"),
+                                      actionButton("goChi", "Lm Test"),
                                       tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
                                )
                              ),
-                             HTML('<p style="color:#808080"> <b>descriptions come here</b>  </p>'),
+                             HTML('<p style="color:#808080"> <b>Other descriptions come here: maybe need to interpret what intercept means to the users</b>  </p>'),
                              # HTML('<p style="color:#808080"> <b>How to interpret the result?</b> If the p-value is less than 0.05, we reject the null hypothesis that in the population there is no difference between the classes (reject independence). </p>')
             )#conditionpanel ends
           )#box ends
