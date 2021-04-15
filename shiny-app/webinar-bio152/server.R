@@ -14,9 +14,10 @@ library(dplyr)
 # Define server logic to read selected file ----
 # global variable
 options(shiny.maxRequestSize=10*1024^2)
-toy<-read.csv("2016-brassica.csv",
+toy<-read.csv("2016-brassica-new.csv",
               header = T,
               sep = ",")
+# toy<-subset(toy, experiment==v54$sec1)
 server <- function(input, output,session) {
   # #################################### 
   dsnames<-c() #a vector to store col names
@@ -102,6 +103,10 @@ server <- function(input, output,session) {
                          label = "Quantity",
                          choices = cb_options,
                          selected = "")
+      updateRadioButtons(session, "section",
+                         label = "Choose which column of data to filter",
+                         choices = cb_options,
+                         selected = "")
     }else{
       updateRadioButtons(session, "xaxisGrp",
                          label = "Group Variable",
@@ -158,6 +163,10 @@ server <- function(input, output,session) {
       updateRadioButtons(session, "qDensities",
                          label = "Quantity",
                          choices = c("Plant"="Plant","Treatment"="Treatment","Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length"),
+                         selected = "")
+      updateRadioButtons(session, "section",
+                         label = "Choose which column of data to filter",
+                         choices = c("Plant"="Plant","Treatment"="Treatment","Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length","Experiment"="Experiment"),
                          selected = "")
     }
     
@@ -505,7 +514,16 @@ server <- function(input, output,session) {
   observeEvent(input$colorDensities,{
     v52$colorDensities<-input$colorDensities
   })
-  
+  v53<-reactiveValues(section=0)
+  observeEvent(input$section,{
+    v53$section<-input$section
+  })
+  v54 <- reactiveValues(sec1 =0)
+  observeEvent(input$sec1, {
+    # 0 will be coerced to FALSE
+    # 1+ will be coerced to TRUE
+    v54$sec1<- input$sec1
+  })
   
   not_equalGV<-function(input1, input2){
     if(strcmp(input1, input2)){
@@ -589,12 +607,15 @@ server <- function(input, output,session) {
     if(input$fileType=="sampleFile")
     {
       df<- toy
+     
     }
     else
     {
       df<-data_set()
     }
-    
+    # choice<-v54$sec1
+    # colName<-v53$section
+    # df1<-subset(df, colName==choice)
     
     if(input$disp == "head") {
       return(head(df))
@@ -965,6 +986,27 @@ server <- function(input, output,session) {
     
   })
   
+  output$sec1<-renderUI({
+    if(input$fileType=="sampleFile")
+    {
+      df<- toy
+    }
+    else
+    {
+      df<-data_set()
+    }
+    
+    # if (v7$gv == "") return()
+    if(v53$section=="UnSpecified_Value") return()
+    
+    group_list<-unlist(subset(df, select=c(v53$section)))
+    
+    selectInput("group1","Category Selected:",choices=as.character(unique(unlist(group_list,use.names = F))))
+    # dont know why cant I put two select input in one uioutput method
+    # v54$sec1
+    # df= subset(df, select==v54$sec1 )
+  })
+  
   output$goMosaic<-renderUI({
     
     if(input$fileType=="sampleFile")
@@ -1025,6 +1067,7 @@ server <- function(input, output,session) {
         # sd = sd(q_var, na.rm = TRUE)
       )
     
+    
     # , in the end omits default val set to be True
     # # important
     # x = subset(df, select=c(v8$q))[group_val == v14$sel1,]
@@ -1056,10 +1099,9 @@ server <- function(input, output,session) {
     req(df)   #really helpful for avoid printing null when file is null
     if (v22$doChi == FALSE) return()
     
-    validate(
       not_categorical(df,v20$gv1)
       
-    )
+    
     # this we assume that gv2 is quantity
     validate(
       not_quantity(df,v21$gv2)
@@ -1080,7 +1122,8 @@ server <- function(input, output,session) {
     # print(group_variable1)
     Quantity<-q_variable2 
     Group_Variable<-as.factor(group_variable1)
-    # print(v20$gv1)
+    cat(sprintf('Quantity is %s \n',v20$gv1))
+    cat(sprintf('Group_Variable is %s \n', v21$gv2))
     lm.model <- lm( Quantity~ Group_Variable, data = df)
     summary(lm.model)
     # print(aov.model$coefficients)

@@ -123,6 +123,12 @@ shinyUI(dashboardPage(
                                choices = c(Head = "head",
                                            All = "all"),
                                selected = "head"),
+                  
+                  radioButtons("section","Choose which column of data to filter",
+                               choices = c("1"="1","2"="2"),
+                               selected = ""),
+                  
+                  uiOutput("sec1")
                 )
               )
       ),
