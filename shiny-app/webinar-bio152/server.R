@@ -519,10 +519,10 @@ server <- function(input, output,session) {
     v53$section<-input$section
   })
   v54 <- reactiveValues(sec1 =0)
-  observeEvent(input$sec1, {
+  observeEvent(input$choice1, {
     # 0 will be coerced to FALSE
     # 1+ will be coerced to TRUE
-    v54$sec1<- input$sec1
+    v54$choice1<- input$choice1
   })
   
   not_equalGV<-function(input1, input2){
@@ -591,6 +591,8 @@ server <- function(input, output,session) {
     # or all rows if selected, will be shown.
     
     df<-data_set()
+    choice<-v54$choice1
+    df<-df[df$Experiment==choice, c(1:ncol(df))]
     
     if (v3$doSummary == FALSE) return()
     
@@ -607,7 +609,9 @@ server <- function(input, output,session) {
     if(input$fileType=="sampleFile")
     {
       df<- toy
-     
+      choice<-v54$choice1
+      df<-df[df$Experiment==choice,c(1:ncol(df))]
+      # , c("Plant","Treatment","Root_length_mm","Shoot_length_mm","Root_to_Shoot_ratio","Total_length","Experiment")
     }
     else
     {
@@ -616,7 +620,7 @@ server <- function(input, output,session) {
     # choice<-v54$sec1
     # colName<-v53$section
     # df1<-subset(df, colName==choice)
-    
+   
     if(input$disp == "head") {
       return(head(df))
     }
@@ -637,12 +641,16 @@ server <- function(input, output,session) {
     if(input$fileType=="sampleFile")
     {
       df<- toy
+      choice<-v54$choice1
+      df<-df[df$Experiment==choice, c(1:ncol(df))]
     }
     else
     {
       df<-data_set()
     }
     req(df)
+   
+    # print(df)
     if (v$doViolinPlot == FALSE) return()
     # fill should contain x var
     
@@ -691,12 +699,15 @@ server <- function(input, output,session) {
     if(input$fileType=="sampleFile")
     {
       df<- toy
+      choice<-v54$choice1
+      df<-df[df$Experiment==choice, c(1:ncol(df))]
     }
     else
     {
       df<-data_set()
     }
     req(df)
+   
     if (v27$doMosaic == FALSE) return()
     # fill should contain x var
     
@@ -740,12 +751,15 @@ server <- function(input, output,session) {
     if(input$fileType=="sampleFile")
     {
       df<- toy
+      choice<-v54$choice1
+      df<-df[df$Experiment==choice, c(1:ncol(df))]
     }
     else
     {
       df<-data_set()
     }
     req(df)
+    
     if (v2$doHist == FALSE) return()
     
     # print(subset(df, select=c(v5$xv)))
@@ -999,9 +1013,9 @@ server <- function(input, output,session) {
     # if (v7$gv == "") return()
     if(v53$section=="UnSpecified_Value") return()
     
-    group_list<-unlist(subset(df, select=c(v53$section)))
+    group_list<-unlist(subset(df, select=c(Experiment)))
     
-    selectInput("group1","Category Selected:",choices=as.character(unique(unlist(group_list,use.names = F))))
+    selectInput("choice1","Experiment Selected:",choices=as.character(unique(unlist(group_list,use.names = F))))
     # dont know why cant I put two select input in one uioutput method
     # v54$sec1
     # df= subset(df, select==v54$sec1 )
@@ -1018,6 +1032,8 @@ server <- function(input, output,session) {
       df<-data_set()
     }
     # req(df)
+    choice<-v54$sec1
+    df<-subset(df, Experiment==choice)
     fluidRow(
       column(6, align="center", offset = 3,
              actionButton("goMosaic", "Mosaic Plot"),
@@ -1038,6 +1054,8 @@ server <- function(input, output,session) {
     if(input$fileType=="sampleFile")
     {
       df<- toy
+      choice<-v54$choice1
+      df<-df[df$Experiment==choice, c(1:ncol(df))]
     }
     else
     {
@@ -1091,6 +1109,8 @@ server <- function(input, output,session) {
     if(input$fileType=="sampleFile")
     {
       df<- toy
+      choice<-v54$choice1
+      df<-df[df$Experiment==choice, c(1:ncol(df))]
     }
     else
     {

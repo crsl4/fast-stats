@@ -118,17 +118,18 @@ shinyUI(dashboardPage(
                                    HTML('<p style="color:#808080">The sample data included here mimics the structure of a dataset the students will have after following the experiments described in the webinar. Each row corresponds to a plant, and we count the number of cotelydons. The generation column identifies if the plant is "parent" (p) or "offspring" (O). The parents column shows which were the parents of that plant. For example, 2x2 means that both parents had 2 cotelydons. </p>'),
                                    
                   ),
+                  uiOutput("sec1"),
                   # Input: Select number of rows to display ----
                   radioButtons("disp","Choose to show 'head' or 'all'",
                                choices = c(Head = "head",
                                            All = "all"),
                                selected = "head"),
                   
-                  radioButtons("section","Choose which column of data to filter",
-                               choices = c("1"="1","2"="2"),
-                               selected = ""),
+                  # radioButtons("section","Choose which column of data to filter",
+                  #              choices = c("1"="1","2"="2"),
+                  #              selected = ""),
                   
-                  uiOutput("sec1")
+                  
                 )
               )
       ),
