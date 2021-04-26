@@ -194,6 +194,8 @@ server <- function(input, output,session) {
       df<-data_set()
     }
     validate(not_empty(df))
+    validate(not_exp(df))
+    validate(not_big_dataset(df))
     v$doViolinPlot <- input$goViolin
     
   })
@@ -225,6 +227,8 @@ server <- function(input, output,session) {
       df<-data_set()
     }
     validate(not_empty(df))
+    validate(not_exp(df))
+    validate(not_big_dataset(df))
     # 0 will be coerced to FALSE
     # 1+ will be coerced to TRUE
     v4$doT <- input$goT
@@ -262,6 +266,8 @@ server <- function(input, output,session) {
       df<-data_set()
     }
     validate(not_empty(df))
+    validate(not_exp(df))
+    validate(not_big_dataset(df))
     # 0 will be coerced to FALSE
     # 1+ will be coerced to TRUE
     v9$doScatter <- input$goScatter
@@ -280,6 +286,8 @@ server <- function(input, output,session) {
       df<-data_set()
     }
     validate(not_empty(df))
+    validate(not_exp(df))
+    validate(not_big_dataset(df))
     v10$doBox <- input$goBox
   })
   
@@ -373,6 +381,8 @@ server <- function(input, output,session) {
       df<-data_set()
     }
     validate(not_empty(df))
+    validate(not_exp(df))
+    validate(not_big_dataset(df))
     # 0 will be coerced to FALSE
     # 1+ will be coerced to TRUE
     v22$doChi <- input$goChi
@@ -406,6 +416,8 @@ server <- function(input, output,session) {
       df<-data_set()
     }
     validate(not_empty(df))
+    validate(not_exp(df))
+    validate(not_big_dataset(df))
     v27$doMosaic <- input$goMosaic
   })
   v28 <- reactiveValues(doAddPoints2 =T)
@@ -584,6 +596,20 @@ server <- function(input, output,session) {
     }
   }
   
+  not_exp<-function(df){
+    if("Experiment" %in% colnames(df)){
+      
+    }else{
+      showNotification("Please upload a file that contains \"Experiment\" column!", duration=3, type="error")
+    }
+  }
+  
+  not_big_dataset<-function(df){
+    if(nrow(df)<15){
+      showNotification("Please make sure that the Experiment you've selected contain at least 15 rows!", duration=3, type="error")
+    }
+  }
+  
   output$summary <- renderPrint({
     
     # input$file1 will be NULL initially. After the user selects
@@ -616,11 +642,14 @@ server <- function(input, output,session) {
     else
     {
       df<-data_set()
+      # not_exp(df)
+      # choice<-v54$choice1
+      # df<-df[df$Experiment==choice,c(1:ncol(df))]
     }
     # choice<-v54$sec1
     # colName<-v53$section
     # df1<-subset(df, colName==choice)
-   
+    # validate(not_exp(df))
     if(input$disp == "head") {
       return(head(df))
     }
@@ -646,9 +675,13 @@ server <- function(input, output,session) {
     }
     else
     {
-      df<-data_set()
+      df<-data_set
+      validate(not_exp(df))
+      choice<-v54$choice1
+      df<-df[df$Experiment==choice, c(1:ncol(df))]
     }
     req(df)
+    validate(not_big_dataset(df))
    
     # print(df)
     if (v$doViolinPlot == FALSE) return()
@@ -696,6 +729,7 @@ server <- function(input, output,session) {
     # and uploads a file, head of that data file by default,
     # or all rows if selected, will be shown.
     
+    
     if(input$fileType=="sampleFile")
     {
       df<- toy
@@ -705,8 +739,12 @@ server <- function(input, output,session) {
     else
     {
       df<-data_set()
+      validate(not_exp(df))
+      choice<-v54$choice1
+      df<-df[df$Experiment==choice, c(1:ncol(df))]
     }
     req(df)
+    validate(not_big_dataset(df))
    
     if (v27$doMosaic == FALSE) return()
     # fill should contain x var
@@ -748,6 +786,7 @@ server <- function(input, output,session) {
   
   output$histogram <- renderPlotly({
     
+    
     if(input$fileType=="sampleFile")
     {
       df<- toy
@@ -757,8 +796,12 @@ server <- function(input, output,session) {
     else
     {
       df<-data_set()
+      validate(not_exp(df))
+      choice<-v54$choice1
+      df<-df[df$Experiment==choice, c(1:ncol(df))]
     }
     req(df)
+    validate(not_big_dataset(df))
     
     if (v2$doHist == FALSE) return()
     
@@ -795,15 +838,22 @@ server <- function(input, output,session) {
   })
   
   output$scatterPlot<-renderPlotly({
+    
     if(input$fileType=="sampleFile")
     {
       df<- toy
+      choice<-v54$choice1
+      df<-df[df$Experiment==choice, c(1:ncol(df))]
     }
     else
     {
       df<-data_set()
+      validate(not_exp(df))
+      choice<-v54$choice1
+      df<-df[df$Experiment==choice, c(1:ncol(df))]
     }
     req(df)
+    validate(not_big_dataset(df))
     if (v9$doScatter == FALSE) return()
     
     validate(
@@ -850,14 +900,22 @@ server <- function(input, output,session) {
   
   output$boxPlot <- renderPlotly({
     
+    
     if(input$fileType=="sampleFile")
     {
       df<- toy
+      choice<-v54$choice1
+      df<-df[df$Experiment==choice, c(1:ncol(df))]
     }
     else
     {
       df<-data_set()
+      validate(not_exp(df))
+      choice<-v54$choice1
+      df<-df[df$Experiment==choice, c(1:ncol(df))]
     }
+    req(df)
+    validate(not_big_dataset(df))
     
     if (v10$doBox == FALSE) return()
     # print(v23$gvBox)
@@ -910,15 +968,23 @@ server <- function(input, output,session) {
   
   output$densities<- renderPlotly({
     
+    
     if(input$fileType=="sampleFile")
     {
       df<- toy
+      choice<-v54$choice1
+      df<-df[df$Experiment==choice, c(1:ncol(df))]
     }
     else
     {
       df<-data_set()
+      validate(not_exp(df))
+      choice<-v54$choice1
+      df<-df[df$Experiment==choice, c(1:ncol(df))]
     }
     req(df)
+    validate(not_big_dataset(df))
+    
     if (v11$doDensities == FALSE) return()
     
     validate(
@@ -1051,6 +1117,7 @@ server <- function(input, output,session) {
     # and uploads a file, head of that data file by default,
     # or all rows if selected, will be shown.
     
+    
     if(input$fileType=="sampleFile")
     {
       df<- toy
@@ -1060,8 +1127,13 @@ server <- function(input, output,session) {
     else
     {
       df<-data_set()
+      validate(not_exp(df))
+      choice<-v54$choice1
+      df<-df[df$Experiment==choice, c(1:ncol(df))]
     }
     req(df)
+    validate(not_big_dataset(df))
+    
     if (v4$doT == FALSE) return()
     # check to see if group variable is categorical
     validate(
@@ -1083,20 +1155,9 @@ server <- function(input, output,session) {
         across(starts_with(v8$q), list(mean=mean,sd=sd)),
         # mean = mean(q_var, na.rm = TRUE),
         # sd = sd(q_var, na.rm = TRUE)
-      )
+      )%>% print( n=Inf)
     
     
-    # , in the end omits default val set to be True
-    # # important
-    # x = subset(df, select=c(v8$q))[group_val == v14$sel1,]
-    # y = subset(df, select=c(v8$q))[group_val == v15$sel2,]
-    # check if two group variables are equal
-    # if(v16$doEqualVar==T){
-    #   t.test(x,y,var.equal = T)
-    # }
-    # else{
-    #   t.test(x,y)
-    # }
     
   })
   
@@ -1105,6 +1166,7 @@ server <- function(input, output,session) {
     # input$file1 will be NULL initially. After the user selects
     # and uploads a file, head of that data file by default,
     # or all rows if selected, will be shown.
+    
     
     if(input$fileType=="sampleFile")
     {
@@ -1115,8 +1177,13 @@ server <- function(input, output,session) {
     else
     {
       df<-data_set()
+      validate(not_exp(df))
+      choice<-v54$choice1
+      df<-df[df$Experiment==choice, c(1:ncol(df))]
     }
-    req(df)   #really helpful for avoid printing null when file is null
+    req(df)
+    validate(not_big_dataset(df))
+    #really helpful for avoid printing null when file is null
     if (v22$doChi == FALSE) return()
     
       not_categorical(df,v20$gv1)

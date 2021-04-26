@@ -98,7 +98,8 @@ shinyUI(dashboardPage(
                                              accept = c("text/csv",
                                                         "text/comma-separated-values,text/plain",
                                                         ".csv")),
-                                   HTML('<p style="color:#808080"> <b>danger:</b> The maximum file size should not exceed <b>10MB</b></p>'),
+                                   HTML('<p style="color:#808080"> <b>Notice:</b> The maximum file size should not exceed <b>10MB</b></p>'),
+                                   HTML('<p style="color:#808080"> <b>Notice:</b> The uploaded file must have a column named<b> Experiment</b></p>'),
                                    
                                    # Input: Checkbox if file has header ----
                                    tags$p("Click the checkbox if file has a header:"),
@@ -119,6 +120,7 @@ shinyUI(dashboardPage(
                                    
                   ),
                   uiOutput("sec1"),
+                  HTML('<p style="color:#808080"> <b>Notice:</b> The number of rows for the <b>Experiment</b> you have selected must be at least <b>15</b></p>'),
                   # Input: Select number of rows to display ----
                   radioButtons("disp","Choose to show 'head' or 'all'",
                                choices = c(Head = "head",
