@@ -1152,10 +1152,19 @@ server <- function(input, output,session) {
     group_by(df[v7$gv]) %>%
       summarise(
         count = n(),
-        across(starts_with(v8$q), list(mean=mean,sd=sd)),
+        across(starts_with(v8$q), list(mean=mean)),
         # mean = mean(q_var, na.rm = TRUE),
         # sd = sd(q_var, na.rm = TRUE)
-      )%>% print( n=Inf)
+      )%>% print()
+    
+    df%>%
+      group_by(df[v7$gv]) %>%
+      summarise(
+        # count = n(),
+        across(starts_with(v8$q), list(sd=sd)),
+        # mean = mean(q_var, na.rm = TRUE),
+        # sd = sd(q_var, na.rm = TRUE)
+      )%>% print()
     
     
     
