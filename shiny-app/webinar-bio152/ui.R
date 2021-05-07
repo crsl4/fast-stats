@@ -61,13 +61,15 @@ shinyUI(dashboardPage(
     tabItems(
       tabItem("about",
               box( width=12, status="danger",solidHeader = T,
-                   title = "Welcome to the WI Fast Stats app: Cotelydon!",
+                   title = "Welcome to the WI Fast Stats web-app for IntroBio!",
                    
                    h4(HTML( 'WI Fast Stats is the <a href="https://github.com/crsl4/fast-stats" target="_blank">open-source</a> publicly available web app to analyze data from <a href="https://fastplants.org/" target="_blank">WI Fast Plants</a>.')),
 
-                   h4(HTML( 'This web app is the accompanying tool for the WI Fast Plants webinar: <a href="https://fastplants.org/2020/08/06/new-fast-plants-polycots-selection/" target="_blank"><i>Strategies for adapting WI Fast Plants selection of traits investigations for remote and social distance learning</i></a>.')),
-                   
-                   h4(HTML( 'A video of the Data Analysis part can be found <a href="https://www.currikistudio.org/playlist/6155/activity/167241/preview/lti" target="_blank">here</a>.'))
+                   h4(HTML( 'This web app is the accompanying tool for the UW-Madison class: <a href="https://introbio.integrativebiology.wisc.edu/" target="_blank">Introductory Biology 151/153-152</a>.')),
+
+                   h4(HTML( 'A 9-minute tutorial of the WI Fast Stats web app can be found <a href="https://www.youtube.com/watch?v=6vX3mVXcK4s&t=4s" target="_blank">here</a>.')),
+                                      
+                   h4(HTML( 'For more information, a video of the Data Analysis part of a WI Fast Plants webinar can be found <a href="https://www.currikistudio.org/playlist/6155/activity/167241/preview/lti" target="_blank">here</a>.'))
                    
                    ),
       ),
@@ -91,15 +93,15 @@ shinyUI(dashboardPage(
                   
                   conditionalPanel(condition="input.fileType=='uploadFile'", 
                                    
-                                   HTML('<p style="color:#808080">Data in delimited text files can be separated by comma, tab or semicolon. For example, Excel data can be exported in .csv (comma separated) or .tab (tab separated) format </p>'),
+                                   HTML('<p style="color:#808080">Data in delimited text files can be separated by comma, tab or semicolon. For example, Excel data can be exported in .csv (comma separated) or .tab (tab separated) format. A template of the spreadsheet can be found <a href="https://docs.google.com/spreadsheets/d/12fEIaSCUdT8s16jPEZ3grV6pQeWsy6pcHtwuRlbW5JM/edit?usp=sharing" target="_blank">here</a> </p>'),
                                    
                                    fileInput("file1", "Choose CSV File or Drag the file here",
                                              multiple = FALSE,
                                              accept = c("text/csv",
                                                         "text/comma-separated-values,text/plain",
                                                         ".csv")),
-                                   HTML('<p style="color:#808080"> <b>Notice:</b> The maximum file size should not exceed <b>10MB</b></p>'),
-                                   HTML('<p style="color:#808080"> <b>Notice:</b> The uploaded file must have a column named<b> Experiment</b></p>'),
+                                   HTML('<p style="color:#808080"> <b>Warning:</b> The maximum file size should not exceed <b>10MB</b></p>'),
+                                   HTML('<p style="color:#808080"> <b>Warning:</b> The uploaded file must have a column named<b> Experiment</b>. A template of the spreadsheet can be found <a href="https://docs.google.com/spreadsheets/d/12fEIaSCUdT8s16jPEZ3grV6pQeWsy6pcHtwuRlbW5JM/edit?usp=sharing" target="_blank">here</a></p>'),
                                    
                                    # Input: Checkbox if file has header ----
                                    tags$p("Click the checkbox if file has a header:"),
@@ -116,13 +118,13 @@ shinyUI(dashboardPage(
                   ),
                   
                   conditionalPanel(condition="input.fileType=='sampleFile'", 
-                                   HTML('<p style="color:#808080">The sample data included here mimics the structure of a dataset the students will have after following the experiments described in the webinar. Each row corresponds to a plant, and we count the number of cotelydons. The generation column identifies if the plant is "parent" (p) or "offspring" (O). The parents column shows which were the parents of that plant. For example, 2x2 means that both parents had 2 cotelydons. </p>'),
+                                   HTML('<p style="color:#808080">The sample data included here mimics the structure of a dataset the students will have after following the experiments in class. A template of the spreadsheet can be found <a href="https://docs.google.com/spreadsheets/d/12fEIaSCUdT8s16jPEZ3grV6pQeWsy6pcHtwuRlbW5JM/edit?usp=sharing" target="_blank">here</a>. </p>'),
                                    
                   ),
                   uiOutput("sec1"),
-                  HTML('<p style="color:#808080"> <b>Notice:</b> The number of rows for the <b>Experiment</b> you have selected must be at least <b>15</b></p>'),
+                  HTML('<p style="color:#808080"> When the dataset contains information from multiple experiments, you can select which experiment you want to focus on for the plots. <b>Important:</b> The number of plants (rows) for the <b>Experiment</b> you have selected must be at least <b>15</b> for some of the plots to be displayed properly</p>'),
                   # Input: Select number of rows to display ----
-                  radioButtons("disp","Choose to show 'head' or 'all'",
+                  radioButtons("disp","Choose to display on the left panel all the data ('all') or just the top rows ('head')",
                                choices = c(Head = "head",
                                            All = "all"),
                                selected = "head"),
@@ -357,7 +359,7 @@ shinyUI(dashboardPage(
           box(
             width = 4, status = "danger",solidHeader = T,
             title = "Data Analysis",
-            selectInput("testType","Test Type",choices =c("Lm Test"=0,"Summarise"=1)),
+            selectInput("testType","Test Type",choices =c("Linear model test"=0,"Summarize"=1)),
             # t-test
             conditionalPanel(condition="input.testType==1",
                              # h4("Data Analysis Option:"),
@@ -372,14 +374,14 @@ shinyUI(dashboardPage(
                              # uiOutput("sel1"),
                              # uiOutput("sel2"),
                              # HTML('<p style="color:#808080"> <b>T test:</b> Statistical test of the null hypothesis of equality of means of a numerical variable ("Quantity") on two groups ("Group variable"). If the selected group variable has more than two categories, the user will select the two groups to compare. </p>'),
-                             HTML('<p style="color:#808080"> <b>summarize test: </b>  </p>'),
+                             HTML('<p style="color:#808080"> <b>Statistical summary:</b> We present a table with the number of plants (count), average (mean) and standard deviation (sd) for the selected plant phenotype (Quantity) by different treatments (Group Variable) </p>'),
                              fluidRow(
                                column(6, align="center", offset = 3,
-                                      actionButton("goT", "Summarise"),
+                                      actionButton("goT", "Summarize"),
                                       tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
                                )
                              ),
-                             HTML('<p style="color:#808080"> <b>Other descriptions come here</b>  </p>'),
+                             #HTML('<p style="color:#808080"> <b>Other descriptions come here</b>  </p>'),
                              # HTML('<p style="color:#808080"> <b>Assumptions of t test:</b> The t test assumes normality, equal variance and independence. Take a look at <a href="https://wolfganghuber.shinyapps.io/t-test-normality-and-independence/" target="_blank">this link</a> that illustrate how important normality and independence are in the t test results. </p>'),
             ),
             # lm test
@@ -389,14 +391,14 @@ shinyUI(dashboardPage(
                                column(6,radioButtons("gv2","Quantity Variable:", c("1"="UnSpecified_Value","2"="UnSpecified_Value")))
                              ),
                              # HTML('<p style="color:#808080"> <b>Chi-square test:</b> Pearson\'s chi-square test is used to determine whether there is a statistically significant difference between the expected frequencies and the observed frequencies in one or more categories of a contingency table</p>'),
-                             HTML('<p style="color:#808080"> <b>lm() test:</b>  </p>'),
+                             HTML('<p style="color:#808080"> <b>Linear model test:</b> We test whether different treatments (Group Variable) have different values of a measured plant phenotype (Quantity) with a t test.</p>'),
                              fluidRow(
                                column(6, align="center", offset = 3,
-                                      actionButton("goChi", "Lm Test"),
+                                      actionButton("goChi", "Linear model test"),
                                       tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
                                )
                              ),
-                             HTML('<p style="color:#808080"> <b>Other descriptions come here: maybe need to interpret what intercept means to the users</b>  </p>'),
+                             HTML('<p style="color:#808080"> <b>How to interpret the result?</b> The group variable represents the different treatments in the experiment which is internally encoded as binary variables. For example, for the light experiment in the sample data, there are two treatments: light (L) and dark (D). In the coefficients table, there is an intercept which corresponds to the average estimated quantity (whatever plant phenotype chosen) for the dark treatment, and a Group_VariableL which corresponds to the difference in averages between the dark treatment and the light treatment. If this coefficient is close to zero, then we do not have evidence of different plant phenotypes on different treatments. </p>'),
                              # HTML('<p style="color:#808080"> <b>How to interpret the result?</b> If the p-value is less than 0.05, we reject the null hypothesis that in the population there is no difference between the classes (reject independence). </p>')
             )#conditionpanel ends
           )#box ends
@@ -407,19 +409,19 @@ shinyUI(dashboardPage(
               box( width=12, status="danger",solidHeader = T,
                    title="Frequently Asked Questions",
                    h4("Q: How to get help? "), 
-                   p(HTML('<b>A: Check out the WI Fast Stats google user group where people post questions/answers. You can join to post questions: <a href="https://groups.google.com/g/wi-fast-stats/">https://groups.google.com/g/wi-fast-stats</a></b>')),
-                   h4("Q: Where can I find the information about the WI Fast Plants Webinar?"),  
-                   p(HTML('<b>A: WI Fast Plants webinar: <a href="https://fastplants.org/2020/08/06/new-fast-plants-polycots-selection/" target="_blank"><i>Strategies for adapting WI Fast Plants selection of traits investigations for remote and social distance learning</i></a>.</b>')),
-                   h4("Q: Where can I find the webinar slides for the Data science part?"),
-                   p(HTML('<b>A: The webinar slides are in the WI Fast Stats github repo <a href="https://github.com/crsl4/fast-stats/blob/master/slides/aug20-cotelydon.pdf" target="_blank">here</a></b>')),
+                   p(HTML('A: Check out the WI Fast Stats google user group where people post questions/answers. You can join to post questions: <a href="https://groups.google.com/g/wi-fast-stats/">https://groups.google.com/g/wi-fast-stats</a>')),
+                   h4("Q: Where can I find a short tutorial for this class web app?"),  
+                   p(HTML('A: A 9-minute tutorial of the WI Fast Stats web app can be found <a href="https://www.youtube.com/watch?v=6vX3mVXcK4s&t=4s" target="_blank">here</a>')),
+                   h4("Q: Where can I find the WI Fast Plants webinar slides and video for the Data science part?"),
+                   p(HTML('A: The webinar slides are in the WI Fast Stats github repo <a href="https://github.com/crsl4/fast-stats/blob/master/slides/aug20-cotelydon.pdf" target="_blank">here</a> and the video can be found <a href="https://www.currikistudio.org/playlist/6155/activity/167241/preview/lti" target="_blank">here</a>')),
                    h4("Q: I found a bug or error in the code, how can I report it?"),
-                   p(HTML('<b>A: You should file an issue in the github repo: <a href="https://github.com/crsl4/fast-stats/issues" target="_blank">https://github.com/crsl4/fast-stats/issues</a></b>')),
+                   p(HTML('A: You should file an issue in the github repo: <a href="https://github.com/crsl4/fast-stats/issues" target="_blank">https://github.com/crsl4/fast-stats/issues</a>')),
                    h4("Q: How can I provide positive (or constructive) feedback?"),
-                   p(HTML(' <b>A: Users feedback is very important to us! Please use <a href="https://forms.gle/PQS92afdhLHwK6kG6" target="_blank">this form </a></b>')),
+                   p(HTML('A: Users feedback is very important to us! Please use <a href="https://forms.gle/PQS92afdhLHwK6kG6" target="_blank">this form </a>')),
                    h4("Q: If I use the website and web apps in my work, how do I cite them?"),
-                   p(HTML('<b>  A: If you use the website or web apps in your work, we ask that you cite <a href="https://arxiv.org/abs/2012.03290" target="_blank">this paper </a></b>')),
+                   p(HTML('A: If you use the website or web apps in your work, we ask that you cite <a href="https://arxiv.org/abs/2012.03290" target="_blank">this paper </a>')),
                    h4("Q: Color Palettes Charts: "), 
-                   p(HTML('<b>A: The colors palettes here shown come from <a href="https://cran.r-project.org/web/packages/RColorBrewer/index.html" target="_blank">ColorBrewer</a></b>')),
+                   p(HTML('A: The colors palettes here shown come from <a href="https://cran.r-project.org/web/packages/RColorBrewer/index.html" target="_blank">ColorBrewer</a>')),
                    img(src="color_palettes.png",width=525, height=671),
                  
               )
