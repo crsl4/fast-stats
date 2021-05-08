@@ -1218,8 +1218,8 @@ server <- function(input, output,session) {
     # print(group_variable1)
     Quantity<-q_variable2 
     Group_Variable<-as.factor(group_variable1)
-    cat(sprintf('Quantity is %s \n',v20$gv1))
-    cat(sprintf('Group_Variable is %s \n', v21$gv2))
+    cat(sprintf('Group_Variable is: %s \n',v20$gv1 ))
+    cat(sprintf('Quantity is: %s \n',v21$gv2)) 
     lm.model <- lm( Quantity~ Group_Variable, data = df)
     summary(lm.model)
     # print(aov.model$coefficients)
