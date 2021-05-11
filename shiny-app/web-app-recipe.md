@@ -7,7 +7,7 @@ For contributors within the Solis-Lemus lab: if you are interested to add a new 
 1. You can copy the existing folder from one of the web apps e.g. `webinar-aug20` since these folders already have the right structure and web app format. You can choose the web-app that has some of the features that you need (e.g. in terms of Data Visualization or Data Analysis)
 
 2. You need to change the `ui.R` file which is what the users see and `server.R` file which is the internal code that runs the plots and data analyses.
-    - Make sure to read the official `R shiny` and `shiny dashboard` documentation before making any changes
+  - Make sure to read the official `R shiny` and `shiny dashboard` documentation before making any changes
 
 3. The `ui.R` file controls what the users see. We refer to [`ui.R` file in the `webinar-aug20` example](https://github.com/crsl4/fast-stats/blob/master/shiny-app/webinar-aug20/ui.R) for the following lines of code:
   - If you want to change the color of the web-app, you do that in `ui.R`. For example, in the `ui.R` file in the `webinar-aug20` folder, in line 6 and also in line 63: the variable `status` specifies the color of the web-app. For example, `status="danger"` is a red color
