@@ -8,7 +8,7 @@ The main website consists of 6 sections:
 * [Web Apps](#web-apps)
 * [Webinars](#webinars)
 * [Source Code](#source-code)
-* [FAQ](#faq)
+* [FAQ-website](#faq-website)
 
 ## Home
 The Home page is a collection of animation using WI Fast Plants photos.
@@ -30,7 +30,7 @@ The Webinars page displays a timeline for all the WI Fast Plant webinars held so
 The Source Code page presents the link to the Github repository.
 ![source-code](https://github.com/crsl4/fast-stats/blob/master/figures/sourcecode_web.png?raw=true)
 
-## FAQ
+## FAQ-website
 As intended, the FAQ section contains questions and answers related to web apps and webinars. 
 
 ![faq-web](https://github.com/crsl4/fast-stats/blob/master/figures/faq_web.png?raw=true)
@@ -43,7 +43,7 @@ The web app consists of four main tabs:
 * [Data Upload](#data-upload)
 * [Data Visualization](#data-visualization)
 * [Data Analysis](#data-analysis)
-* [FAQ](#faq2)
+* [FAQ-webapp](#faq-webapp)
 
 ![Home](https://github.com/crsl4/fast-stats/blob/master/figures/home.png?raw=true) 
 
@@ -94,8 +94,7 @@ The Data Analysis section also depends on the specific web app. For example, the
 ![Tests](https://github.com/crsl4/fast-stats/blob/master/figures/ttest.png?raw=true)
 
 
-
-## FAQ {##faq2}
+## FAQ-webapp
 Finally, click FAQ in the sidepanel to see more related information about this app and the webinars. 
 
 ![faq](https://github.com/crsl4/fast-stats/blob/master/figures/faq.png?raw=true)
