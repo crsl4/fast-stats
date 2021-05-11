@@ -95,7 +95,7 @@ The Data Analysis section also depends on the specific web app. For example, the
 
 
 
-## FAQ {#faq2}
+## FAQ {##faq2}
 Finally, click FAQ in the sidepanel to see more related information about this app and the webinars. 
 
 ![faq](https://github.com/crsl4/fast-stats/blob/master/figures/faq.png?raw=true)
