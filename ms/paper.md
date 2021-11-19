@@ -13,7 +13,7 @@ output: pdf_document
 authors:
 - name: Yizhou Liu
   affiliation: 1
-- name: Claudia Solis-Lemus^[Corresponding author (solislemus@wisc.edu)]
+- name: Claudia Solis-Lemus^[Corresponding author (solislemus\@wisc.edu)]
   orcid: 0000-0002-9789-8915
   affiliation: 2
 bibliography: paper.bib
