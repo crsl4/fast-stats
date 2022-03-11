@@ -45,6 +45,7 @@ server <- function(input, output,session) {
       dsnames <- names(data_set())
       cb_options <- list()
       cb_options[ dsnames] <- dsnames
+      print(cb_options)
       updateRadioButtons(session, "xaxisGrp",
                          label = "Group Variable",
                          choices = cb_options,
@@ -102,61 +103,64 @@ server <- function(input, output,session) {
                          choices = cb_options,
                          selected = "")
     }else{
+      # "sample data" option
+      gv_vec <- c("plant.ID"="plant.ID","generation"="generation","parents"="parents")
+      q_vec <- c("cotyledons"="cotyledons")
       updateRadioButtons(session, "xaxisGrp",
                          label = "Group Variable",
-                         choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
+                         choices =  gv_vec,
                          selected = "")
       updateRadioButtons(session, "yaxisGrp",
                          label = "Quantity",
-                         choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
+                         choices = q_vec,
                          selected = "")
       updateRadioButtons(session, "groupVar",
                          label = "Group Variable",
-                         choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
+                         choices =  gv_vec,
                          selected = "")
       updateRadioButtons(session, "quantity",
                          label = "Quantity",
-                         choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
+                         choices =q_vec,
                          selected = "")
       updateRadioButtons(session, "gv1",
                          label = "Group Variable 1",
-                         choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
+                         choices =  gv_vec,
                          selected = "")
       updateRadioButtons(session, "gv2",
                          label = "Group Variable 2",
-                         choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
+                         choices =  gv_vec,
                          selected = "")
       updateRadioButtons(session, "gvBox",
                          label = "Group Variable",
-                         choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
+                         choices = gv_vec,
                          selected = "")
       updateRadioButtons(session, "qBox",
                          label = "Quantity",
-                         choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
+                         choices =q_vec,
                          selected = "")
       updateRadioButtons(session, "gvMosaic1",
                          label = "Group Variable 1",
-                         choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
+                         choices =  gv_vec,
                          selected = "")
       updateRadioButtons(session, "gvMosaic2",
                          label = "Group Variable 2",
-                         choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
+                         choices =  gv_vec,
                          selected = "")
       updateRadioButtons(session, "gvScatter",
                          label = "Group Variable",
-                         choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
+                         choices =  gv_vec,
                          selected = "")
       updateRadioButtons(session, "qScatter",
                          label = "Quantity",
-                         choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
+                         choices = q_vec,
                          selected = "")
       updateRadioButtons(session, "gvDensities",
                          label = "Group Variable",
-                         choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
+                         choices =  gv_vec,
                          selected = "")
       updateRadioButtons(session, "qDensities",
                          label = "Quantity",
-                         choices = c("plant.ID"="plant.ID","cotyledons"="cotyledons","generation"="generation","parents"="parents"),
+                         choices = q_vec,
                          selected = "")
     }
     
@@ -538,12 +542,17 @@ server <- function(input, output,session) {
     
     
   }
-  not_categorical<-function(df, input){
+  not_categorical<-function(df, inputCol){
+    # bypass the check for plant.id
+    # print(input)
+    if(inputCol == "plant.ID" && input$fileType=="sampleFile"){
+      NULL
+    } 
     # check to see the data type of a specific col in data frame
-    if(class(df[[input]])=="numeric"||class(df[[input]])=="integer"||class(df[[input]])=="complex"){
+    else if(class(df[[inputCol]])=="numeric"||class(df[[inputCol]])=="integer"||class(df[[inputCol]])=="complex"){
       showNotification( "Please select a categorical variable to be the 'Group Variable'!",duration=3,type = "error")
       # "Please select a categorical variable to be the grouping variable!"
-    }else if(df==""||input==""){
+    }else if(df==""||inputCol==""){
       F
     }
     else{
@@ -551,13 +560,16 @@ server <- function(input, output,session) {
     }
   }
   
-  not_quantity<-function(df, input){
+  not_quantity<-function(df, inputCol){
+    if(inputCol == "plant.ID" && input$fileType=="sampleFile"){
+      NULL
+    }
     # check to see the data type of a specific col in data frame
-    if(class(df[[input]])!="numeric"&&class(df[[input]])!="integer"&&class(df[[input]])!="complex"){
+    else if(class(df[[inputCol]])!="numeric"&&class(df[[inputCol]])!="integer"&&class(df[[inputCol]])!="complex"){
       showNotification( "Please select a numerical variable to be the 'Quantity'!",duration=3,type = "error")
       # "Please select a numerical variable to be the quantity!"
       
-    }else if(df==""||input==""){
+    }else if(df==""||inputCol==""){
       F
     }
     else{
@@ -623,7 +635,7 @@ server <- function(input, output,session) {
     req(df)
     if (v$doViolinPlot == FALSE) return()
     # fill should contain x var
-    
+    # print(class(v5$xv))
     validate(
       not_categorical(df,v5$xv)
     )
@@ -634,8 +646,10 @@ server <- function(input, output,session) {
     x_val<-unlist(subset(df, select=c(v5$xv)))
     y_val<-unlist(subset(df, select=c(v6$yv)))
     
+    print(x_val)
+    
     # options(repr.plot.width=v14$doWidthVal, repr.plot.height=v15$doHeightVal)
-    plot<-ggplot(df, aes(x=x_val, y=y_val, fill=x_val))+geom_violin(alpha=v41$transViolin/100)+xlab(v5$xv)+ylab(v6$yv)+labs(fill=v5$xv)+ggtitle("Violin Plot")+
+    plot<-ggplot(df, aes(x=x_val, y=y_val, fill=as.factor(x_val)))+geom_violin(alpha=v41$transViolin/100)+xlab(v5$xv)+ylab(v6$yv)+labs(fill=v5$xv)+ggtitle("Violin Plot")+
       ylim(c(1,6))+
       theme(
         plot.title = element_text(hjust=0.5, size=rel(1.8)),
@@ -742,7 +756,7 @@ server <- function(input, output,session) {
     # y_val<-df[,v6$yv]
     
     
-    p<-ggplot(df, aes(x_val, fill=x_val))+geom_bar(alpha=0.5)+ 
+    p<-ggplot(df, aes(x_val, fill=as.factor(x_val)))+geom_bar(alpha=0.5)+ 
       xlab(v5$xv)+labs(fill=v5$xv)+
       theme(
         plot.titlelib = element_text(hjust=0.5, size=rel(1.8)),
@@ -786,7 +800,7 @@ server <- function(input, output,session) {
     y_val<-unlist(subset(df, select=c(v30$qScatter)))
     
     
-    p<-ggplot(df, aes(y = y_val, x = x_val, fill = x_val)) +
+    p<-ggplot(df, aes(y = y_val, x = x_val, fill =as.factor(x_val))) +
       xlab(v29$gvScatter)+labs(fill=v29$gvScatter)+ylab(v30$qScatter)+
       geom_jitter(pch = v34$pointShapeScatter, alpha=v33$transScatter/100, width=0.2,size=v35$pointSizeScatter)+
       theme(
@@ -842,7 +856,7 @@ server <- function(input, output,session) {
     # print(x_val)
     y_val<-unlist(subset(df, select=c(v24$qBox)))
     # print(x_val)
-    plot<-ggplot(df, aes(x = x_val, y = y_val, fill = x_val)) +
+    plot<-ggplot(df, aes(x = x_val, y = y_val, fill = as.factor(x_val))) +
       xlab(v23$gvBox)+labs(fill=v23$gvBox)+ylab(v24$qBox)+ggtitle("Box Plot")+
       geom_boxplot(outlier.size = 0, alpha=v45$transBox/100) +
       theme(
@@ -901,7 +915,7 @@ server <- function(input, output,session) {
     # print(x_val)
     y_val<-unlist(subset(df, select=c(v32$qDensities)))
     
-    p<-ggplot(df, aes(y_val, fill=x_val))+geom_density(alpha=v49$transDensities/100)+
+    p<-ggplot(df, aes(y_val, fill=as.factor(x_val)))+geom_density(alpha=v49$transDensities/100)+
       xlab(v32$qDensities)+labs(fill=v31$gvDensities)+
       theme(
         plot.title = element_text(hjust=0.5, size=rel(1.8)),
