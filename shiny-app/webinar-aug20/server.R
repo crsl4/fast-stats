@@ -13,6 +13,9 @@ library(RColorBrewer)
 # Define server logic to read selected file ----
 # global variable
 options(shiny.maxRequestSize=10*1024^2)
+# ---------suppress all R's warning-------------
+# options(warn=-1)
+# --------------------------------------------
 toy<-read.csv("toys.csv",
               header = T,
               sep = ",")
@@ -42,70 +45,91 @@ server <- function(input, output,session) {
   outputOptions(output, 'fileUploaded', suspendWhenHidden=FALSE)
   observe({
     if(input$fileType=="uploadFile"){
+      df <- data_set()
       dsnames <- names(data_set())
-      cb_options <- list()
-      cb_options[ dsnames] <- dsnames
-      print(cb_options)
+      cat("dsnames:  ", typeof(dsnames), dsnames)
+      print("\n")
+      gv_options <- list()
+      q_options <- list()
+      for(var in dsnames){
+        # cat("xxx", typeof(var), var)
+        print("\n")
+        if(is_quantity(df, var)){
+          q_options[var] <- var
+        }else{
+          gv_options[var] <- var
+        }
+      }
+      # print(q_options)
+      # print("\n")
+      # print(">>>>>>>>>>>>>>>")
+      # print(gv_options)
+      # print("\n")
+      # cb_options <- list()
+      # 
+      # cb_options[ dsnames] <- dsnames
+      # cat("cb_options  ",cb_options)
       updateRadioButtons(session, "xaxisGrp",
                          label = "Group Variable",
-                         choices = cb_options,
+                         choices = gv_options,
                          selected = "")
       updateRadioButtons(session, "yaxisGrp",
                          label = "Quantity",
-                         choices = cb_options,
+                         choices = q_options,
                          selected = "")
       updateRadioButtons(session, "groupVar",
                          label = "Group Variable",
-                         choices = cb_options,
+                         choices = gv_options,
                          selected = "")
       updateRadioButtons(session, "quantity",
                          label = "Quantity",
-                         choices = cb_options,
+                         choices = q_options,
                          selected = "")
       updateRadioButtons(session, "gv1",
                          label = "Group Variable 1",
-                         choices = cb_options,
+                         choices = gv_options,
                          selected = "")
       updateRadioButtons(session, "gv2",
                          label = "Group Variable 2",
-                         choices = cb_options,
+                         choices = gv_options,
                          selected = "")
       updateRadioButtons(session, "gvBox",
                          label = "Group Variable",
-                         choices = cb_options,
+                         choices = gv_options,
                          selected = "")
       updateRadioButtons(session, "qBox",
                          label = "Quantity",
-                         choices = cb_options,
+                         choices = q_options,
                          selected = "")
       updateRadioButtons(session, "gvMosaic1",
                          label = "Group Variable 1",
-                         choices = cb_options,
+                         choices = gv_options,
                          selected = "")
       updateRadioButtons(session, "gvMosaic2",
                          label = "Group Variable 2",
-                         choices = cb_options,
+                         choices = gv_options,
                          selected = "")
       updateRadioButtons(session, "gvScatter",
                          label = "Group Variable",
-                         choices = cb_options,
+                         choices = gv_options,
                          selected = "")
       updateRadioButtons(session, "qScatter",
                          label = "Quantity",
-                         choices = cb_options,
+                         choices = q_options,
                          selected = "")
       updateRadioButtons(session, "gvDensities",
                          label = "Group Variable",
-                         choices = cb_options,
+                         choices = gv_options,
                          selected = "")
       updateRadioButtons(session, "qDensities",
                          label = "Quantity",
-                         choices = cb_options,
+                         choices = q_options,
                          selected = "")
     }else{
       # "sample data" option
       gv_vec <- c("plant.ID"="plant.ID","generation"="generation","parents"="parents")
       q_vec <- c("cotyledons"="cotyledons")
+      gv_vec_no_id <- c("generation"="generation","parents"="parents")
       updateRadioButtons(session, "xaxisGrp",
                          label = "Group Variable",
                          choices =  gv_vec,
@@ -116,7 +140,7 @@ server <- function(input, output,session) {
                          selected = "")
       updateRadioButtons(session, "groupVar",
                          label = "Group Variable",
-                         choices =  gv_vec,
+                         choices =  gv_vec_no_id,
                          selected = "")
       updateRadioButtons(session, "quantity",
                          label = "Quantity",
@@ -124,11 +148,11 @@ server <- function(input, output,session) {
                          selected = "")
       updateRadioButtons(session, "gv1",
                          label = "Group Variable 1",
-                         choices =  gv_vec,
+                         choices =  gv_vec_no_id,
                          selected = "")
       updateRadioButtons(session, "gv2",
                          label = "Group Variable 2",
-                         choices =  gv_vec,
+                         choices =  gv_vec_no_id,
                          selected = "")
       updateRadioButtons(session, "gvBox",
                          label = "Group Variable",
@@ -542,9 +566,42 @@ server <- function(input, output,session) {
     
     
   }
+  
+  # return true/false based on if var is gv or not
+  is_categorical<-function(df, inputCol){
+    # bypass the check for plant.id
+    # print("----------------")
+    # if(is.vector(inputCol)){
+    #   # need to change it to string when using vector
+    #   inputCol_str <- inputCol[0]
+    #   cat(is.vector(inputCol_str), inputCol_str)
+    # }
+    
+    if(inputCol == "plant.ID" && input$fileType=="sampleFile"){
+      return (T)
+    } 
+    # check to see the data type of a specific col in data frame
+    else if(class(df[[inputCol]])=="numeric"||class(df[[inputCol]])=="integer"||class(df[[inputCol]])=="complex"){
+      return (F)
+      # "Please select a categorical variable to be the grouping variable!"
+    }else if(df==""||inputCol==""){
+      return (F)
+    }
+    else{
+      return (T)
+    }
+  }
+  
+  
   not_categorical<-function(df, inputCol){
     # bypass the check for plant.id
-    # print(input)
+    # print("----------------")
+    # if(is.vector(inputCol)){
+    #   # need to change it to string when using vector
+    #   inputCol_str <- inputCol[0]
+    #   cat(is.vector(inputCol_str), inputCol_str)
+    # }
+    
     if(inputCol == "plant.ID" && input$fileType=="sampleFile"){
       NULL
     } 
@@ -557,6 +614,23 @@ server <- function(input, output,session) {
     }
     else{
       NULL
+    }
+  }
+  
+  is_quantity<-function(df, inputCol){
+    if(inputCol == "plant.ID" && input$fileType=="sampleFile"){
+      return (F)
+    }
+    # check to see the data type of a specific col in data frame
+    else if(class(df[[inputCol]])!="numeric"&&class(df[[inputCol]])!="integer"&&class(df[[inputCol]])!="complex"){
+      return (F)
+      # "Please select a numerical variable to be the quantity!"
+      
+    }else if(df==""||inputCol==""){
+      return (F)
+    }
+    else{
+      return (T)
     }
   }
   
@@ -915,8 +989,8 @@ server <- function(input, output,session) {
     # print(x_val)
     y_val<-unlist(subset(df, select=c(v32$qDensities)))
     
-    p<-ggplot(df, aes(y_val, fill=as.factor(x_val)))+geom_density(alpha=v49$transDensities/100)+
-      xlab(v32$qDensities)+labs(fill=v31$gvDensities)+
+    p<-ggplot(df, aes(x=x_val, fill=as.factor(y_val)))+geom_density(alpha=v49$transDensities/100)+
+      xlab(v32$gvDensities)+labs(fill=v31$qDensities)+
       theme(
         plot.title = element_text(hjust=0.5, size=rel(1.8)),
         axis.title.x = element_text(size=rel(1.8)),
