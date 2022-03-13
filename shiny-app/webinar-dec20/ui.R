@@ -1,9 +1,37 @@
+#####################################################################
+#
+# ui.R
+#     
+# 
+#
+#     This program is free software; you can redistribute it and/or
+#     modify it under the terms of the GNU General Public License,
+#     version 3, as published by the Free Software Foundation.
+#
+#     This program is distributed in the hope that it will be useful,
+#     but without any warranty; without even the implied warranty of
+#     merchantability or fitness for a particular purpose.  See the GNU
+#     General Public License, version 3, for more details.
+#
+#     A copy of the GNU General Public License, version 3, is available
+#     at http://www.r-project.org/Licenses/GPL-3
+#
+# Part of the fast-stats package
+# Contains: ui.R
+######################################################################
+
 library(shiny)
 library(plotly)
 library(shinydashboard)
 library(shinyjs)
-# library(dashboardthemes)
 
+######################################################################
+# 
+# shinyUI: Create a Shiny UI handler
+# ui:
+# A user interace definition
+# 
+###################################################################### 
 shinyUI(dashboardPage(
   skin="blue",
  
@@ -131,6 +159,7 @@ shinyUI(dashboardPage(
                 )
               )
       ),
+      # data visualization button
       tabItem(
         "dataVisualization",
         
@@ -138,9 +167,6 @@ shinyUI(dashboardPage(
           box(
             width = 8, status = "primary", solidHeader = T,
             title = "Plot Display",
-            
-            # conditionalPanel(condition = "input.plotType==0&&input.goMosaic!=0",
-            #                  plotlyOutput("mosaicPlot") ),
             conditionalPanel(condition = "input.plotType==1&&input.goViolin!=0",
                             plotlyOutput("violinPlot")
                              ),
@@ -148,8 +174,6 @@ shinyUI(dashboardPage(
                              plotlyOutput("boxPlot") ),
             conditionalPanel(condition = "input.plotType==3&&input.goScatter!=0",
                              plotlyOutput("scatterPlot") ),
-            # conditionalPanel(condition = "input.plotType==4&&input.goDensities!=0",
-            #                  plotlyOutput("densities") ),
           ),
           box(
             width = 4, status = "primary",solidHeader = T, 
@@ -312,7 +336,7 @@ shinyUI(dashboardPage(
           )
         )
       ),
-     
+     # FAQ button
       tabItem("FAQ",
               box( width=12, status="primary",solidHeader = T,
                    title="Frequently Asked Questions",
