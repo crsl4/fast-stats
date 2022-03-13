@@ -47,13 +47,13 @@ server <- function(input, output,session) {
     if(input$fileType=="uploadFile"){
       df <- data_set()
       dsnames <- names(data_set())
-      cat("dsnames:  ", typeof(dsnames), dsnames)
-      print("\n")
+      # cat("dsnames:  ", typeof(dsnames), dsnames)
+      # print("\n")
       gv_options <- list()
       q_options <- list()
       for(var in dsnames){
         # cat("xxx", typeof(var), var)
-        print("\n")
+        # print("\n")
         if(is_quantity(df, var)){
           q_options[var] <- var
         }else{
@@ -720,7 +720,7 @@ server <- function(input, output,session) {
     x_val<-unlist(subset(df, select=c(v5$xv)))
     y_val<-unlist(subset(df, select=c(v6$yv)))
     
-    print(x_val)
+    # print(x_val)
     
     # options(repr.plot.width=v14$doWidthVal, repr.plot.height=v15$doHeightVal)
     plot<-ggplot(df, aes(x=x_val, y=y_val, fill=as.factor(x_val)))+geom_violin(alpha=v41$transViolin/100)+xlab(v5$xv)+ylab(v6$yv)+labs(fill=v5$xv)+ggtitle("Violin Plot")+
@@ -989,8 +989,8 @@ server <- function(input, output,session) {
     # print(x_val)
     y_val<-unlist(subset(df, select=c(v32$qDensities)))
     
-    p<-ggplot(df, aes(x=x_val, fill=as.factor(y_val)))+geom_density(alpha=v49$transDensities/100)+
-      xlab(v32$gvDensities)+labs(fill=v31$qDensities)+
+    p<-ggplot(df, aes(y_val, fill=as.factor(x_val)))+geom_density(alpha=v49$transDensities/100)+
+      xlab(v32$qDensities)+labs(fill=v31$gvDensities)+
       theme(
         plot.title = element_text(hjust=0.5, size=rel(1.8)),
         axis.title.x = element_text(size=rel(1.8)),
@@ -1107,8 +1107,6 @@ server <- function(input, output,session) {
     validate(
       not_equalGV2(v14$sel1,v15$sel2)
     )
-    # print()
-    # print(y)
     if(v16$doEqualVar==T){
       t.test(x,y,var.equal = T)
     }
