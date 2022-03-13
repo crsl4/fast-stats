@@ -1,3 +1,25 @@
+#####################################################################
+#
+# server.R
+#
+# 
+#
+#     This program is free software; you can redistribute it and/or
+#     modify it under the terms of the GNU General Public License,
+#     version 3, as published by the Free Software Foundation.
+#
+#     This program is distributed in the hope that it will be useful,
+#     but without any warranty; without even the implied warranty of
+#     merchantability or fitness for a particular purpose.  See the GNU
+#     General Public License, version 3, for more details.
+#
+#     A copy of the GNU General Public License, version 3, is available
+#     at http://www.r-project.org/Licenses/GPL-3
+#
+# Part of the fast-stats package
+# Contains: server.R
+######################################################################
+
 library(data.table)
 library(ggplot2)
 library(car)
@@ -9,9 +31,6 @@ library(thatssorandom)
 library(rsconnect)
 library(viridis)
 library(RColorBrewer)
-# library(shinyjs)
-# Define server logic to read selected file ----
-# global variable
 options(shiny.maxRequestSize=10*1024^2)
 # ---------suppress all R's warning-------------
 # options(warn=-1)
@@ -19,8 +38,10 @@ options(shiny.maxRequestSize=10*1024^2)
 toy<-read.csv("toys.csv",
               header = T,
               sep = ",")
+######################################################################
+# R shiny server function
+######################################################################
 server <- function(input, output,session) {
-  # #################################### 
   dsnames<-c() #a vector to store col names
   
   data_set <- reactive({
@@ -43,6 +64,12 @@ server <- function(input, output,session) {
     return(!is.null(data_set()))
   })
   outputOptions(output, 'fileUploaded', suspendWhenHidden=FALSE)
+
+  ######################################################################
+  # update the radio buttons as user specified, i.e. uploadFile mode or sample
+  # file mode, then classify the options either as group variable or quantity
+  # variables.
+  ######################################################################  
   observe({
     if(input$fileType=="uploadFile"){
       df <- data_set()
@@ -176,16 +203,14 @@ server <- function(input, output,session) {
     }
     
   })
-  #####################testing
-  # observeEvent(input$fileType=="sampleFile", updateRadioButtons(session, "gv1",
-  #                                                      label = "Group Variable 1",
-  #                                                      choices = c("xxxx"="x"),
-  #                                                      selected = ""))
   
   output$choose_dataset <- renderUI({
     selectInput("dataset", "Data set", as.list(data_sets))
   })
-  ####################################
+  ######################################################################
+  # Following obserfverEvent functions
+  # used to assign local values from reactive values
+  ######################################################################
   v<-reactiveValues(doViolinPlot=FALSE)
   observeEvent(input$goViolin, {
     # 0 will be coerced to FALSE
@@ -520,7 +545,10 @@ server <- function(input, output,session) {
     v52$colorDensities<-input$colorDensities
   })
   
-  
+  ######################################################################
+  # not_equalGV: compare if two group variables are the same, show warning 
+  # message if they are the same
+  ######################################################################
   not_equalGV<-function(input1, input2){
     if(strcmp(input1, input2)){
       showNotification("Please select different 'Group Variables'!",duration=3,type = "error")
@@ -534,6 +562,10 @@ server <- function(input, output,session) {
     }
   }
   
+  ######################################################################
+  # not_equalGV2: compare if two group variables are the same, show warning 
+  # message if they are the same; used in t-test part
+  ######################################################################
   not_equalGV2<-function(input1, input2){
     if(strcmp(input1, input2)){
       showNotification("Please select different group variables for 'Group one' and 'Group two'!",duration=3,type = "error")
@@ -547,6 +579,9 @@ server <- function(input, output,session) {
     }
   }
   
+  ######################################################################
+  # not_empty: make sure the data frame is not empty
+  ######################################################################
   not_empty<-function(df){
     if(is.null(df))
       showNotification("Please upload a data file first!",duration=3,type = "error")
@@ -554,16 +589,12 @@ server <- function(input, output,session) {
     
   }
   
-  # return true/false based on if var is gv or not
+  ######################################################################
+  # is_categorical: used to decide if the inputCol is categorical or not, return 
+  # TRUE if yes, and FALSE otherwise
+  ######################################################################
   is_categorical<-function(df, inputCol){
     # bypass the check for plant.id
-    # print("----------------")
-    # if(is.vector(inputCol)){
-    #   # need to change it to string when using vector
-    #   inputCol_str <- inputCol[0]
-    #   cat(is.vector(inputCol_str), inputCol_str)
-    # }
-    
     if(inputCol == "plant.ID" && input$fileType=="sampleFile"){
       return (T)
     } 
@@ -579,7 +610,10 @@ server <- function(input, output,session) {
     }
   }
   
-  
+  ######################################################################
+  # not_categorical: validate method, show warning statement if the variable is not 
+  # categorical
+  ######################################################################
   not_categorical<-function(df, inputCol){
     # bypass the check for plant.id
     
@@ -597,7 +631,10 @@ server <- function(input, output,session) {
       NULL
     }
   }
-  
+  ######################################################################
+  # is_quantity: used to determine if the input variable belongs to quantity 
+  # variable or not; return True if yes, and False otherwise
+  ######################################################################
   is_quantity<-function(df, inputCol){
     if(inputCol == "plant.ID" && input$fileType=="sampleFile"){
       return (F)
@@ -615,6 +652,10 @@ server <- function(input, output,session) {
     }
   }
   
+  ######################################################################
+  # not_quantity: validate method, show warning if the input variable not belong
+  # to quantity variable
+  ######################################################################
   not_quantity<-function(df, inputCol){
     if(inputCol == "plant.ID" && input$fileType=="sampleFile"){
       NULL
@@ -632,6 +673,9 @@ server <- function(input, output,session) {
     }
   }
   
+  ######################################################################
+  # summary: show summary content to users
+  ######################################################################
   output$summary <- renderPrint({
     
     # input$file1 will be NULL initially. After the user selects
@@ -646,6 +690,9 @@ server <- function(input, output,session) {
     
   })
   
+  ######################################################################
+  # contents: show the dataframe as table to users
+  ######################################################################
   output$contents <- renderTable({
     
     # input$file1 will be NULL initially. After the user selects
@@ -671,9 +718,11 @@ server <- function(input, output,session) {
     
   })
   
+  ######################################################################
+  # violinPlot: output the violin plot based on users' selected variables
+  ######################################################################
   output$violinPlot <- renderPlotly({
     
-    # there must be a way not to repeat the same lines to get df
     
     # input$file1 will be NULL initially. After the user selects
     # and uploads a file, head of that data file by default,
@@ -689,8 +738,8 @@ server <- function(input, output,session) {
     }
     req(df)
     if (v$doViolinPlot == FALSE) return()
-    # fill should contain x var
-    # print(class(v5$xv))
+   
+    # validation
     validate(
       not_categorical(df,v5$xv)
     )
@@ -700,10 +749,6 @@ server <- function(input, output,session) {
     
     x_val<-unlist(subset(df, select=c(v5$xv)))
     y_val<-unlist(subset(df, select=c(v6$yv)))
-    
-    # print(x_val)
-    
-    # options(repr.plot.width=v14$doWidthVal, repr.plot.height=v15$doHeightVal)
     plot<-ggplot(df, aes(x=x_val, y=y_val, fill=as.factor(x_val)))+geom_violin(alpha=v41$transViolin/100)+xlab(v5$xv)+ylab(v6$yv)+labs(fill=v5$xv)+ggtitle("Violin Plot")+
       ylim(c(1,6))+
       theme(
@@ -727,6 +772,9 @@ server <- function(input, output,session) {
     ggplotly(plot,tooltip = c("x", "y"))%>% config(displaylogo = FALSE,displayModeBar = T)
   })
   
+  ######################################################################
+  # mosaicPlot: output the mosaic plot based on users' selected variables
+  ######################################################################
   output$mosaicPlot <- renderPlotly({
     
     # there must be a way not to repeat the same lines to get df
@@ -782,6 +830,9 @@ server <- function(input, output,session) {
     # something need to note is that ggplotly is not compatiable with geom_mosaic
   })
   
+  ######################################################################
+  # histogram: output the histogram based on users' selected variables
+  ######################################################################
   output$histogram <- renderPlotly({
     
     if(input$fileType=="sampleFile")
@@ -794,14 +845,6 @@ server <- function(input, output,session) {
     }
     req(df)
     if (v2$doHist == FALSE) return()
-    
-    # print(subset(df, select=c(v5$xv)))
-    
-    # tryCatch({
-    #   x_val<-unlist(subset(df, select=c(v5$xv)))
-    # }error=function(e){
-    #   stop(safeError(e))
-    # })
     x_val<-unlist(subset(df, select=c(v5$xv)))
     
     # notice that v5$xv here is character, not col obj; but ggplot needs to accept col obj
@@ -827,6 +870,9 @@ server <- function(input, output,session) {
     
   })
   
+  ######################################################################
+  # scatterPlot: output the scatter plot based on users' selected variables
+  ######################################################################
   output$scatterPlot<-renderPlotly({
     if(input$fileType=="sampleFile")
     {
@@ -871,8 +917,6 @@ server <- function(input, output,session) {
     group_list=unlist(subset(df,select=c(v29$gvScatter)))
     colorCount = length(unique(unlist(group_list,use.names=F)))   #8, an arbitrary number
     getPalette <- colorRampPalette(brewer.pal(8, v36$colorScatter),bias=2.5)(colorCount)
-    # FIXME LATER:
-    # bias value needs to be tested to get the best level change within color palette
     p<-p+scale_fill_manual(values= getPalette)
    
     
@@ -881,6 +925,9 @@ server <- function(input, output,session) {
     
   })
   
+  ######################################################################
+  # boxPlot: output the box plot based on users' selected variables
+  ######################################################################
   output$boxPlot <- renderPlotly({
     
     if(input$fileType=="sampleFile")
@@ -941,6 +988,9 @@ server <- function(input, output,session) {
     ggplotly(plot,tooltip = c("x", "y"))%>% config(displaylogo = FALSE,displayModeBar = T)
   })
   
+  ######################################################################
+  # densities: output the densities plot based on users' selected variables
+  ######################################################################
   output$densities<- renderPlotly({
     
     if(input$fileType=="sampleFile")
@@ -992,7 +1042,9 @@ server <- function(input, output,session) {
     ggplotly(p,tooltip = c("x", "y"))%>% config(displaylogo = FALSE,displayModeBar = T)
     
   })
-  
+  ######################################################################
+  # sel1: show results for t-test group variable 1's selected groups
+  ######################################################################
   output$sel1<-renderUI({
     if(input$fileType=="sampleFile")
     {
@@ -1012,6 +1064,9 @@ server <- function(input, output,session) {
     # dont know why cant I put two select input in one uioutput method
   })
   
+  ######################################################################
+  # sel2: show results for t-test group variable 2's selected groups
+  ######################################################################
   output$sel2<-renderUI({
     if(input$fileType=="sampleFile")
     {
@@ -1051,10 +1106,10 @@ server <- function(input, output,session) {
       )
     )
   })
-  # outputOptions(output, 'goMosaic')
   
-  
-  
+  ######################################################################
+  # ttest: output the t-test result based on users' selected variables
+  ######################################################################
   output$ttest <- renderPrint({
     
     # input$file1 will be NULL initially. After the user selects
@@ -1097,141 +1152,9 @@ server <- function(input, output,session) {
     
   })
   
-  # output$levene <- renderPrint({
-  #   
-  #   # input$file1 will be NULL initially. After the user selects
-  #   # and uploads a file, head of that data file by default,
-  #   # or all rows if selected, will be shown.
-  #   
-  #   if(input$fileType=="sampleFile")
-  #   {
-  #     df<-read.csv("toys.csv",
-  #                  header = T,
-  #                  sep = ",")
-  #   }
-  #   else
-  #   {
-  #     req(input$file1) #to require that user upload a file
-  #     tryCatch(
-  #       {
-  #         df <- read.csv(input$file1$datapath,
-  #                        header = input$header,
-  #                        sep = input$sep)
-  #       },
-  #       error = function(e) {
-  #         # return a safeError if a parsing error occurs
-  #         stop(safeError(e))
-  #       }
-  #     )
-  #   }
-  #   
-  #   if (v17$doLevene == FALSE) return()
-  #   
-  #   # extract var as col obj
-  #   # print(v7$gv)
-  #   
-  #   group_val<-unlist(subset(df, select=c(v7$gv)))
-  #   quantity<-unlist(subset(df, select=c(v8$q)))
-  #   
-  #   # , in the end omits default val set to be True
-  #   # # important
-  #   # x = subset(df, select=c(v8$q))[group_val == v14$sel1,]
-  #   # y = subset(df, select=c(v8$q))[group_val == v15$sel2,]
-  #   if (v17$doLevene == FALSE) return()
-  #   
-  #   leveneTest(quantity~group_val,df, center=mean)
-  # })
-  # 
-  # output$fligner <- renderPrint({
-  #   
-  #   # input$file1 will be NULL initially. After the user selects
-  #   # and uploads a file, head of that data file by default,
-  #   # or all rows if selected, will be shown.
-  #   
-  #   if(input$fileType=="sampleFile")
-  #   {
-  #     df<-read.csv("toys.csv",
-  #                  header = T,
-  #                  sep = ",")
-  #   }
-  #   else
-  #   {
-  #     req(input$file1) #to require that user upload a file
-  #     tryCatch(
-  #       {
-  #         df <- read.csv(input$file1$datapath,
-  #                        header = input$header,
-  #                        sep = input$sep)
-  #       },
-  #       error = function(e) {
-  #         # return a safeError if a parsing error occurs
-  #         stop(safeError(e))
-  #       }
-  #     )
-  #   }
-  #   
-  #   if (v18$doFligner == FALSE) return()
-  #   
-  #   # extract var as col obj
-  #   # print(v7$gv)
-  #   
-  #   group_val<-unlist(subset(df, select=c(v7$gv)))
-  #   quantity<-unlist(subset(df, select=c(v8$q)))
-  #   
-  #   # , in the end omits default val set to be True
-  #   # # important
-  #   # x = subset(df, select=c(v8$q))[group_val == v14$sel1,]
-  #   # y = subset(df, select=c(v8$q))[group_val == v15$sel2,]
-  #   if (v18$doFligner == FALSE) return()
-  #   
-  #   fligner.test(quantity~group_val,df)
-  # })
-  # 
-  # output$wilcoxon <- renderPrint({
-  #   
-  #   # input$file1 will be NULL initially. After the user selects
-  #   # and uploads a file, head of that data file by default,
-  #   # or all rows if selected, will be shown.
-  #   
-  #   if(input$fileType=="sampleFile")
-  #   {
-  #     df<-read.csv("toys.csv",
-  #                  header = T,
-  #                  sep = ",")
-  #   }
-  #   else
-  #   {
-  #     req(input$file1) #to require that user upload a file
-  #     tryCatch(
-  #       {
-  #         df <- read.csv(input$file1$datapath,
-  #                        header = input$header,
-  #                        sep = input$sep)
-  #       },
-  #       error = function(e) {
-  #         # return a safeError if a parsing error occurs
-  #         stop(safeError(e))
-  #       }
-  #     )
-  #   }
-  #   
-  #   if (v19$doWilcoxon == FALSE) return()
-  #   
-  #   # extract var as col obj
-  #   # print(v7$gv)
-  #   
-  #   group_val<-unlist(subset(df, select=c(v7$gv)))
-  #   quantity<-unlist(subset(df, select=c(v8$q)))
-  #   
-  #   # , in the end omits default val set to be True
-  #   # # important
-  #   # x = subset(df, select=c(v8$q))[group_val == v14$sel1,]
-  #   # y = subset(df, select=c(v8$q))[group_val == v15$sel2,]
-  #   if (v19$doWilcoxon == FALSE) return()
-  #   
-  #   wilcox.test(quantity~group_val,df)
-  # })
-  
+  ######################################################################
+  # chitest: output the chi-square test result based on users' selected variables
+  ######################################################################  
   output$chitest<-renderPrint({
     # input$file1 will be NULL initially. After the user selects
     # and uploads a file, head of that data file by default,
@@ -1248,17 +1171,6 @@ server <- function(input, output,session) {
     req(df)   #really helpful for avoid printing null when file is null
     if (v22$doChi == FALSE) return()
     
-    
-    # extract var as col obj
-    # print(v7$gv)
-    
-    # , in the end omits default val set to be True
-    # # important
-    # x = subset(df, select=c(v8$q))[group_val == v14$sel1,]
-    # y = subset(df, select=c(v8$q))[group_val == v15$sel2,]
-    # if (v22$doChi == FALSE) return()
-    # if(is.null(df)) return()
-    
     validate(
       not_categorical(df,v20$gv1)
       
@@ -1271,12 +1183,9 @@ server <- function(input, output,session) {
     validate(
       not_equalGV(v20$gv1,v21$gv2)
     )
-    # print(v20$gv1)
     
     group_variable1<-unlist(subset(df, select=c(v20$gv1)))
     group_variable2<-unlist(subset(df, select=c(v21$gv2)))
-    # print(v22$doChi)
-    # print(class(subset(df, select=c(v20$gv1))))
     dt <- table(group_variable1, group_variable2)
     ct<-chisq.test(dt)
     cat("Observed values:\n")
@@ -1288,23 +1197,6 @@ server <- function(input, output,session) {
     # the test result cannot be assigned to a variable, otherwise it might get some unexpected errors
   })
   
-  # output$down <- downloadHandler(
-  #   filename =  function() {
-  #     paste("iris", input$downloadOptions, sep=".")
-  #   },
-  #   # content is a function with argument file. content writes the plot to the device
-  #   content = function(file) {
-  #     if(input$downloadOptions == "png")
-  #       png(file) # open the png device
-  #     else if (input$downloadOptions=="pdf")
-  #       pdf(file) # open the pdf device
-  #     else
-  #       jpeg(file)
-  #     plot(x=x(), y=y(), main = "iris dataset plot", xlab = xl(), ylab = yl()) # draw the plot
-  #     dev.off()  # turn the device off
-  #     
-  #   } 
-  # )
   
   
   # if users wanna change the parameter (say change dots), we can first set a var as p<-ggplot(...). Then use if statement to test user's response, add it piece by piece, and finally return p
