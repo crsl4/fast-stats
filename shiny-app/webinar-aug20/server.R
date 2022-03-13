@@ -39,7 +39,19 @@ toy<-read.csv("toys.csv",
               header = T,
               sep = ",")
 ######################################################################
-# R shiny server function
+# server: R shiny server function, 
+# 
+# input:
+# The session's input object (the same as is passed into the Shiny server 
+# function as an argument)
+# 
+# output:
+# The session's output object (the same as is passed into the Shiny 
+# server function as an argument)
+# 
+# shiny:
+# The session object is an environment that can be used to access 
+# information and functionality relating to the session. 
 ######################################################################
 server <- function(input, output,session) {
   dsnames<-c() #a vector to store col names
