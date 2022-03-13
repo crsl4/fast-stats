@@ -47,28 +47,15 @@ server <- function(input, output,session) {
     if(input$fileType=="uploadFile"){
       df <- data_set()
       dsnames <- names(data_set())
-      # cat("dsnames:  ", typeof(dsnames), dsnames)
-      # print("\n")
       gv_options <- list()
       q_options <- list()
       for(var in dsnames){
-        # cat("xxx", typeof(var), var)
-        # print("\n")
         if(is_quantity(df, var)){
           q_options[var] <- var
         }else{
           gv_options[var] <- var
         }
       }
-      # print(q_options)
-      # print("\n")
-      # print(">>>>>>>>>>>>>>>")
-      # print(gv_options)
-      # print("\n")
-      # cb_options <- list()
-      # 
-      # cb_options[ dsnames] <- dsnames
-      # cat("cb_options  ",cb_options)
       updateRadioButtons(session, "xaxisGrp",
                          label = "Group Variable",
                          choices = gv_options,
@@ -595,12 +582,6 @@ server <- function(input, output,session) {
   
   not_categorical<-function(df, inputCol){
     # bypass the check for plant.id
-    # print("----------------")
-    # if(is.vector(inputCol)){
-    #   # need to change it to string when using vector
-    #   inputCol_str <- inputCol[0]
-    #   cat(is.vector(inputCol_str), inputCol_str)
-    # }
     
     if(inputCol == "plant.ID" && input$fileType=="sampleFile"){
       NULL
