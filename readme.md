@@ -52,16 +52,19 @@ list.of.packages <- c(
   "car", 
   "pracma", 
   "ggplotify", 
-  "thatssorandom", 
   "viridis",
   "rsconnect")
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[, "Package"])]
 if(length(new.packages)) install.packages(new.packages)
+install.github(“https://github.com/EdwinTh/thatssorandom")
 ```
 
 3. Within R, you can run the web app with the following command:
 
-```shiny::runApp("/path/to/wi-fast-stats")```
+```shiny::runApp("C:/fast-stats/shiny-app/webinar-aug20")
+   shiny::runApp("C:/fast-stats/shiny-app/webinar-dec20")
+   shiny::runApp("C:/fast-stats/shiny-app/webinar-bio152")
+```
 
 # Contributions
 
