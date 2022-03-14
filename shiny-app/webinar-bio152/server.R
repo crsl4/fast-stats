@@ -159,8 +159,8 @@ server <- function(input, output,session) {
                          choices = cb_options,
                          selected = "")
     }else{
-      gv_vec <- c("Plant"="Plant", "Treatment"="Treatment")
-      q_vec <-  c("Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length")
+      gv_vec <- c( "Treatment"="Treatment")
+      q_vec <-  c("Plant"="Plant","Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length")
       updateRadioButtons(session, "xaxisGrp",
                          label = "Group Variable",
                          choices = gv_vec,
