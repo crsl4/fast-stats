@@ -61,9 +61,11 @@ install.github(“https://github.com/EdwinTh/thatssorandom")
 
 3. Within R, you can run the web app with the following command:
 
-```shiny::runApp("C:/fast-stats/shiny-app/webinar-aug20")
-   shiny::runApp("C:/fast-stats/shiny-app/webinar-dec20")
-   shiny::runApp("C:/fast-stats/shiny-app/webinar-bio152")
+```
+shiny::runApp("C:/fast-stats/shiny-app/webinar-aug20")
+shiny::runApp("C:/fast-stats/shiny-app/webinar-dec20")
+shiny::runApp("C:/fast-stats/shiny-app/webinar-bio152")
+   
 ```
 
 # Contributions
