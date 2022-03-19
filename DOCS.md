@@ -59,7 +59,7 @@ The web app consists of four main tabs:
 
 ### Data Upload
 
-Click `Data Upload` in the sidepanel to upload a data file. The dataset should be in csv format and it will be uploaded using the Data Upload box. Data should be numeric or categorical and should not contain any NULL/NaN/NA values. The file should be no larger than 10MB.
+Click `Data Upload` in the sidepanel to upload a data file. The dataset should be in csv format and it will be uploaded using the Data Upload box. Data should be numeric or categorical and should not contain any NULL/NaN/NA values. The file should be no larger than 10MB. Users are encouraged to read the paper on [Data Organization in Spreadsheets](https://www.tandfonline.com/doi/full/10.1080/00031305.2017.1375989).
 
 WI Fast Stats web app comes with a sample dataset and in the examples below, we will use the "Sample dataset". The sample datasets are described on the web app, and we also describe them next:
 
@@ -120,7 +120,7 @@ Finally, click FAQ in the sidepanel to see more related information about this a
 
 We list below the most common errors when running the web apps remotely (on the browser). 
 
-1. The data is not in the right format: The errors are difficult to list in this case, but make sure that your dataset follows the same format as the sample dataset (described in the [Data Upload section](#data-upload)) and make sure that the dataset does not have any missing values.
+1. The data is not in the right format: The errors are difficult to list in this case, but make sure that your dataset follows the same format as the sample dataset (described in the [Data Upload section](#data-upload)) and make sure that the dataset does not have any missing values. Users are encouraged to read the paper on [Data Organization in Spreadsheets](https://www.tandfonline.com/doi/full/10.1080/00031305.2017.1375989).
 
 When running the web apps locally, you might see some warnings in the R console. Most warnings can be safely ignored (but feel free to create an issue in the [GitHub issue tracker](https://github.com/crsl4/fast-stats/issues) if you are unsure).
 
