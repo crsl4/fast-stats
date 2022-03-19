@@ -1,4 +1,4 @@
-We thank the reviewers for such helpful comments that have greatly improved the web apps and the manuscript.
+We thank the reviewers for such helpful comments that have greatly improved the web apps and the manuscript. All of our changes are in the [review branch](https://github.com/crsl4/fast-stats/tree/review) which we will merge to master after approval by the reviewers and editorial team.
 
 # Review 1
 
