@@ -19,7 +19,7 @@ Functionality and Documentation:
 - Unfortunately, the `Warning: guides(<scale> = FALSE) is deprecated. Please use guides(<scale> = "none") instead.` is out of our control as we are not calling `guides` directly in our mosaic function. We wondered whether we should suppress all warnings so that the user is not confused, but decided against this in case there are bugs or package upgrades that we need to address in the future. For now, we simply added a section about warnings in the documentation.
 - We modified the interface so that only categorical variables appear under "Group variable" and only quantitative variables appear under "quantity"
 - We have also expanded the documentation including more details about the sample dataset and some of the most common errors and warnings
-- The slides provided in the repo are the slides used when teaching the WI Fast plants webinars. The plots in the slides were not created using the same sample data in the repo (but data related to the specific webinar). The goal of the slides was to illustrate concepts, rather than testing the web app. This is actually related to another point brought up by the reviewer (the notebooks). It was precisely the goal of the notebooks to be that reproducible script that anyone could run (but as the reviewer mentioned, this was not true). In short, the slides are made available as part of the webinars to illustrate statistical concepts rather than usage of the web apps. I have now updated the notebooks so that they are indeed reproducible so that anyone can run them and get the plots. Hope this satisfies the reviewer!
+- The slides provided in the repo are the slides used when teaching the WI Fast plants webinars. The plots in the slides were not created using the same sample data in the repo (but data related to the specific webinar). The goal of the slides was to illustrate statistical concepts, rather than testing the web app. This is actually related to another point brought up by the reviewer (the notebooks). It was precisely the goal of the notebooks to be that reproducible script that anyone could run (but as the reviewer mentioned, they were not working properly). We have now updated the notebooks so that they are indeed reproducible so that anyone can run them and get the plots. We have also added a readme file explaining this in the repo. Hope this satisfies the reviewer!
 
 
 Notebooks folder
@@ -30,17 +30,4 @@ Software paper
 
 Editorial
 - We fully revised the documentation
-- Thanks for checking that the links to the webinars do not work anymore. The webinars were run in coordination with WI Fast Plants and Carolina Knowledge Center, so the links are on their end. We have reached out to them to ask whether the links have changed, but we have not heard back yet.
-
-
-
-
-
-Expand documentation to help students
-  - section on younger audiences starting to code: point at shiny app tutorial
-  - section on warnings in the code: Warning: Groups with fewer than two data points have been dropped
-  - section on sample data
-  - section on most common errors
-make the notebooks reproducible (change to sample data)
-  - distinguish which are for webinar and which are for reproducing
-  - add readme to slides that the slides are meant to illustrate stat concepts
+- Thanks for checking that the links to the webinars do not work anymore. The webinars were run in coordination with WI Fast Plants and Carolina Knowledge Center, so the links are on their end. We have reached out to them to ask whether the links have changed, but we have not heard back yet. If it is ok with the reviewers, we will create a new issue on the broken links for now to address this when we receive the new links.
