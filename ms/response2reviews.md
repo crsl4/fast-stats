@@ -8,18 +8,39 @@ Functionality and Documentation:
 - We modified the interface so that only categorical variables appear under "Group variable" and only quantitative variables appear under "quantity"
 - For the `webinar-aug20` sample data, we make `plant ID` a group variable. We found that for the other web apps, it did not make sense to change `plant ID` as categorical variable because some plots became not very intepretable, so we decided to keep them as quantitiative variables.
 
-add more details on how to install thatssorandom
-add more details on how to run runApp
-overall check all the steps to run a web app locally
-more comments on code! Think of younger audiences looking at the code. No need to comment every line, but explain the overall structure and what each function is doing
-“Group variable” should only display the variables that are categorical and “Quantity” should only display the variables that are quantitative
-For cotelydon toy data, change plant ID to categorical variable
-change the warning on guide scales=FALSE to “none”
-check the warnings on fewer than two data points
+Software paper
+- We added the DOI to me Williams and Hill (1986) paper
+- We now make reference to the "Data Upload" section in the paper instead of the "Data Summary"
 
-Add DOI to references
-Change Data summary to Data upload
+# Review 2
+
+Functionality and Documentation:
+- We double checked all the steps in the `readme` file to run the web apps locally, and provided more details on how to install `thatssorandom` and how to run the `shiny::runApp` command
+- Unfortunately, the `Warning: guides(<scale> = FALSE) is deprecated. Please use guides(<scale> = "none") instead.` is out of our control as we are not calling `guides` directly in our mosaic function. We wondered whether we should suppress all warnings so that the user is not confused, but decided against this in case there are bugs or package upgrades that we need to address in the future. For now, we simply added a section about warnings in the documentation.
+- We modified the interface so that only categorical variables appear under "Group variable" and only quantitative variables appear under "quantity"
+- We have also expanded the documentation including more details about the sample dataset and some of the most common errors and warnings
+- The slides provided in the repo are the slides used when teaching the WI Fast plants webinars. The plots in the slides were not created using the same sample data in the repo (but data related to the specific webinar). The goal of the slides was to illustrate concepts, rather than testing the web app. This is actually related to another point brought up by the reviewer (the notebooks). It was precisely the goal of the notebooks to be that reproducible script that anyone could run (but as the reviewer mentioned, this was not true). In short, the slides are made available as part of the webinars to illustrate statistical concepts rather than usage of the web apps. I have now updated the notebooks so that they are indeed reproducible so that anyone can run them and get the plots. Hope this satisfies the reviewer!
+
+
+Notebooks folder
+- We have double checked the steps to the notebook to make sure they are indeed reproducible and we have included a readme file explaining how the notebooks can be used to reproduce plots and analyses
+
+Software paper
+- We have added the DOI to all papers
+
+Editorial
+- We fully revised the documentation
+- Thanks for checking that the links to the webinars do not work anymore. The webinars were run in coordination with WI Fast Plants and Carolina Knowledge Center, so the links are on their end. We have reached out to them to ask whether the links have changed, but we have not heard back yet.
+
+
+
+
+
 Expand documentation to help students
-Make slides available and data for the slides: Maybe change to md
-remove the notebooks
-editorial comments on broken links
+  - section on younger audiences starting to code: point at shiny app tutorial
+  - section on warnings in the code: Warning: Groups with fewer than two data points have been dropped
+  - section on sample data
+  - section on most common errors
+make the notebooks reproducible (change to sample data)
+  - distinguish which are for webinar and which are for reproducing
+  - add readme to slides that the slides are meant to illustrate stat concepts
