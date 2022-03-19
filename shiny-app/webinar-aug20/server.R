@@ -5,16 +5,9 @@
 # 
 #
 #     This program is free software; you can redistribute it and/or
-#     modify it under the terms of the GNU General Public License,
-#     version 3, as published by the Free Software Foundation.
+#     modify it under the terms of the MIT License:
+#     https://github.com/crsl4/fast-stats/blob/master/LICENSE
 #
-#     This program is distributed in the hope that it will be useful,
-#     but without any warranty; without even the implied warranty of
-#     merchantability or fitness for a particular purpose.  See the GNU
-#     General Public License, version 3, for more details.
-#
-#     A copy of the GNU General Public License, version 3, is available
-#     at http://www.r-project.org/Licenses/GPL-3
 #
 # Part of the fast-stats package
 # Contains: server.R
@@ -39,7 +32,7 @@ toy<-read.csv("toys.csv",
               header = T,
               sep = ",")
 ######################################################################
-# server: R shiny server function, 
+# server: R shiny server function (see tutorial: https://shiny.rstudio.com/tutorial/)
 # 
 # input:
 # The session's input object (the same as is passed into the Shiny server 

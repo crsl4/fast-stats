@@ -62,10 +62,9 @@ install.github(“https://github.com/EdwinTh/thatssorandom")
 3. Within R, you can run the web app with the following command:
 
 ```
-shiny::runApp("C:/fast-stats/shiny-app/webinar-aug20")
-shiny::runApp("C:/fast-stats/shiny-app/webinar-dec20")
-shiny::runApp("C:/fast-stats/shiny-app/webinar-bio152")
+shiny::runApp("path-to/fast-stats/shiny-app/webinar-aug20")
 ```
+where `path-to` corresponds to the location where the `fast-stats` folder was cloned. You can change `webinar-aug20` to `webinar-dec20` or `webinar-bio152` to run the other web apps.
 
 # Contributions
 
