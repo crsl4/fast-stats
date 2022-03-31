@@ -1,3 +1,17 @@
+#####################################################################
+#
+# server.R
+#
+# 
+#
+#     This program is free software; you can redistribute it and/or
+#     modify it under the terms of the MIT License:
+#     https://github.com/crsl4/fast-stats/blob/master/LICENSE
+#
+# Part of the fast-stats package
+# Contains: server.R
+######################################################################
+
 library(data.table)
 library(ggplot2)
 library(car)
@@ -13,10 +27,22 @@ options(shiny.maxRequestSize=10*1024^2)
 toy<-read.csv("2016-brassica.csv",
              header = T,
              sep = ",")
-
-# Define server logic to read selected file ----
+######################################################################
+# server: R shiny server function  (see tutorial: https://shiny.rstudio.com/tutorial/)
+# 
+# input:
+# The session's input object (the same as is passed into the Shiny server 
+# function as an argument)
+# 
+# output:
+# The session's output object (the same as is passed into the Shiny 
+# server function as an argument)
+# 
+# shiny:
+# The session object is an environment that can be used to access 
+# information and functionality relating to the session. 
+######################################################################
 server <- function(input, output,session) {
-  # #################################### 
   dsnames<-c() #a vector to store col names
   
   data_set <- reactive({
@@ -37,137 +63,134 @@ server <- function(input, output,session) {
     
     
   })
+  ######################################################################
+  # update the radio buttons as user specified, i.e. uploadFile mode or sample
+  # file mode, then classify the options either as group variable or quantity
+  # variables.
+  ###################################################################### 
   observe({
     if(input$fileType=="uploadFile"){
+      df <- data_set()
       dsnames <- names(data_set())
-      cb_options <- list()
-      cb_options[ dsnames] <- dsnames
+      gv_options <- list()
+      q_options <- list()
+      for(var in dsnames){
+        if(is_quantity(df, var)){
+          q_options[var] <- var
+        }else{
+          gv_options[var] <- var
+        }
+      }
       updateRadioButtons(session, "xaxisGrp",
                          label = "Group Variable",
-                         choices = cb_options,
+                         choices = gv_options,
                          selected = "")
       updateRadioButtons(session, "yaxisGrp",
                          label = "Quantity",
-                         choices = cb_options,
+                         choices = q_options,
                          selected = "")
       updateRadioButtons(session, "groupVar",
                          label = "Group Variable",
-                         choices = cb_options,
+                         choices = gv_options,
                          selected = "")
       updateRadioButtons(session, "quantity",
                          label = "Quantity",
-                         choices = cb_options,
+                         choices = q_options,
                          selected = "")
       updateRadioButtons(session, "gv1",
                          label = "Group Variable 1",
-                         choices = cb_options,
+                         choices = gv_options,
                          selected = "")
       updateRadioButtons(session, "gv2",
                          label = "Group Variable 2",
-                         choices = cb_options,
+                         choices = gv_options,
                          selected = "")
       updateRadioButtons(session, "gvBox",
                          label = "Group Variable",
-                         choices = cb_options,
+                         choices = gv_options,
                          selected = "")
       updateRadioButtons(session, "qBox",
                          label = "Quantity",
-                         choices = cb_options,
+                         choices = q_options,
                          selected = "")
       updateRadioButtons(session, "gvMosaic1",
                          label = "Group Variable 1",
-                         choices = cb_options,
+                         choices = gv_options,
                          selected = "")
       updateRadioButtons(session, "gvMosaic2",
                          label = "Group Variable 2",
-                         choices = cb_options,
+                         choices = gv_options,
                          selected = "")
       updateRadioButtons(session, "gvScatter",
                          label = "Group Variable",
-                         choices = cb_options,
+                         choices = gv_options,
                          selected = "")
       updateRadioButtons(session, "qScatter",
                          label = "Quantity",
-                         choices = cb_options,
+                         choices = q_options,
                          selected = "")
       updateRadioButtons(session, "gvDensities",
                          label = "Group Variable",
-                         choices = cb_options,
+                         choices = gv_options,
                          selected = "")
       updateRadioButtons(session, "qDensities",
                          label = "Quantity",
-                         choices = cb_options,
+                         choices = q_options,
                          selected = "")
     }else{
+      gv_vec <- c( "Treatment"="Treatment")
+      q_vec <-  c("Plant"="Plant","Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length")
       updateRadioButtons(session, "xaxisGrp",
                          label = "Group Variable",
-                         choices = c("Plant"="Plant","Treatment"="Treatment","Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length"),
+                         choices = gv_vec,
                          selected = "")
       updateRadioButtons(session, "yaxisGrp",
                          label = "Quantity",
-                         choices = c("Plant"="Plant","Treatment"="Treatment","Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length"),
+                         choices =  q_vec,
                          selected = "")
       updateRadioButtons(session, "groupVar",
                          label = "Group Variable",
-                         choices = c("Plant"="Plant","Treatment"="Treatment","Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length"),
+                         choices = gv_vec,
                          selected = "")
       updateRadioButtons(session, "quantity",
                          label = "Quantity",
-                         choices = c("Plant"="Plant","Treatment"="Treatment","Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length"),
+                         choices =  q_vec,
                          selected = "")
       updateRadioButtons(session, "gv1",
                          label = "Group Variable 1",
-                         choices = c("Plant"="Plant","Treatment"="Treatment","Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length"),
+                         choices = gv_vec,
                          selected = "")
       updateRadioButtons(session, "gv2",
                          label = "Group Variable 2",
-                         choices = c("Plant"="Plant","Treatment"="Treatment","Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length"),
+                         choices =  q_vec,
                          selected = "")
       updateRadioButtons(session, "gvBox",
                          label = "Group Variable",
-                         choices = c("Plant"="Plant","Treatment"="Treatment","Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length"),
+                         choices = gv_vec,
                          selected = "")
       updateRadioButtons(session, "qBox",
                          label = "Quantity",
-                         choices = c("Plant"="Plant","Treatment"="Treatment","Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length"),
-                         selected = "")
-      updateRadioButtons(session, "gvMosaic1",
-                         label = "Group Variable 1",
-                         choices = c("Plant"="Plant","Treatment"="Treatment","Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length"),
-                         selected = "")
-      updateRadioButtons(session, "gvMosaic2",
-                         label = "Group Variable 2",
-                         choices = c("Plant"="Plant","Treatment"="Treatment","Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length"),
+                         choices =  q_vec,
                          selected = "")
       updateRadioButtons(session, "gvScatter",
                          label = "Quantity 1/Group Variable",
-                         choices = c("Plant"="Plant","Treatment"="Treatment","Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length"),
+                         choices = gv_vec,
                          selected = "")
       updateRadioButtons(session, "qScatter",
                          label = "Quantity 2",
-                         choices = c("Plant"="Plant","Treatment"="Treatment","Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length"),
+                         choices =  q_vec,
                          selected = "")
-      updateRadioButtons(session, "gvDensities",
-                         label = "Group Variable",
-                         choices = c("Plant"="Plant","Treatment"="Treatment","Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length"),
-                         selected = "")
-      updateRadioButtons(session, "qDensities",
-                         label = "Quantity",
-                         choices = c("Plant"="Plant","Treatment"="Treatment","Root_length_mm"="Root_length_mm","Shoot_length_mm"="Shoot_length_mm","Root_to_Shoot_ratio"="Root_to_Shoot_ratio","Total_length"="Total_length"),
-                         selected = "")
-    }
+      }
     
   })
-  #####################testing
-  # observeEvent(input$fileType=="sampleFile", updateRadioButtons(session, "gv1",
-  #                                                      label = "Group Variable 1",
-  #                                                      choices = c("xxxx"="x"),
-  #                                                      selected = ""))
   
   output$choose_dataset <- renderUI({
     selectInput("dataset", "Data set", as.list(data_sets))
   })
-  ####################################
+  ######################################################################
+  # Following obserfverEvent functions
+  # used to assign local values from reactive values
+  ######################################################################
   v<-reactiveValues(doViolinPlot=FALSE)
   observeEvent(input$goViolin, {
     # 0 will be coerced to FALSE
@@ -484,7 +507,10 @@ server <- function(input, output,session) {
     v55$addComment<- input$addComment
   })
   
-  
+  ######################################################################
+  # not_equalGV: compare if two group variables are the same, show warning 
+  # message if they are the same
+  ######################################################################
   not_equalGV<-function(input1, input2){
     if(strcmp(input1, input2)){
       showNotification("Please select different 'Group Variables'!",duration=3,type = "error")
@@ -498,6 +524,10 @@ server <- function(input, output,session) {
     }
   }
   
+  ######################################################################
+  # not_equalGV2: compare if two group variables are the same, show warning 
+  # message if they are the same; used in t-test part
+  ######################################################################
   not_equalGV2<-function(input1, input2){
     if(strcmp(input1, input2)){
       showNotification("Please select different group variables for 'Group one' and 'Group two'!",duration=3,type = "error")
@@ -511,12 +541,42 @@ server <- function(input, output,session) {
     }
   }
   
-  not_categorical<-function(df, input){
+  ######################################################################
+  # is_categorical: used to decide if the inputCol is categorical or not, return 
+  # TRUE if yes, and FALSE otherwise
+  ######################################################################
+  is_quantity<-function(df, inputCol){
+    if(inputCol == "plant.ID" && input$fileType=="sampleFile"){
+      return (F)
+    }
     # check to see the data type of a specific col in data frame
-    if(class(df[[input]])=="numeric"||class(df[[input]])=="integer"||class(df[[input]])=="complex"){
+    else if(class(df[[inputCol]])!="numeric"&&class(df[[inputCol]])!="integer"&&class(df[[inputCol]])!="complex"){
+      return (F)
+      # "Please select a numerical variable to be the quantity!"
+      
+    }else if(df==""||inputCol==""){
+      return (F)
+    }
+    else{
+      return (T)
+    }
+  }
+  
+  ######################################################################
+  # not_categorical: validate method, show warning statement if the variable is not 
+  # categorical
+  ######################################################################
+  not_categorical<-function(df, inputCol){
+    # bypass the check for plant.id
+    
+    if(inputCol == "Plant" && input$fileType=="sampleFile"){
+      NULL
+    } 
+    # check to see the data type of a specific col in data frame
+    else if(class(df[[inputCol]])=="numeric"||class(df[[inputCol]])=="integer"||class(df[[inputCol]])=="complex"){
       showNotification( "Please select a categorical variable to be the 'Group Variable'!",duration=3,type = "error")
       # "Please select a categorical variable to be the grouping variable!"
-    }else if(df==""||input==""){
+    }else if(df==""||inputCol==""){
       F
     }
     else{
@@ -524,6 +584,10 @@ server <- function(input, output,session) {
     }
   }
   
+  ######################################################################
+  # not_quantity: validate method, show warning if the input variable not belong
+  # to quantity variable
+  ######################################################################
   not_quantity<-function(df, input){
     # check to see the data type of a specific col in data frame
     if(class(df[[input]])!="numeric"&&class(df[[input]])!="integer"&&class(df[[input]])!="complex"){
@@ -538,6 +602,9 @@ server <- function(input, output,session) {
     }
   }
   
+  ######################################################################
+  # not_empty: make sure the data frame is not empty
+  ######################################################################
   not_empty<-function(df){
     if(is.null(df))
       showNotification("Please upload data file first!",duration=3,type = "error")
@@ -545,6 +612,9 @@ server <- function(input, output,session) {
     
   }
   
+  ######################################################################
+  # summary: show summary content to users
+  ######################################################################
   output$summary <- renderPrint({
     df<-data_set()
     
@@ -554,6 +624,9 @@ server <- function(input, output,session) {
     
   })
   
+  ######################################################################
+  # contents: show the dataframe as table to users
+  ######################################################################
   output$contents <- renderTable({
     # input$file1 will be NULL initially. After the user selects
     # and uploads a file, head of that data file by default,
@@ -577,6 +650,9 @@ server <- function(input, output,session) {
     
   })
   
+  ######################################################################
+  # violinPlot: output the violin plot based on users' selected variables
+  ######################################################################
   output$violinPlot <- renderPlotly({
     
     if(input$fileType=="sampleFile")
@@ -604,7 +680,7 @@ server <- function(input, output,session) {
     
     # options(repr.plot.width=v14$doWidthVal, repr.plot.height=v15$doHeightVal)
     # notes about limit: if the data is too large,i.e. extends limit, then we should not include ylim or xlim or it will throw weird "non-inf" error
-    plot<-ggplot(df, aes(x=x_val, y=y_val, fill=x_val))+geom_violin(alpha=v41$transViolin/100)+xlab(v5$xv)+ylab(v6$yv)+labs(fill=v5$xv)+ggtitle("Violin Plot")+ 
+    plot<-ggplot(df, aes(x=x_val, y=y_val, fill=as.factor(x_val)))+geom_violin(alpha=v41$transViolin/100)+xlab(v5$xv)+ylab(v6$yv)+labs(fill=as.factor(v5$xv))+ggtitle("Violin Plot")+ 
       theme(
         plot.title = element_text(hjust=0.5, size=rel(1.8)),
         axis.title.x = element_text(size=rel(1.8)),
@@ -626,98 +702,18 @@ server <- function(input, output,session) {
     ggplotly(plot,tooltip = c("x", "y"))%>% config(displaylogo = FALSE,displayModeBar = T)
   })
   
-  output$mosaicPlot <- renderPlotly({
-    if(input$fileType=="sampleFile")
-    {
-      df<- toy
+  ######################################################################
+  # not_big_dataset: ensure the dataset is larger than 15 rows
+  ######################################################################
+  not_big_dataset<-function(df){
+    if(nrow(df)<15){
+      showNotification("Please make sure that the Experiment you've selected contain at least 15 rows!", duration=3, type="error")
     }
-    else
-    {
-      df<-data_set()
-    }
-    
-    if (v27$doMosaic == FALSE) return()
-    # fill should contain x var
-    
-    validate(
-      not_categorical(df,v25$gvMosaic1)
-    )
-    validate(
-      not_categorical(df,v26$gvMosaic2)
-    )
-    validate(
-      not_equalGV(v25$gvMosaic1,v26$gvMosaic2)
-    )
-    g_val1<-unlist(subset(df, select=c(v25$gvMosaic1)))
-    g_val2<-unlist(subset(df, select=c(v26$gvMosaic2)))
-    # dt = table(g_val1,  g_val2)
-    # mosaicplot(dt, shade = TRUE, las=2,xlab=v25$gvMosaic1,ylab=v26$gvMosaic2,main="Mosaic Plot")
-    plot<-ggmm(df,g_val1, g_val2)
-    plot<-plot+xlab(v25$gvMosaic1)+ylab(v26$gvMosaic2)+ggtitle("Mosaic Plot")+labs(fill=v26$gvMosaic2)+ 
-      theme(
-        plot.title = element_text(hjust = 0.5),
-        text=element_text(size=9)
-      )
-    group_list=unlist(subset(df,select=c(v25$gvMosaic1)))
-    colorCount = length(unique(unlist(group_list,use.names=F)))
-    group_list=unlist(subset(df,select=c(v26$gvMosaic2)))
-    colorCount = max(colorCount,length(unique(unlist(group_list,use.names=F))) )  
-    getPalette <- colorRampPalette(brewer.pal(8, v40$colorMosaic),bias=2.5)(colorCount)
-    # FIXME LATER:
-    # bias value needs to be tested to get the best level change within color palette
-    plot<-plot+scale_fill_manual(values= getPalette)
-    
-    
-    ggplotly(plot)
-    
-    # ################################################
-    # something need to note is that ggplotly is not compatiable with geom_mosaic
-  })
+  }
   
-  output$histogram <- renderPlotly({
-    if(input$fileType=="sampleFile")
-    {
-      df<- toy
-    }
-    else
-    {
-      df<-data_set()
-    }
-    
-    if (v2$doHist == FALSE) return()
-    
-    # print(subset(df, select=c(v5$xv)))
-    
-    # tryCatch({
-    #   x_val<-unlist(subset(df, select=c(v5$xv)))
-    # }error=function(e){
-    #   stop(safeError(e))
-    # })
-    x_val<-unlist(subset(df, select=c(v5$xv)))
-    
-    # notice that v5$xv here is character, not col obj; but ggplot needs to accept col obj
-    # use subset func to extract col object from dataframe; other func, such as df[...], seems not work at all
-    # ggplot2 does not accept list object; must use unlist
-    # print(x_val)
-    # y_val<-df[,v6$yv]
-    
-    
-    p<-ggplot(df, aes(x_val, fill=x_val))+geom_bar(alpha=0.5)+ 
-      xlab(v5$xv)+labs(fill=v5$xv)+
-      theme(
-        plot.titlelib = element_text(hjust=0.5, size=rel(1.8)),
-        axis.title.x = element_text(size=rel(1.8)),
-        axis.title.y = element_text(size=rel(1.8), angle=90, vjust=0.5, hjust=0.5),
-        axis.text.x = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
-        axis.text.y = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
-        panel.background = element_blank(),
-        axis.line = element_line(colour = "grey"),
-        text=element_text(size=8),
-      )
-    ggplotly(p)
-    
-  })
-  
+  ######################################################################
+  # scatterPlot: output the scatter plot based on users' selected variables
+  ######################################################################
   output$scatterPlot<-renderPlotly({
     if(input$fileType=="sampleFile")
     {
@@ -755,17 +751,13 @@ server <- function(input, output,session) {
           text=element_text(size=9)
         )
       
-      #############################################################
-      # df[[v29$gvScatter]]<-as.factor( df[[v29$gvScatter]])
       group_list=unlist(subset(df,select=c(as.factor(v29$gvScatter))))
       
       colorCount = length(unique(unlist(group_list,use.names=F)))   #8, an arbitrary number
       
       getPalette <- colorRampPalette(brewer.pal(8, v36$colorScatter),bias=2.5)(colorCount)
-      # print(getPalette)
       
       p<-p+scale_fill_gradient(low=getPalette[1], high=getPalette[length(getPalette)])
-      ###########################################################
       if(v53$addRegression==T){
         # add a aes(group="") solve the problem that one variable is a factor (numerical converts to factor)
         p<-p+geom_smooth(method='lm',formula=y~x)
@@ -789,8 +781,6 @@ server <- function(input, output,session) {
           axis.line = element_line(colour = "grey"),
           text=element_text(size=9)
         )
-      #############################################################
-      # df[[v29$gvScatter]]<-as.factor( df[[v29$gvScatter]])
       group_list=unlist(subset(df,select=c(v29$gvScatter)))
       
       colorCount = length(unique(unlist(group_list,use.names=F)))   #8, an arbitrary number
@@ -799,7 +789,6 @@ server <- function(input, output,session) {
       # print(getPalette)
       
       p<-p+scale_fill_manual(values=getPalette)
-      ###########################################################
     }
     
     ggplotly(p,tooltip = c("x", "y"))%>% config(displaylogo = FALSE,displayModeBar = T)
@@ -807,6 +796,9 @@ server <- function(input, output,session) {
     
   })
   
+  ######################################################################
+  # boxPlot: output the box plot based on users' selected variables
+  ######################################################################
   output$boxPlot <- renderPlotly({
     if(input$fileType=="sampleFile")
     {
@@ -835,7 +827,7 @@ server <- function(input, output,session) {
     # print(x_val)
     y_val<-unlist(subset(df, select=c(v24$qBox)))
     # print(x_val)
-    plot<-ggplot(df, aes(x = x_val, y = y_val, fill = x_val)) +
+    plot<-ggplot(df, aes(x = x_val, y = y_val, fill = as.factor(x_val))) +
       xlab(v23$gvBox)+labs(fill=v23$gvBox)+ylab(v24$qBox)+ggtitle("Box Plot")+
       geom_boxplot(outlier.size = 0, alpha=v45$transBox/100) +
       theme(
@@ -865,57 +857,10 @@ server <- function(input, output,session) {
     ggplotly(plot,tooltip = c("x", "y"))%>% config(displaylogo = FALSE,displayModeBar = T)
   })
   
-  output$densities<- renderPlotly({
-    if(input$fileType=="sampleFile")
-    {
-      df<- toy
-    }
-    else
-    {
-      df<-data_set()
-    }
-    
-    if (v11$doDensities == FALSE) return()
-    
-    validate(
-      not_categorical(df,v31$gvDensities)
-    )
-    validate(
-      # print(class(df[[v24$qBox]])),
-      not_quantity(df,v32$qDensities)
-    )
-    
-    
-    x_val<-unlist(subset(df, select=c(v31$gvDensities)))
-    # notice that v5$xv here is character, not col obj; but ggplot needs to accept col obj
-    # use subset func to extract col object from dataframe; other func, such as df[...], seems not work at all
-    # ggplot2 does not accept list object; must use unlist
-    # print(x_val)
-    y_val<-unlist(subset(df, select=c(v32$qDensities)))
-    
-    p<-ggplot(df, aes(y_val, fill=x_val))+geom_density(alpha=v49$transDensities/100)+
-      xlab(v32$qDensities)+labs(fill=v31$gvDensities)+
-      theme(
-        plot.title = element_text(hjust=0.5, size=rel(1.8)),
-        axis.title.x = element_text(size=rel(1.8)),
-        axis.title.y = element_text(size=rel(1.8), angle=90, vjust=0.5, hjust=0.5),
-        axis.text.x = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
-        axis.text.y = element_text(colour="grey", size=rel(1.5), angle=0, hjust=.5, vjust=.5, face="plain"),
-        panel.background = element_blank(),
-        text=element_text(size=8),
-        axis.line = element_line(colour = "grey")##,
-      )
-    group_list=unlist(subset(df,select=c(v31$gvDensities)))
-    colorCount = length(unique(unlist(group_list,use.names=F)))
-    getPalette <- colorRampPalette(brewer.pal(8, v52$colorDensities),bias=2.5)(colorCount)
-    # FIXME LATER:
-    # bias value needs to be tested to get the best level change within color palette
-    p<-p+scale_fill_manual(values= getPalette)
-    
-    ggplotly(p)
-    
-  })
-  
+
+  ######################################################################
+  # addLine: show regression addLine button to users
+  ######################################################################  
   output$addLine<-renderUI(
     {
       if(input$fileType=="sampleFile")
@@ -933,6 +878,9 @@ server <- function(input, output,session) {
       # 
     }
   )
+  ######################################################################
+  # addComment: show added comments to users
+  ######################################################################
   output$addComment<-renderUI(
     {
       if(input$fileType=="sampleFile")
@@ -948,65 +896,4 @@ server <- function(input, output,session) {
       HTML('<p style="color:#808080"> <b>Add a linear regression line:</b> Automatic computation of slope and intercept for the best line explaining the dots. The line includes a confidence region around it in gray.</p>')
     }
   )
-    
-    
-  
-  # output$goViolin<-renderUI({
-  #   if(input$fileType=="sampleFile")
-  #   {
-  #     df<- toy
-  #   }
-  #   else
-  #   {
-  #     df<-data_set()
-  #   }
-  #   req(df)
-  #   fluidRow(
-  #     column(6, align="center", offset = 3,
-  #            actionButton("goViolin", "Violin Plot"),
-  #            tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
-  #     )
-  #   )
-  # })
-  # 
-  # output$goBox<-renderUI({
-  #   if(input$fileType=="sampleFile")
-  #   {
-  #     df<- toy
-  #   }
-  #   else
-  #   {
-  #     df<-data_set()
-  #   }
-  #   req(df)
-  #   fluidRow(
-  #     column(6, align="center", offset = 3,
-  #            actionButton("goBox", "Box Plot"),
-  #            tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
-  #     )
-  #   )
-  # })
-  # 
-  # output$goScatter<-renderUI({
-  #   if(input$fileType=="sampleFile")
-  #   {
-  #     df<- toy
-  #   }
-  #   else
-  #   {
-  #     df<-data_set()
-  #   }
-  #   req(df)
-  #   fluidRow(
-  #     column(6, align="center", offset = 3,
-  #            actionButton("goScatter", "Scatter Plot"),
-  #            tags$style(type='text/css', "#button { vertical-align: middle; height: 50px; width: 100%; font-size: 30px;}")
-  #     )
-  #   )
-  # })
-  #  
-  
-  
-  
-  
 }

@@ -1,9 +1,29 @@
+#####################################################################
+#
+# ui.R
+#     
+# 
+#
+#     This program is free software; you can redistribute it and/or
+#     modify it under the terms of the MIT License:
+#     https://github.com/crsl4/fast-stats/blob/master/LICENSE
+#
+# Part of the fast-stats package
+# Contains: ui.R
+######################################################################
+
 library(shiny)
 library(plotly)
 library(shinydashboard)
 library(shinyjs)
-# library(dashboardthemes)
 
+######################################################################
+# 
+# shinyUI: Create a Shiny UI handler (see tutorial: https://shiny.rstudio.com/tutorial/)
+# ui: user interface. This function will define the format of the 
+# screen (what the user sees when opening the web app)
+# 
+###################################################################### 
 shinyUI(dashboardPage(
   skin="blue",
  
@@ -131,6 +151,7 @@ shinyUI(dashboardPage(
                 )
               )
       ),
+      # data visualization button
       tabItem(
         "dataVisualization",
         
@@ -138,9 +159,6 @@ shinyUI(dashboardPage(
           box(
             width = 8, status = "primary", solidHeader = T,
             title = "Plot Display",
-            
-            # conditionalPanel(condition = "input.plotType==0&&input.goMosaic!=0",
-            #                  plotlyOutput("mosaicPlot") ),
             conditionalPanel(condition = "input.plotType==1&&input.goViolin!=0",
                             plotlyOutput("violinPlot")
                              ),
@@ -148,8 +166,6 @@ shinyUI(dashboardPage(
                              plotlyOutput("boxPlot") ),
             conditionalPanel(condition = "input.plotType==3&&input.goScatter!=0",
                              plotlyOutput("scatterPlot") ),
-            # conditionalPanel(condition = "input.plotType==4&&input.goDensities!=0",
-            #                  plotlyOutput("densities") ),
           ),
           box(
             width = 4, status = "primary",solidHeader = T, 
@@ -312,7 +328,7 @@ shinyUI(dashboardPage(
           )
         )
       ),
-     
+     # FAQ button
       tabItem("FAQ",
               box( width=12, status="primary",solidHeader = T,
                    title="Frequently Asked Questions",

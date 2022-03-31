@@ -55,7 +55,7 @@ The web page and accompanying web apps are all open-source with the code stored 
 # Description of the web apps
 
 The web apps within `WI Fast Stats` provide an interactive and easy-to-use platform for data visualization and data analysis for data collected in accordance with the WI Fast Plants webinars and educational materials.
-The web apps are based on the `R shiny` package and contain three main modules: Data Summary, Data Visualization, and Data Analysis which are built with the `ShinyDashboard` framework (Figures \ref{figwebapp1} and \ref{figwebapp2}). 
+The web apps are based on the `R shiny` package and contain three main modules: Data Upload, Data Visualization, and Data Analysis which are built with the `ShinyDashboard` framework (Figures \ref{figwebapp1} and \ref{figwebapp2}). 
 
 The Data Upload section allows the users to upload their own collected data based on their fast plants experiments, or to utilize the already loaded sample dataset which illustrates the same educational outcomes intended in the webinar without having to run the experiments.
 In addition, this section also provides a summary button to show only first rows of the dataset or the whole dataset.

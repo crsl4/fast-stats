@@ -15,7 +15,7 @@ library(ggplot2)
 
 Reading in the data (had to remove manually the '#' sign from the column and save as csv file; also I removed the rows of "dead plant" and the text with the description of variables. All in the original file: `102314-Phenotypic-Plasticity-Data.xlsx`):
 ```{r}
-dat = read.table("data/ecosystem-data.csv", sep=",",header=TRUE)
+dat = read.table("../data/ecosystem-data.csv", sep=",",header=TRUE)
 str(dat)
 ```
 
