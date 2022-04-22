@@ -69,7 +69,6 @@ Finally, the web apps maintain a validator system detecting any illegal actions 
 
 ![WI Fast Stats web app corresponding to the WI Fast Plants webinar on the selection of polycot plants: \url{https://wi-fast-stats.wid.wisc.edu/cotyledon/}.\label{figwebapp1}](webapp1.png)
 
-![WI Fast Stats web app corresponding to the WI Fast Plants webinar on the effect of the ecosystem on the plants.: \url{https://wi-fast-stats.wid.wisc.edu/ecosystem/}. \label{figwebapp2}](webapp2.png)
 
 # Future work
 
@@ -77,6 +76,8 @@ Finally, the web apps maintain a validator system detecting any illegal actions 
 
 # Acknowledgements
 
-This work was supported by the Department of Energy [DE-SC0021016 to CSL]. We thank Hedi Baxter Lauffer and everybody at WI Fast Plants for inviting us to work with them on the creation of these Data Science educational open-source tools. Finally, we acknowledge the work in [@Hotaling2020] which helped us improve the scientific writing of this manuscript.
+This work was supported by the Department of Energy [DE-SC0021016 to CSL]. We thank Hedi Baxter Lauffer and everybody at WI Fast Plants for inviting us to work with them on the creation of these Data Science educational open-source tools. Finally, we acknowledge the work in @Hotaling2020 which helped us improve the scientific writing of this manuscript.
+
+![WI Fast Stats web app corresponding to the WI Fast Plants webinar on the effect of the ecosystem on the plants.: \url{https://wi-fast-stats.wid.wisc.edu/ecosystem/}. \label{figwebapp2}](webapp2.png)
 
 # References
