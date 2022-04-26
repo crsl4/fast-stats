@@ -1,5 +1,8 @@
 [![DOI](https://zenodo.org/badge/279106528.svg)](https://zenodo.org/badge/latestdoi/279106528)
 
+[![DOI](https://jose.theoj.org/papers/10.21105/jose.00159/status.svg)](https://doi.org/10.21105/jose.00159)
+
+
 # WI Fast Stats overview
 - WI Fast Stats is the first and only dedicated tool tailored at [WI Fast Plants](https://fastplants.org/) data and educational objectives
 - WI Fast Stats is an integrated animated web page with a collection of R-developed web apps that provide Data Visualization and Data Analysis tools for [WI Fast Plants](https://fastplants.org/) data
